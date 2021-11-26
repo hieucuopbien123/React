@@ -1,0 +1,269 @@
+React(hay React.js, ReactJS) là thư viện javascript xd giao diện ng dùng, ban đầu từ facebook, giúp trang lấy và xử lý dữ liệu tối ưu, dùng cho cả mobile và desktop.
+Điểm mạnh là kp reload lại trang mà nó chia thành các commponent, mỗi khi có sự đổi mới thì nó chỉ đổi các component liên quan, tái sử dụng các thành phần giao diện, component(giống như 1 function). Đó chính là việc giải quyết vấn đề của tầng view trong MVC.
+
+ReactJS là cho phát triển các ứng dụng web, còn React Navtice cũng đc facebook công bố sau khi React ra đời giúp phát triển các ứng dụng mobile.
+
+Cơ chế nó tạo 1 virtual DOM thông qua react xác định các component bị thay đổi trong virtual DOM và chỉ đổi nó trong DOM thật.
+
+JSX là javascript syntax xml. 1 cách khác viết cấu trúc xml trong javascript. Khi dùng trình biên dịch sẽ chuyển từ JSX syntax sang JS. Nó dùng babel-> dùng trong trang web bằng cách script tới trang: https://unpkg.com/@babel/standalone@7.12.4/babel.js -> khi dùng code JSX ta dùng type script là "text/babel" thì babel có thể compile file của ta.
+Các file JSX có đuôi mở rộng là jsx cx là 1 text file. 
+->link gốc: https://unpkg.com/browse/babel-standalone@7.0.0-beta.3/
+
+Ta có thể cài đặt React thông qua cdn với 2 file:
+<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+or
+<script crossorigin src="https://unpkg.com/react@***/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@***/umd/react-dom.production.min.js"></script> 
+với dấu *** là phiên bản ta muốn, ví dụ 16.4.2 nếu chỉ 16 thì tức là phiên bản 16 nào đó mới nhất
+->link phiên bản: https://github.com/facebook/react/releases
+
+NodeJS là 1 platform chạy javascript runtime. Với Nodejs, ta có thể chạy JavaScript trên server và tăng tốc độ xử lý. Nó kp 1 framework mà là 1 nền tảng phát triển web nhanh chóng độc lập, có thể tạo ra 1 ứng dụng độc lập như dùng các ngôn ngữ C++ chứ k chỉ ứng dụng web. Nó cx k đc coi là 1 ngôn ngữ lập trình, mà là 1 nền tảng server đc viết bằng javascript, tương thích nhiều thiết bị. Cần cài đặt NodeJS để tạo ứng dụng React.
+React giống như javascript nó dùng để chạy tại phía Client. Nhưng nó cũng có thể chạy được trên Server nếu Server đó hiểu được Javascript, chẳng hạn như NodeJS Server.
+Như v, có 2 cách tiếp cận React: Ta có thể cài đặt môi trường NodeJS Server, khi đó lập trình ứng dụng fullstack với javascript, có thể dùng javascript cho các chức năng phức tạp ở server; Cách khác là ta chỉ dùng React lập trình ứng dụng tại Client sử dụng javascript còn phía server vẫn có thể dùng các ngôn ngữ khác Java, DotNet, PHP,..
+
+npm(Node package manager) là công cụ quản lý các thư viện lập trình javascript cho NodeJS. Khi cài nodeJS r thì dùng các lệnh npm thoải mái để thao tác vs các thư viện JS.
+
+Cài React trên máy: 
+Cài NodeJS->node -v kiểm tra phiên bản trên cmd
+Cài bộ cài appReact với: npm install -g create-react-app
+Tạo 1 project: create-react-app <link tới react-project> (chú ý tên k đc chứa space,in hoa)
+Chạy: cd đến thư mục đó-> npm start (k cd đc có thể dùng terminal của VSC)
+=>Với lệnh create-react-app thì nó sẽ tự tạo các thứ cần thiết để phát triển 1 ứng dụng react, tức là ta k cần quan tâm đến từng cái react-dom, react, babel như trước nx. Có thể dùng code JSX viết react thoải mái
+
+Cấu trúc react-project: 
+node_modules: cài đặt các dependencies lưu hết vào đây, ví dụ babel, redux,.. các file dữ liệu toàn bộ ở đây
+package.json: lưu các thông tin như tên thư viện và phiên bản sử dụng của chúng, tên ứng dụng, phần script còn cho biết lệnh chạy ứng dụng. Ví dụ cần thêm 1 thư viện mới vào ứng dụng ta có thể thêm tên và phiên bản vào đây r gọi npm install-> nó sẽ tìm phiên bản vào down vào package.json, chứ bth gọi npm install <package> là nó tự tìm package phiên bản mới nhất. Ví dụ xóa hết file node_modules r gọi npm-install sẽ reinstall toàn bộ
+public: chứa các file output tương tác trực tiếp với trình duyệt như HTML,image,..
+src: file input-> ta code nội dung ở đây, phần lớn là file javascript và css
+Vài file khác nx chưa qt.
+
+Với React.js, những gì ta viết kp ở html mà là ở file js. Mọi thứ hiển thị ta đều phải dùng trong file js. File html chỉ là cầu nối liên kết code javascript với trình duyệt. 
+
+Hàm ReactDOM.render(<element html code>,<thẻ hiển thị>) -> render cái element(code html) lên cái container(thẻ cần hiển thị)(code javascript)-> hàm phổ biến nhất
+
+Viết JSX dễ hơn rất nhiều so với viết code React thuần túy vì XML nó gần giống với HTML chỉ sửa đổi 1 số thuộc tính,.. 
+VD: tạo element mới 
+const element = React.createElement(,,)
+const element = {<code element XML gần giống HTML>}
+Ta có thể convert từ HTML sang JSX online là viết mọi thứ ez
+
+Ngoài lề: 1 số trình duyệt nó k cho tệp tin javascript native hoạt động, đó là tập tin trong máy của ta đó, khi mở lên sẽ có đường dẫn file thư mục. Nó yêu cầu phải có http/https server mới cho load, khi đó ta có thể tạo ra 1 http-server với npm như sau:
+->Trỏ đến đường dẫn thư mục muốn chạy bằng http-server(k mở đc thì dùng VSC ez)
+->npm install -g http-server
+->http-server -c-1 (lệnh này để disable cache)
+->bh ta thêm file html vào trong đường dẫn đó là chạy trên http server đó
+=>chú ý là việc ta dùng create-react-app là đã tạo ra 1 http server r. Đó là:
+http://localhost:<số port>/
+=>Vc ta dùng lệnh npm để tạo 1 server như thế chính là tạo 1 NodeJS Server rồi. Server này nằm ngay trên máy của ta. Ta có thể code javascript trên server r.
+
+Component Life Cycle(no error handling):
+ReactDOM.render() --> <tên class>.defaultProps = {}
+   ^                               |
+   |                               v
+   |                       this.state = {}
+   |                               |
+   |                               v                         
+   |               static getDerivedStateFromProps(nextprops, prevstate){return({})} --> shouldComponentUpdate(nextProps, nextState){}
+   |                               |                 ^                                                |
+   |                               v                 |                                                v
+   |                            render()             |                                             render()
+   |                               |                 |                                                |
+   |                               v                 |                                                v
+   |                   componentDidMount(){} --> this.setState({})                     getSnapshotBeforeUpdate(prevProps, prevState){}
+   |                               |                 ^                                                |
+   |                               v                 |                                                v
+componentWillUnmount()         <xử lý>---------------  ---------------------<---- componentDidUpdate(prevProps, prevState, snapshot){}
+   ^                                |
+   |                                v
+   ---------------   ReactDOM.unmountComponentAtNode(element)   
+
+
+ReactJS là 1 thư viện của javascript thì React Router lại là 1 thư viện định tuyến của React bên thứ 3. Nó giữ cho giao diện ứng dụng đồng bộ với URL trên trình duyệt. Nó cho phép định tuyến luồng dữ liệu trong ứng dụng 1 cách rõ ràng. Kiểu đường dẫn url thế này thì tương đương với router(tuyến đường này) và giao diện nó sẽ thế này. 
+Nó thg dùng phía server nh hơn ví dụ ứng dụng react trong NodeJS Server. React chỉ là load các component qua lại nên luôn có 1 trang -> nhưng nhờ router mà web của ta có đường dẫn khác nhau khi các component thay đổi trên trang đó-> Single Page Application. 
+Ta có thể dùng cdn với React Router: 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-router-dom/4.3.1/react-router-dom.min.js"></script>
+K dùng cdn, ta tạo 1 dự án bth và thêm router vào bằng cách cd đến dự án r => npm install react-router-dom
+Thật ra nó có 3 package: react-router / react-router-dom / react-router-native. Cái đầu là thành phần core để sử dụng 2 cái còn lại. react-router-dom sử dụng khi xd web app, react-router-native dùng khi xd React Native(mobile) app. Ta dùng cái gì thì install cái đó. 
+Xong rồi import { BrowserRouter as Router } from 'react-router-dom' để sử dụng
+
+
+npm là 1 bộ quản lý package bằng lệnh npm của NodeJS. npx là lệnh có ở phiên bản mới của NodeJS chạy nhanh và tốt hơn npm. Chúng cài các dependencies của dự án vào file package.json và package-lock.json
+yarn là 1 phiên bản cải tiến của npm sử dụng file yarn.lock khắc phục lỗi version của npm khi cài cùng 1 module trên 2 máy khác nhau lại có phiên bản khác nhau gây bug, nó cx tiện lợi hơn ở nhiều thứ. Dùng chung file package.json và cài các dependencies vào folder node_modules, file yarn lock sẽ theo dõi phiên bản package trong node_modules.
+yarn add <tên gói> hoặc version cụ thể với: yarn add [package]@[version-or-tag]-> dùng cài đặt thêm dependencies và tự động thêm phiên bản tham chiếu vào package.json tương đương vói lệnh npm install <package>
+yarn upgrade <package> -> upgrade các gói lên phiên bản mới nhất theo rule trong package.json tương tự npm update và tạo lại yarn.lock
+yarn remove <package>
+3 cái --dev / --peer / -optional thêm vào cuối nếu specific với 3 loại dev dependencies, peer dependencies and optional dependencies.
+
+Redux là flux đơn giản dựa trên kiến trúc ELM(ngôn ngữ lập trình hàm). Redux js là một thư viện Javascript giúp tạo ra thành một lớp quản lý trạng thái của ứng dụng. Redux là kết hợp hoàn hảo của React nhưng cx dùng đc với các framework khác của js. Với các lib khác của js thì vc quản lý khi ứng dụng trở nên lớn hơn rất phức tạp. Có 1 nguyên lý là data chỉ nên live trong 1 component. Chính vì v vc share data rất khó khăn nhất là các component ở xa nhau. Để share đc thì state phải live trong component cha và pass đến các component con như props. Thế nếu 2 component cực xa nhau chia sẻ thì dữ liệu phải tồn tại ở cha rất nhiều-> redux giải quyết vấn đề, nó có 1 store lưu trữ toàn bộ state của app. Mỗi component có thể access trực tiếp đến state thay vì phải gửi qua props như cũ.
+Luồng redux: thực hiện 1 hành động trên giao diện là view provider(1 view framework như react/angular)->1 đối tượng action được tạo ra lưu các thông tin cần thiết-> dispatch action đó tới store-> trong store có middleware và reducer, middleware sẽ thực hiện các nhiệm vụ gì đó như dispatch các action mới/báo lỗi/..-> sau đó reducer sẽ xử lý action đó và cho ra từ state ban đầu cho ra 1 state mới copy->cái state mới đó được lưu vào store để quản lý-> trả ra trạng thái mới cho view provider để ta nhìn thấy sự thay đổi trên màn hình nếu có và cập nhập trạng thái mới cho component bằng mapStateToProps chuyển từ state mới sang props của component.
+Store là duy nhất được tạo bằng hàm createStore gọi 1 lần.
+Nguyên lý: state của ứng dụng đc lưu giữ trên 1 object tree trong store duy nhất; state chỉ thay đổi khi phát ra 1 action mà làm thay đổi nó; thay đổi chỉ bằng pure function của reducer
+Để sử dụng: C1 dùng cdn: 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.0/redux.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-redux/5.0.7/react-redux.min.js"></script>
+C2 dùng trong dự án react thực tế: tạo dự án bth
+Cài đặt yarn nếu chưa có với: yarn add redux-> chạy: yarn add redux -> yarn add react-redux -> yarn start để chạy compile
+Dùng hàm nào thì import hàm đó ví dụ: import { connect } from "react-redux";
+Khắc phục lỗi install: cannot be loaded because running scripts is disabled on this system -> chạy lệnh: 
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
+Cơ bản dùng các hàm của redux: dispatch, mapStateToProps, connect, createStore, tạo reducer
+
+Khi ta dùng lệnh bth với npm để lập trình dự án react như v là ta đã sử dụng NodeJS r. Mà NodeJS là công nghệ tại phía server, thao tác với server trả ra HTML cho trình duyệt ng dùng-> Với dự án create-react-app, ta có thể dùng JS để viết ứng dụng tại 2 phía client/server. Các thứ ta chỉnh sửa trong thư mục src chính là trên môi trường server r, nếu muốn dùng 1 cái gì trong 1 module thì phải import vào tập tin giữa các file-> sai, chỉ là frontend mà thôi
+
+React-transition-group là 1 thư viện phát triển bởi cộng đồng react-> giúp làm việc với CSS transition
+dùng cdn: <script src="https://cdnjs.cloudflare.com/ajax/libs/react-transition-group/2.4.0/react-transition-group.min.js"></script> trong dự án cứ lấy 
+với react trong NodeJS: npm install react-transition-group --save -> save là lưu vào package.json, ta có thể npm run <lệnh đó trong script package.json>. Thư viện này cung cơ bản 3 component: Transition, CssTransition, TransitionGroup
+import { TransitionGroup, CSSTransition, Transition } from "react-transition-group";
+Dùng v cx đc dù nó là phiên bản cũ và k còn đc nâng cấp. Ta cũng có thể sử dụng 1 phiên bản cũ khác là: 
+yarn add react-transition-group-v1@npm:react-transition-group@1.x và import { CSSTransitionGroup } from 'react-transition-group-v1'
+=> dùng đc CSSTransitionGroup
+Cả 2 cái này k còn hỗ trợ nên có các hàm cũ nhưng vẫn chạy đc là đc
+
+Expressjs là một framework được xây dựng trên nền tảng của Nodejs cho web hoặc mobile. Khi làm việc với React, chúng ta sẽ thường có nhu cầu liên kết dữ liệu như MySQL, MongoDB, ..., tuy nhiên bản thân React là một Javascript, chỉ thao tác ở phía client, việc liên kết sử lý dữ liệu là không thể. Để giải quyết vấn đề này, chúng ta sẽ liên kết dữ liệu với React thông qua API với Expressjs. Khi cài bằng create-react-app nó tự cài express cho mình r.
+Nếu ta muốn tự cài riêng nó và chỉ mình nó từ 1 dự án trống:
+npm init => sinh file package.json chứa thông tin dự án chưa có dependencies gì hết
+npm install --save express -> sinh file package-lock.json và cái luôn express
+Cài xong express ta sẽ có express server, để sử dụng ta tạo file app.js và tạo 1 API trong nó r tạo 1 client với create-react-app cùng
+folder với server đó -> tiến hành liên kết. 1 cái ở server, 1 cái ở client chạy trên port khác nhau nên cần xử lý port
+Để liên kết ta cần chạy 2 cái npm 1 lúc song song nhau cho client và server, cần dùng package là concurrently:
+npm install --save concurrently => nhớ cài trong folder chứa cả client và server, cái gì install trong thư mục lớn đó sẽ dùng đc cả với client và server
+=>VD: Cần lấy dữ liệu JSON gửi cho client React, nhưng run 2 cái cùng lúc trên 1 cổng rằng 1 cái gửi 1 cái nhận nhưng chúng nó đâu có hiểu gửi nhận xử lý như thế nào-> ta phải sử dụng http request với các phương thức GET/POST/DELETE-> thử dùng với thư viện Axios:
+npm install --save axios => axios hoạt động ở hầu hết các trình duyệt hiện đại, dùng đc ở cả font end (browser) và server(NodeJS) dùng để liên kết 2 cái lại
+Chú ý: cái file package.json phần script chính là các lệnh npm. Ta dùng: npm run <tên script>
+Ta dùng package concurrently thì sẽ có lệnh: concurrently "tên lệnh 1" "tên lệnh 2" => sẽ run 2 lệnh song song trong phần script ta dùng tương tự để gom vào 1 lệnh, cái \" là để có " thôi.
+Ta dùng proxy để chạy app trên port xác định khi kết nối song song với server bằng cách chỉnh proxy trong package.json của client
+"proxy": "http://localhost:<cổng server>" => dùng proxy nó lấy dữ liệu server ở cổng 4000 nhưng vẫn chạy ở cổng 3000 => đúng mà vì 1 cổng chỉ làm 1 thứ chứ làm sao cả client và server cùng chạy 1 port đc. Trong file json ta làm như v tức là client sẽ kết nối với server ở công 4000 còn mở chạy ở cổng 3000
+=> dùng lệnh concurrently chạy cả client và server phát là xong.
+
+npm run --prefix <path> => là cách run npm ở directory khác nhau thì thêm option prefix => trong dự án này là ta đang npm start ở thư mục client nên phải là: npm run start --prefix client
+
+Như v là chạy đc server và client kết nối vào cổng đó của server để lấy dữ liệu với giao thức GET. Tuy nhiên thường thì cơ sở dữ liệu sẽ đc lưu trong 1 database server chứ chả ai gửi mấy cái hello world hay text cố định mãi. Tức là ta coi máy của ta là 1 NodeJS server, trong máy ta lại có 1 SQL server database server nx, ta sẽ kết nối 2 cái lại với nhau để lấy dữ liệu từ database dùng trong NodeJS server, xong gửi dữ liệu đó cho client.
+=> Như v ta cần phân biệt, code MySQL là các lệnh để thao tác với database; code fontend là code html, javascript react bình thường; code backend là code trên server ví dụ nodejs server để lấy dữ liệu từ database, xử lý và gửi lên fontend cho người dùng.
+Nói rõ hơn vai trò của code backend. Ví dụ: ban đầu ta có 1 database SQL, ta dùng nó trong nodejs với code backend, lấy dữ liệu ra và thực hiện lắng nghe-> người dùng truy cập vào web thì sẽ là client gửi request cho server về trang web, server nhận yêu cầu xử lý thông tin của SQL và gửi lại cho client, fontend của client (code html, javascript, react,..) sẽ nhận dữ liệu đó và thực hiện hiển thị lên màn hình. Người dùng thao tác với 1 thứ nào đó thì các sự kiện của javascript sẽ thực hiện hiển thị y như những gì ta mong muốn, nhưng nếu thực hiện thứ gì mà làm thay đổi dữ liệu trong sql, ví dụ thêm 1 bình luận-> nó sẽ lại gửi request cho server-> code backend trên server sẽ phải xử lý request đó là cập nhập thông tin lưu vào sql server-> lần sau khi truy cập vào trang web, nó lại lấy từ server đó nên thấy dữ liệu thay đổi. Và để ng dùng truy cập vào đc như v thì database server và nodeJS server lúc nào cx phải trong TT sẵn sàng hoạt động
+=>VĐ ta chưa hiểu là làm sao font end của client lại có file js App.js và index.html để load dữ liệu từ server gửi lên-> chắc đó cx là những file mà client request để server gửi cho nó r dùng các file đó + dữ liệu để hiện thị ra màn hình nhưng ta chưa xử lý
+
+Code NodeJS: đặc biệt là nó vẫn dùng javascript, chạy server bằng: node <tên file js>
+Màn hình console của server chính là terminal chạy lệnh. Nếu ta k dùng hàm listen cho server lắng nghe thì nó chạy như bth từ trên xuống dưới và kết thúc, nếu dùng listen thì sẽ hiển thị bth khi kết nối vào.
+
+Cách kết nối với Microsoft SQL Server trong NodeJS Server: trỏ đến thư mục code server đó=> npm install mssql
+-> tương tự như các thứ khác có 2 cách kết nối. 1 là dùng string connection, 2 là kết nối theo Config Object=> kbh dùng cách 1 vì k rõ ràng
+
+Để tạo tài khoản mật khẩu và sử dụng:
+rightClick vào server-> property-> secure-> SQL Server and Window Authentication mode vì tk mk thì phải dùng mode SQL Server nx
+Vào SQL bằng window authentication(là nơi tạo ra các user)-> security->rightclick login-> new login -> SQL Server authentication-> gõ password; server roles-> mặc định có public tức là tài khoản cho mọi người-> ta nên dùng tài khoản cho người và chỉ có 1 user tên là sa có quyền sysadmin mà thoi; User mapping: chọn các database muốn truy cập bởi user này-> check các quyền db_datawriter và db_datareader là các quyền cơ bản nhất đọc và viết với database, để 2 quyền đó hoạt động thì phải là chủ của database tức check thêm db_owner(k check sẽ lỗi); Status: grant và enabled; => ok
+restart lại server này; computer management-> Services and Applications-> Services-> refresh lại SQL Server Browser, agent và service;
+->có thể vào database với từng tài khoản r, tk đó chỉ truy cập vào được những database ta đã set mà thôi
+
+Để dùng đc server ta cần setting lần đâu: computer management-> services and applications-> services-> start các thứ SQL Server Browser, SQL Server, SQL Server CEIP services; ->SQL Server Configuration Manager-> SQL Server Services-> start SQL Server Browser; ->SQL Server Network Configuration-> Protocols for SQLEXPRESS-> enabled cái TCP/IP-> IP Addresses-> active và enabled yes-> TCP Dynamic Ports blank-> TCP Port 1433
+
+Chú ý: console của client là trình duyệt F12, console của server là cmd chạy-> nếu lỗi xảy ra ở 1 trong 2 khi post/get thì sẽ dừng CT-> khi đó phải kiểm tra lỗi của cả server và client ở 2 nơi nhé, k thì tìm lỗi đến sang năm. 
+F5 trang web chỉ load lại client, nếu chỉnh sửa bên server thì k có tác dụng
+
+React là 1 framework nổi tiếng nên có nhiều người làm các component có sẵn và ta hoàn toàn có thể tái sử dụng. Các component thì hoạt động ở client nên ta cd đến client: npm install react-modal  là thư viện chứa nhiều component có sẵn 
+import Modal from 'react-modal'; để sử dụng
+
+Restful API là 1 tiêu chuẩn trong việc thiết kế API cho các ứng dụng web. Là 1 trong các kiểu thiết kế api sử dụng phổ biến ngày nay. 
+Ta hiểu API đã biết là 1 thứ giúp ứng dụng này tương tác với 1 ứng dụng hay thành phần khác. Còn REST là quy định cách sử dụng các HTTP method và định dạng URL. Đó là khái niệm ta hiểu trong việc thiết kế web tức restful API đơn giản là 1 tiêu chuẩn tạo ra các thứ giúp client giao tiếp với server. 
+Các hoạt động cơ bản trên web sẽ dựa vào các giao thức http riêng: 
+GET(SELECT)/POST(CREATE)/PUT(UPDATE)/DELETE -> CRUD. Ngoài ra còn có HEAD, PATCH, CONNECT, TRACE, OPTIONS. Restful API cũng quy định hàng loại mã code trả ra lỗi or thành công ví dụ 200 là thành công, 404 là k tìm thấy resource. 
+=>Bất cứ 1 ngôn ngữ nào cũng có thể dùng để thiết kế 1 restful api. Cái axios và express ta dùng để trao đổi dữ liệu giữa client và server thông qua giao thức get và post chính là sử dụng restful api đó
+
+Đôi khi nodeJs bị lỗi ta phải: npm install <package> mới được nhất là lỗi module_not_found buộc dùng npm k đc dùng yarn add
+
+1 vài thao tác khác của sql: 
+Nó chia ra làm login và user. Ví dụ 1 login có thể là user của nhiều database kiểu phân quyền với tài khoản login nào thì chỉ đc là user truy cập vào 1 số database nào=> muốn xóa 1 login-> phải xóa user của login đó ở tất cả các database r restart lại r mới xóa login. Muốn thêm 1 login phải chắc chắn k tồn tại login hay user nào trùng tên với user mới thêm. 
+Mỗi khi xóa hay gì thì phải luôn luôn restart lại database và nếu có thể thì cả trong computer management.
+Có những TH ta xóa đi rồi nhưng vẫn còn. Nó chia ra thông tin ng dùng đc lưu trên server và database, sql cung cho ta các query để truy cập vào chính hệ thống của nó:
+IF EXISTS (SELECT*FROM sys.database_principals WHERE name=N'<username>')
+DROP USER [<user name>]  =>lệnh xóa 1 user name nếu tồn tại
+
+SELECT name, principal_id, sid FROM sys.server_principals WHERE name = 'TestUser';
+SELECT name, principal_id, sid FROM sys.database_principals WHERE name='TestUser'
+GO  =>lệnh xem thông tin user name trên server và database
+
+DROP LOGIN <login name>
+DROP USER <user name>
+
+CREATE LOGIN <tên login> WITH PASSWORD='<password>', CHECK_POLICY=OFF;
+GO
+
+CREATE USER <tên user> FOR LOGIN <tên login>;
+
+Để xóa 1 user hay login vào database->tìm tất cả các nhánh user có tên cần xóa và xóa đi
+SID là security id là số tồn tại ở mỗi user
+
+react bootstrap là bootstrap được xây dựng lại bằng react, làm cho giao diện đẹp hơn. Nó trở thành các component react. Trong ứng dụng của ta vẫn có thể dùng bootstrap bình thường .js và .css nhưng ta nên dùng react-bootstrap cho react sẽ ok hơn.
+Để cài: npm install react-bootstrap bootstrap
+Để dùng bootstrap bình thường ta cần thêm jquery và proper.js=> npm install --save jquery popper.js
+=>Dùng tiếp như cdn với: 
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap';
+import 'jquery';
+import 'popper.js';
+=> điều đặc biệt là khi ta install package gì thì cái tên package ta install, ta chỉ cần import '<tên package install>'; thì nó tự import file js cho ta. Chẳng qua bootstrap nó yêu cầu file css nên ta import thêm vào thôi.
+Vd thêm component: import { Button,<> } from 'react-bootstrap';
+
+Material ui là thư viện các react component tích hợp thêm Google's Material Design. Giao diện mới lạ khác với giao diện phổ biến là bootstrap. Nó là thư viện đc đánh giá là hay nhất hiện giờ của react về giao diện.
+Material Design là hình thức phát triển hơn của Flat Design(thiết kế phẳng). Bằng những gam màu nổi bật với đường nét đơn giản, chúng mang tới cảm giác 3D như có hiệu ứng nổi lên trên giao diện. Thiết kế này còn bao gồm những chuyển động tự nhiên, như khi các nút, menu hiện trên màn hình chẳng hạn. Ví dụ 1 bức ảnh màu xanh và 1 bức ảnh gradient từ xanh nhạt đến xanh đậm tạo ra sự khác biệt hoàn toàn. 
+yarn add @material-ui/core
+yarn add @material-ui/icons
+import { Button } from '@material-ui/core';
+
+yarn add @fontsource/roboto => font chữ cx add vào npm thoải mái => dùng với font-family: "Roboto"
+
+UUID(Universally Unique IDentifier) là 1 định danh duy nhất. nó mạnh mẽ đến mức cung cấp đc id cho hàng tỉ tỉ user và phức tạp khó có thể lộ ra ngoài, khi đó ta cần sử dụng uuid. JS có thư viện cung cấp uuid: 
+npm install uuid
+sử dụng: import { v4 as uuidv4 } from 'uuid/v4'; => có từ v1 đến v5
+để dùng: var id = uuidv4();
+
+Redux saga là thư viện cung cấp việc xử lý side effect(ví dụ setTimeout, delay, call api tốn thời gian phải chờ đợi mà ta k kiểm soát đc, k định lượng được ví dụ đọc dữ liệu ổ cứng, call api lấy dữ liệu từ server),dùng như middleware bổ trợ cho việc xử lý action dễ hơn,cx dung khi lưu data vào local storage of browser
+Ta gắn nó vào store được thực thi trong phần middleware-> tức là dispatch action phát, reducers chưa kịp xử lý thì phải đi qua đây. Nó có các hàm bắt action xong làm gì trước khi đưa tiếp đến reducers. Tức là dữ liệu mới đc gửi đến chưa kịp xử lý để lấy đầu ra thì ta có thể: cho nó in ra 1 function xàm lờ như hello world or có thể xử lý trạng thái loading or kiểm tra nếu đc dispatch liên tục nhiều lần mà các lần trước chưa thực hiện xong thì thực hiện mỗi cái cuối hay chỉ thực hiện cái đầu hay đưa vào hàng đợi,... tùy ý. Bên cạnh làm những thứ đó, nó còn có thể call api: 
+view->dispatch actions->middleware->reducer->state mới->quay về view
+                              |
+                             API
+middleware nằm ngoài store nhưng gắn liền vào dispatcher là 1 phần của store. action đến middleware thực hiện bất đồng bộ đồng thời 2 hành động 1 phần đi vào dispatcher, 1 phần callapi. phần đi vào dispatcher sẽ đưa tới reducer đồng thời lấy state ở store-> kết hợp lại ra state mới-> gửi state mới đến view. phần callapi phải chờ 1 lát mới xong, sau đó cx đi vào dispatcher và thực hiện tương tự-> ta phải implement điều đó
+=> Như v chỉ cần chú ý 1 phần thực hiện call api r đưa đến reducer xử lý, thì lúc đó state của store đã được cập nhập 1 lần bởi action r.
+Để sử dụng: npm install redux-saga
+
+redux-logger dùng in ra các thứ hỗ trợ cho console.log(), nó cho phép xem các thứ xảy ra trong redux trên trình duyệt:
+npm install redux-logger => npm lỗi r bh toàn dùng yarn add
+import logger from 'redux-logger'
+=> nhét logger vào applyMiddleware của redux khi tạo store
+
+Khi ta tạo react app, nó tự động cài cho ta 1 vài plugin hữu dụng như:
+@babel/plugin-proposal-class-properties: là plugin giúp dùng đc các class property(hay props), dùng arrow function
+@babel/runtime và @babel/plugin-transform-runtime: tự động thay thế các tính năng k đc hỗ trợ của phiên bản ES khi dùng, cung cấp polyfill(các đoạn code được dùng để cung cấp một chức năng (hoặc công nghệ) của các trình duyệt hiện đại cho các trình duyệt cũ),..
+
+json server là server trả về dữ liệu dưới dạng json đơn giản. Đây là mô hình demo cho 1 server(k áp dụng trong thực tế) để test các chức năng có thể tạo cực nhanh. Để dùng:
+npm install -g json-server
+->tạo 1 file db.json trong dự án chứa database dưới dạng object cần dùng cho dự án:
+-> json-server --watch <link đến file db.json> -> nếu file db.json k tồn tại, nó sẽ tự tạo 1 file db.json mặc định
+-> thế là có 1 server với database ở 1 cổng mà ta set-> nó sẽ tự chia ra các route khác nhau cho mỗi item trong object của file db.json
+-> để lấy data từ server thì chỉ cần link đến đó trong giao thức GET và POST
+Có website cung cấp json-server miễn phí truy cập bất cứ lúc nào, vd như https://jsonplaceholder.typicode.com/posts
+->các giao thức crud trên json server-cx được làm sẵn theo 1 chuẩn nhất định rồi. Ví dụ cần thêm 1 element với axios thì ta cứ post cái object element mới là nó hiểu.
+
+dvaJS là 1 lib làm vc với các ứng dụng react, nó cung cấp 1 plugin là dva-loading.
+redux-waiters cx là 1 middleware nx. Nó lấy ý tưởng từ dva-loading, react-wait, redux-thunk, redux-act để tạo nên 1 thư viện giúp kiểm soát trạng thái 1 action đang load hay đã thực hiện xong mà kp code đi code lại cái logic kiểm tra đó nh lần.
+redux-waiters, redux thunk, redux saga có thể dùng kết hợp với nhau đều ok. redux saga có thể làm những thứ mà thunk k làm đc nhưng code phức tạp hơn
+
+Điểm mạnh của React là ta có thể thêm bất cứ component nào vào App của ta dễ dàng. Cần gì thì search google là ra:
+npm install calendar. Ta sẽ k đi theo con đường tạo package đâu, nó éo chạy đc. Các package có sẵn ta thg phải import thêm cả file css để sử dụng
+
+yarn add react-calendar => cuộn lịch
+
+waiter kết hợp với saga phức tạp vl, nếu sau này dùng thì đọc lại chứ bth chỉ cần có saga or 1 mình waiter là đc r chứ chưa cần kết hợp cả 2. Nếu dùng saga ta cx có thể cho nó loading được khi chưa success thì cho load=false và  hiển thị. Còn dùng waiter mà k dùng saga thì cx tương tự nó tự sinh start, success, error nhưng k hay bằng saga
+
+npm i react-cssfx-loading => import { BarWave } from "react-cssfx-loading"; để dùng
+
+
+??dbjson
+
+??dự án tổng kết sẽ sử dụng: nodejs server express, sql database, axios for request/fetch , react bootstrap, react transition, redux logger, redux saga, phân trang, đăng server lên public, react hook, react,..
+
+??bài tập: tạo ấn edit là vị trí age và name trở thành 1 input điền text cơ, nút edit biến thành finish, điền xong ấn finish tự cập nhật
+
+??Bài tập: tự làm đc ví dụ ở redux bài đầu tiên nhưng id khi xóa ở giữa sẽ tự cập nhập lại tăng dần-> à k chơi kiểu chỉ có cái cuối là luôn bằng cái trc +1 còn lại vẫn giữ nguyên
+
+??? useParams và useRouteMatch phải học đến react hook ms dùng đc

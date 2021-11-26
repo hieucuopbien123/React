@@ -1,0 +1,18 @@
+Higher Order Component(HOC) là 1 component nhận đầu vào là 1 component và trả ra 1 component khác-> sử dụng logic đó cho nhiều component khác nhau tránh vc trùng lặp code. 
+Trc h ta biết stateful component(class) và stateless component(function component). Nhưng như v sẽ phải loay hoay trong cái this, super, life cycle phức tạp. Sau đó lại còn phải bind các hàm nx. Ở phiên bản mới thì nó cho phép cải tiến k cần dùng constructor nx mà khai báo 1 biến luôn(chứ kp như ta tưởng dùng state hay biến bth đều đc đâu mà biến bth nó là phiên bản cải tiến của state, constructor, this của class đó); còn hàm bind ta thay thế bằng arrow function.
+
+Tuy nhiên vấn đề vẫn còn rất nhiều ở phiên bản react cũ(mà ta đã học thấy mẹ rồi đó). Ví dụ phải gọi cùng 1 hàm ở componentDidMount, componentDidUpdate.
+logic code vẫn bị trùng lặp. Ví dụ 1 component muốn xài biến state của 1 component khác cơ, hay nói cách khác, có 10 component muốn dùng state của 1 component xa nó, xong khi 1 component trên trời nào đó thay đổi số liệu thì tất cả mọi component đều có thể thay đổi sang bất kỳ tùy ý chỉ với vài dòng code đơn giản thì chưa có cách nào tốt để xử lý êm đẹp điều này. ví dụ truyền từ cha sang con có thể dùng HOC, or truyền props chay or dùng context-> context hay đó
+Ý tưởng chính của react là chia ứng dụng thành các component rồi kết hợp lại thành trang web. Nhưng kết nối thế thì toang, react ngày xưa chưa có cách để chia sẻ logic hoàn hảo.
+
+React hook ra đời làm cho mọi vc trở nên đơn giản. Ngày xưa dùng class nếu muốn dùng state, nếu chỉ nhận props để render ra UI thì dùng function. 
+React Hook làm cho mọi thứ đều dùng function, k còn class nx và sự phụ thuộc dữ liệu, chia sẻ logic trở nên đơn giản.
+=> dùng react hook thì tất cả this,super,lifecycle,state trong class kiểu cũ đều bỏ, cx k cần kế thừa React.Component làm kích thước bundle giảm nhẹ.
+Mọi thứ như là life cycle, đổi state, fetch dữ liệu, cập nhập cây DOM-> đều là đồng bộ hóa. Ta muốn 1 số ở chỗ này thay đổi thì những data ở chỗ nào thay đổi. react hook sẽ gom những data liên quan lại với nhau và hình thành 1 cú pháp đơn giản để 1 cái đổi cái khác tự động kiểm tra và đổi. 
+
+Nguyên lý khá giống redux, biến react thành functional programming. ta có thể tạo ra hook của ta hoặc dùng built-in hook. Hook k dùng trong class
+Basic Hooks: useState, useEffect,..
+Additional Hooks: useReducer, useMemo, useCallback,..
+ 
+side effect là data fetching, còn có thể là cập nhập DOM, set up a subscription,...
+

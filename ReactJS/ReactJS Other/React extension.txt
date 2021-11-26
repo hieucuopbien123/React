@@ -1,0 +1,25 @@
+create react app như bth.
+
+Nếu ta chạy "npm start" như bth nó sẽ ra 1 trang web ta cần hiển thị. Để tạo ra 1 sản phẩm extension trong react ta phải build nó "yarn run build" sẽ tạo ra thư mục build chứa sản phẩm cuối của ta. Nó có 1 file manifest.
+Ta dùng TT thư mục dự án cũng đc nhưng nó kp là sản phẩm mà phải chạy npm run build mới đc.
+
+Tạo flie manifest đúng cấu trúc của 1 extension có name, description, version, content_script, background, action,..
+
+=> trong đó default_popup ta dùng file index.html là file html hiển thị các component React của ta thôi.
+
+Lỗi CSP là Content Security Policy: nó là 1 policy giảm thiểu truy vấn cross-site như kiểu SOP ấy. Với Chrome App, cái policy này sẽ cản trở ta script page(tức cấm thẻ script và các sự kiện như onclick).
+Để khắc phục: ta tạo ra file .env và thêm vào: INLINE_RUNTIME_CHUNK=false
+
+=>tạo ra các file cho content_script và background như bth.
+
+service_worker là file background.js
+
+Craco(Create react app configuration override) là 1 package giúp chỉnh sửa config của create-react-app. Vì extension ta muốn nó build cả 2 file script là content_script và background nên ta phải config build cho react 2 file đó => tạo file craco.config.js và setup là đc
+=>Xong r chỉnh lại scripts package.json là craco build chứ k dùng react-scripts build mặc định nx
+
+Dòng comment /* eslint-disable no-undef */ lại là bắt buốc trong các file react mà dùng đến variable chrome-> nếu k có dòng comment này thì sẽ k dùng đc biến chrome trong react.
+
+"permissions: ['storage']" tức là có thể dùng chrome.storage để lưu thông tin
+
+extension trong react nó k dùng đc các kiểu onInstalled hay alert ở background=> cơ chế nó k còn như cũ nx, ta nên chú trọng hơn vào vc dùng component react trong index.html khi extension popup
+

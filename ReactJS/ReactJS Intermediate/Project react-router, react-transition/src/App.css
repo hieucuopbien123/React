@@ -1,0 +1,124 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.example-enter {
+  opacity: 0.01;
+}
+
+.example-enter.example-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.example-appear {
+  opacity: 0.01;
+}
+
+.example-appear.example-appear-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.example-leave {
+  opacity: 1;
+}
+
+.example-leave.example-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+/* .example-enter {
+  opacity: 0.1;
+  background:  #f9e79f;
+}
+
+.example-enter .example-enter-active {
+  opacity: 1;
+  background:  #eafaf1 ;
+  transition: opacity 300ms ease-in;
+}
+
+.example-enter-done {
+  opacity: 1;
+  background:  #eafaf1 ;
+}
+
+.example-exit {
+  opacity: 1;
+  transition: opacity 900ms ease-in;
+  background:  #fdebd0 ;
+}
+
+.example-exit .example-exit-active {
+  background:  white ;
+}
+
+.example-exit-done {
+  opacity: 1;
+  background:  white;
+}
+
+.appear {
+  opacity: 0;
+}
+
+.appearDone{
+  opacity: 0.5;
+}
+
+.appearActive{
+  opacity: 1;
+  transition: opacity 5000ms ease-in;
+}
+
+.my-div {
+  border: 1px solid blue;
+  width: 350px;
+  height: 150px;
+  padding: 5px;
+}
+
+.my-message {
+  font-style: italic;
+  color: blue;
+}
+
+.my-highlight  {
+  color: red;
+} */

@@ -1,0 +1,23 @@
+.routerSelected{
+    color: blue;
+}
+
+.transition-enter{
+    color: green;
+    display: block;
+}
+.transition-entering{
+    color: green
+}
+.transition-entered{
+    color: blue
+}
+.transition-exit{
+    color: red
+}
+.transition-exiting{
+    color: red
+}
+.transition-exited{
+    display: none;
+}
