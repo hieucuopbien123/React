@@ -7,6 +7,7 @@ class Panel extends React.Component {
                 <div>{this.props.children}</div>
             </div>
         );
+        //Tương tự trong function component có hết chỉ cần bỏ this đi
     }
 }
 //nhờ có this.props.children mà nó làm cho code của ta ở dưới nó ez hơn, chứ kp lưu 4 cái thẻ div lại thành 1 biến
@@ -56,14 +57,23 @@ class MovieBrowser extends React.Component {
         const childrenWithExtraProp = React.Children.map(this.props.children, child => {
             // return React.cloneElement(child, {
             //     isPlaying: child.props.title === currentPlayingTitle
-            // }
+            // })
+            console.log(child.type.name.toString())
             return (
                 <div className="some-component-special-class" style={{color:"red"}}>{child}</div> 
             );
         });
         //ít dùng vì dù có isPlaying : true r thì cx chả có ích gì trong này nx. Ta thg dùng tạo ra các thẻ có sự thay
-        //đổi đi 1 chút thì hơn, ví dụ class thay đổi
-        //chú ý là bị hạn chế ví dụ k đổi đc text của các con chẳng hạn
+        //đổi đi 1 chút thì hơn, ví dụ class thay đổi. Ta đơn giản là k đổi con mà chỉ thêm 1 thẻ div có style mong muốn
+        //bao ngoài con mà thôi
+        //chú ý là bị hạn chế ví dụ k đổi đc text của các con chẳng hạn. Đó là do ta cho các children tĩnh thôi
+        //Ta có thể thêm vào props của các child con các thứ như isPlaying, text hiển thị cũng có thể truyền vào props
+        //được thì child có thể điều khiển mọi thứ từ cha.
+        //Nhưng giả sử ta k muốn chỉnh sửa child mà vẫn muốn nó thay đổi cơ vì ta muốn tái sử dụng Parent ở nhiều nơi
+        //Khi đó vấn đề nằm ở cấu trúc parent child của ta có vấn đề, ta có thể fix lại cho nó dễ hơn. Nếu k react vẫn
+        //có thể thực hiện được bằng cloneElement để tạo ra child mới từ child cũ có thêm thuộc tính ra và điều khiển 
+        //nó bằng các hàm của react nhưng chác chắn rất phức tạp=> tuyệt đối k đi hướng này mà nên chỉnh structure
+        //Nếu muốn đổi style thì được chứ đổi content text cụ thể thì k
         console.log(childrenWithExtraProp);
         console.log(this.props.children);
         //mở debug ra mà chỉnh thuộc tính

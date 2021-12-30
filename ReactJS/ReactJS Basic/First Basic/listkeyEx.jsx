@@ -1,7 +1,7 @@
 class Employee extends React.Component {
     render() {
         return (
-            <li key={this.props.key}>{/*để dùng thì phải làm thêm key ntn */}
+            <li key={this.props.key}>{/*để dùng thì phải làm thêm key ntn=> éo cần */}
                 <div>
                     <b>Full Name:</b> {this.props.fullName}
                 </div>

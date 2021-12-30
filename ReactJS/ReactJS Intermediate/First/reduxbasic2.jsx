@@ -34,7 +34,7 @@ function logger(helo) {
     var { getState } = helo;
     return next => action => {
         console.log('will dispatch', action)
-        const returnValue = next(action)
+        const returnValue = next(action);//returnValue cx chỉ là cái action truyền vào thôi
         console.log('state after dispatch', getState())
         return returnValue;
     }
@@ -94,6 +94,7 @@ function dispatchAndLog(store, action) {
     console.log('next state', store.getState());//hàm getState sẽ lấy state thời điểm hiện tại, lấy lúc nào cx đc
     //Đây chính là 1 hàm ghi log bth mỗi tội dài, khi nào cần ghi thì sử dụng. Đấy là middleware thứ nhất mà nó phải đi qua. Trước khi đi vào
     //reducer của store
+    //store.dispatch(action) gọi chơi thôi, cái này gọi để dispatch action bất cứ lúc nào cx đc
 }
 dispatchAndLog(store, addNumber())
 */
@@ -111,4 +112,4 @@ console.log(a) // Giá trị của a cũng bị thay đổi thành { name: 'bar'
 console.log(a === b) // true
 //hàm assign có khả năng copy cái này vào cái khác. Ở trên nếu k dùng mergeProps thì nó sẽ tự gọi mặc định
 //return Object.assign({},stateProps,dispatchProps,ownProps);//assign thì k dùng ... mà truyền vào object nhưng return {...<>} thì có
-//thg dùng 1 là {} trống để gán copy bằng gt trả về
+//thg dùng 1 là {} trống để gán COPY bằng gt trả về

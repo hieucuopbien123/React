@@ -12,10 +12,18 @@ funcGlobal = () => {
 funcGlobal();
 
 var funcNotArr = function Animal(name) {
+    //nó bảo function kiểu có this bên trong như này giốn kiểu hàm khởi tạo nên dùng class
     this.name = name,
     console.log("Arrow Function constructor in global", this);
 }
 funcNotArr();
+/*class funcNotArr {
+    constructor(name) {
+        this.name = name,
+            console.log("Arrow Function constructor in global", this);
+    }
+}
+funcNotArr(); */
 
 
 //this trong func construtor global thì là object của nó
@@ -34,7 +42,6 @@ varBindNorm.bind(varBook,"para1");//k chạy luôn mà chỉ gán
 varBindNorm.call(varBook, "para1");
 varBindNorm.apply(varBook, ["para1"]);
 
-//!
 //trong hàm sự kiện k truyền đối số nhưng hàm có đối số->biến sẽ undefined nhưng k dừng ct->nên truyền đủ với event
 function onchangeFunction(e){
     console.log("Hàm xử lý sự kiện có đối số nhưng k truyền đối số: ", this, " ", e);

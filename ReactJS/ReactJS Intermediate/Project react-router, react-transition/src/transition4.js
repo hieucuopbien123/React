@@ -17,14 +17,14 @@ class TodoList extends React.Component {
     }
 
     handleAdd() {
-        const newItems = this.state.items.concat([
+        const newItems = this.state.items.concat([//concat 1 prompt luon dc
             prompt('Enter some text')
         ]);
         this.setState({items: newItems});
     }
 
     handleRemove(i) {
-        let newItems = this.state.items.slice();
+        let newItems = this.state.items.slice();//trả ra chính nó
         newItems.splice(i, 1);
         this.setState({items: newItems});
     }
@@ -48,7 +48,9 @@ class TodoList extends React.Component {
                 transitionEnter={true}
                 transitionLeave={true}>
                 {items}
+                {/* hiệu ứng trans củ chuối, xóa phải chờ 5s mới mất */}
             </CSSTransitionGroup>
+            {/* mấy cái xóa hay thêm ta k nên dùng transition */}
             </div>
         );
     }

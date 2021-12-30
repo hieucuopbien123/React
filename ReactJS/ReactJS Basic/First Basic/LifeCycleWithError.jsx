@@ -7,7 +7,7 @@ class ComponentLifeCycle extends React.Component {
         //nếu ta khai báo now ở trong constructor như này thì chỉ đc dùng trong constructor. Tức dùng đc trong 
         //hàm dưới. Nếu khai báo ngoài hàm này or trong các hàm khác của class này thì thành global dùng đc ở mọi hàm
         //bên trong class này=> hiểu sai rồi
-        //có this thì dùng mọi nơi, có  this thì chỉ dùng trong phạm vi hàm. Hàm constructor cũng như hàm bth
+        //có this thì dùng mọi nơi, k có this thì chỉ dùng trong phạm vi hàm. Hàm constructor cũng như hàm bth
         //miễn là nó compile đến để biến tồn tại là đc, nhưng điều quan trọng là muốn dùng this trong các 
         //hàm thì phải bind
         this.state = {

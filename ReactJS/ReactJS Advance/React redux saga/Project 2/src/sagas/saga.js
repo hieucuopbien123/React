@@ -124,3 +124,34 @@ export default mySaga;*/
 // Fetch /posts/2 end     |  Main end <-- 
 // Fetch /posts/1 end     |  Fetch /posts/2 end
 // Main end <--           |  Fetch /posts/1 end
+
+/*
+VD: ứng dụng race
+function* fetchPostsWithTimeout() {
+    const {posts, timeout} = yield race({
+        posts: call(fetchApi, '/posts'),
+        timeout: delay(1000)
+    })
+    if (posts)
+        yield put({type: 'POSTS_RECEIVED', posts})
+    else
+        yield put({type: 'TIMEOUT_ERROR'})
+}
+*/
+
+/* Tổng kết: mặc định là các hàm được gọi kèm với yield
+takeEvery: mọi request của user đều lấy
+takeLatest: user gọi nhiều thì chỉ lấy cái cuối, dừng những cái đã gọi 
+call: gọi 1 hàm bất kỳ thực hiện lần lượt
+delay: chờ 1 khoảng thời gian r mới thực hiện tiếp 
+put: dispatch 1 action bất đồng bộ
+takeLeading: user gọi nhiều hàm thì chỉ lấy cái đầu
+take: gọi 1 hàm đúng 1 lần, các lần sau sẽ k bắt
+fork: thực hiện bất đồng bộ hàm đó nhưng chỉ khi xong mới thực hiện hàm sau hàm cha gọi nó. Kiểu hàm cha gọi nó cần dùng
+thì phải chờ cho nó xong=> bất đồng bộ nhưng ta lại muốn nó đồng bộ thêm 1 lúc để tiết kiệm thời gian ấy
+spawn: bất đồng bộ hoàn toàn, gọi hàm nhưng data bên trong k qtr xong hay chưa, cứ gọi bất đồng bộ khi nào xong thì lấy
+all: chạy mọi hàm bên trong bất đồng bộ cùng lúc
+putResolve: dispatch 1 action đồng bộ, phải dispatch xong mới cho đi tiếp
+race: thực hiện đồng bộ mọi hàm bất đồng bộ bên trong cùng lúc, cái nào xong trước thì lấy kết quả, biến lưu cái chưa 
+xong trả ra null 
+*/

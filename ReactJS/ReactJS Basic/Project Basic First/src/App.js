@@ -173,7 +173,7 @@ class App extends React.Component {
         <br/>
           <Grid container spacing={2} justify="center">
             <Grid item xs={12} sm={3}>
-              {/* ở trong vùng sm chỉ chiếm 6 ô, ở trong vùng sx chiếm max 12 cột(đây là responsive
+              {/* ở trong vùng sm chỉ chiếm 3 ô, ở trong vùng sx chiếm max 12 cột(đây là responsive
                 để nó chiếm hết vùng đó thì paper ta set là 100% chứ k đc fix) */}
               <Paper style={{width: "100%", height: 75}} variant="outlined">
                 <Box component="span" m={1}>

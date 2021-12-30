@@ -11,7 +11,7 @@ class TransitionClass extends React.Component{
     }
     enterFunc = () => {
         console.log("Enter")
-        this.setState({
+        this.setState({ 
             state: "enter"
         })
     }

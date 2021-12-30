@@ -64,7 +64,7 @@ const reducer2 = (state = { numberTest: 1 }, action) =>
     return { numberTest: copyState1 };
 }
 //Ở lần đầu tiên render nó sẽ chạy reducer đầu tiên với action INIT nhưng ta k có tự chạy vào case là default và chỉ
-//lấy những giá trị default mà thôi
+//lấy những giá trị default mà thôi. Ở trong đây thì tức là switch case k chạy 
 
 //k có hàm nào là tự có cả, import cdn phải có tiền tố
 var reducer = Redux.combineReducers({

@@ -26,7 +26,7 @@ export default postsSaga;
 //thế nào thì giao diện in ra như thế nào. Trong lúc đó thì hđ call api vẫn diễn ra và nếu thành công thì lại dispatch
 //action tới reducer luôn in ra cái gì
 //Nếu đang lấy api dở lại thực hiện 1 action khác thì sao-> phải gọi vào hàm all để các saga chạy đa luồng tức là vừa 
-///fetch api cho dữ liệu action này, vừa thực hiện cho action khác ở luồng khác nx
+//fetch api cho dữ liệu action này, vừa thực hiện cho action khác ở luồng khác nx
 
 //mọi giá trị của trả về của yield đều là undefined nhưng nếu là 1 object Promise thực hiện 1 hàm callAPI thì nó sẽ
 //trả ra giá trị object lưu kết quả của promise đó. VD promise đó resolve hay reject cái gì thì lấy hoặc đơn giản

@@ -48,6 +48,7 @@ body {
 ol, ul { list-style: none; }
 img { border: none; vertical-align: top; }
 /* vertical-align: theo thẻ cha, theo dòng chữ của thẻ cha or khoảng cách theo số bất kỳ */
+/* vertical-align: top là theo thẻ có chiều cao cao nhất ở dòng hiện tại */
 button {
   background-color: #3a95ea;
   border: 1px solid #2d87da;

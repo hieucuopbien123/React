@@ -38,6 +38,7 @@ class ErrorBoundary extends React.Component {
         }
     // Normally, just render children
         return this.props.children;//props.children là các thẻ con trong thẻ này tự lưu trong props của class
+        //props của mỗi class luôn tự động có component children của nó
     }  
 }
 

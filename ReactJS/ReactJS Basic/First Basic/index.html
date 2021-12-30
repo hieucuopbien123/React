@@ -64,7 +64,7 @@
     function Comment(){
         return(
             <div className="comment">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit proin sit amet neque.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit proin sit amet neque.
             </div>
         )
     };
@@ -97,6 +97,7 @@
         //trừ TH trực tiếp như name thì mới đc truyền trực tiếp=> tức props phải tương ứng với 1 thuộc tính nào đó ở
         //bên ngoài or là object luôn chứ kbh props k tương ứng với thuộc tính nào
         //tức là name="infoPerson.info.name" ok; name="name" ok; age="infoPerson.info.age" ok nhưng age="19" thì k đc.
+        //ý là age = {} phải có ngoặc {} thôi. Khi truyền string dùng luôn ""; khi truyền number dùng {}
         //Điều này đồng nghĩa với việc, nếu ta gán info luôn thì ta có thể đặt tên info đó 1 cái tên bất kỳ, nhưng nếu ta
         //muốn gán age và name thì cần phải đúng là có cái tên ấy
     );//cặp () báo hiệu code 1 đối tượng JSX
@@ -222,6 +223,7 @@
     <div id="listkeyEx"></div>
     <script type="text/babel" src="listkeyEx.jsx"></script>
 
+    <div id="hieu"></div>
     <script type="text/babel" src="learnJSX.jsx"></script>
 
     <div>TRAINING</div>
@@ -230,6 +232,9 @@
 
     <div id="training2"></div>
     <script type="text/babel" src="training2.jsx"></script>
+
+    <div id="fragment"></div>
+    <script type="text/babel" src="fragment.jsx"></script>
 
 </body>
 

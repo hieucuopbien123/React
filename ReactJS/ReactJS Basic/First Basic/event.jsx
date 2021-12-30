@@ -1,5 +1,5 @@
 class EventForm extends React.Component{
-//mọi component trong react có tên luôn bắt đầu bằng chữ hoa, nếu k sẽ lỗi
+//mọi component trong react có tên luôn bắt đầu bằng chữ hoa,nếu k sẽ lỗi.Nhưng khi gán component bằng 1 biến thì k cần
     constructor(props){
         super(props);
         this.state = {
@@ -37,9 +37,9 @@ class EventForm extends React.Component{
         this.setState({
             //nếu type là checkbox thì gán valueCheck, type là text thì gán value. C1: ta dùng điều kiện if else
             //bên ngoài để gọi 2 hàm khác nhau. C2: là đổi TT bằng cách khiến key là biến
-            [e.target.name]: (e.target.type == "check") ? e.target.checked : e.target.value
+            [e.target.name]: (type == "check") ? e.target.checked : e.target.value
         })
-    }//làm gộp rối vl nhưng đẳng cấp
+    }//làm gộp rối vl nhưng đẳng cấp. Đặt name của thẻ trùng với tên state var của components
     // có mỗi type check box là checked thôi còn các cái còn lại thì đều là value. Nếu có cái biến khác nx thì phải
     //chia TH từ từ ra
 
@@ -51,6 +51,7 @@ class EventForm extends React.Component{
     handleChangeSelect = (e) => {
         this.setState({
             valueSelect: e.target.value
+            //các trường còn lại của state k nói tức là nó giữ nguyên
         })
     }
 

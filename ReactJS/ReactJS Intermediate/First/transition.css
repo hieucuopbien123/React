@@ -1,4 +1,4 @@
-/* .my-msg {
+.my-msg {
     color: blue;
 }
 
@@ -21,7 +21,7 @@
 
 .my-highlight  {
 color: red;
-} */
+}
 
 .my-msg {
     color: blue;
@@ -46,6 +46,7 @@ color: red;
     opacity: 0;
     font-size: 100%;
     margin-left: 300px;
+    /* chú ý chỉnh kiểu margin thì các thẻ bên phải nó bị ảnh hưởng đấy, nên để nó luôn block tag */
     color: black;
     transition-duration: 1s;
 }

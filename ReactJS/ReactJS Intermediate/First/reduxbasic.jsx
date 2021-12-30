@@ -12,6 +12,7 @@ class Test extends React.Component {
         //dùng được ở mọi nơi(trù constructor thì phải bind)
         //Ta có thể var <actionCreators var>=Redux.bindActionCreators({object tập hợp các hàm},<dispatch>);
         //lúc này <actionCreators var> là tập hợp các action creator có thể truyền làm return hàm mapDispatchToProps
+        //Điều đặc biệt là nó thường bind ở ngoài hay bind ở 1 file khác phân cấp thư mục
     }
 
     //xử lý các hàm sự kiện bên dưới, dùng dữ kiện về thông tin phần tử thay đổi để tạo ra 1 biến action. Buộc có tp 1 là type
@@ -162,9 +163,9 @@ const /*tên component redux*/ TestRedux = ReactRedux.connect ( /*tên hàm mapS
 //         reset: () => dispatch(reset()),
 //     }
 // }
-// //cách 2 là dùng như 1 object. Nên dùng cách này trừ khi có TH ta có nhu cầu thay đổi hành động dispatch
+// //cách 2 là dùng như 1 object. Nên dùng cách này trừ khi có TH ta có nhu cầu thay đổi hành động dispatch(theo ownProps)
 // const actionCreators = {//đặt tên khác thôi
-//     increment,//đã dispatch r
+//     increment,//là actionCreator được tạo từ bindActionCreator rồi
 //     decrement,
 //     reset,
 // }
@@ -205,11 +206,11 @@ console.log(store);
 //truyền vào props của Test hàm onAddNumber và return ra 1 component y hệt class Test nhưng props lại có 2 thuộc tính đó-> đó chính là TestRedux
 //và render nó lên màn hình. Điều này tức cái thứ ta render lên màn hình là TestRedux được tạo bởi connect chứ kp là Test, Test nó là 1 class 
 //giống y hệt TestRedux mà thôi. Bh ta click vào sự kiện thì nó sẽ xử lý event của ta, gọi vào hàm onAddNumber với đối số, hàm này được truyền 
-//vào thep props thây, nó sẽ khởi tạo rồi dispatch cái action của ta-> dispatch thì nó đi ra lần lượt các thẻ lớn hơn chờ bắt cái action đó thì 
+//vào props thây, nó sẽ khởi tạo rồi dispatch cái action của ta-> dispatch thì nó đi ra lần lượt các thẻ lớn hơn chờ bắt cái action đó thì 
 //gặp thẻ Provider có store lưu cái reducer sẽ xử lý cái action + props cũ truyền từ mapStateToProps trả ra 1 object mới-> xong cái thẻ của ta 
 //sẽ gọi mapStateToProps để truyền Object đó vào props và thực hiện render. Nếu tiếp tục bấm sẽ thực hiện tương tự: xử lý event->dispatch action
 //reducer xử lý action và props cũ cho ra object mới-> lại mapStateToProps nhét vào TestRedux(mapDispatchToProps chỉ định nghĩa và thực hiện 1 
-//lần thôi)
+//lần thôi)-> trước khi dispatch đi nó cũng chạy vào middleware nx
 
 //Phân chia file: (components) sẽ lưu các thứ hiển thị với giao diện, ở đây là class Test; (actions) sẽ lưu các hành động xử lý từ cái data 
 //truyền vào; (containers) sẽ mapStateToProps và mapDispatchToProps r thực hiện connect để đưa nó vào trong props của class; (reducer) là nơi 

@@ -8,7 +8,7 @@ class TransitionClass extends React.Component{
     }
     change = () => {
         this.setState({
-            transition: this.state.transition ? false : true
+            transition: !this.state.transition
         })
     }
     onEnterHandler()  {
@@ -29,6 +29,7 @@ class TransitionClass extends React.Component{
     onExitedHandler() {
         this.setState({message: 'OK Exited!'});
     }
+
     render(){
         return(
             <div>
@@ -87,7 +88,7 @@ const increase = number => {
         data: number
         //data:number ở đây thừa vì reducer nó có state là dùng number r, cái data trong action kiểu này chỉ dung
         //khi ta cần truyền thêm dữ liệu gì khác của component cần thiết dể thay đổi cái number trong state mà thôi
-        //chứ number trong action chả dùng
+        //chứ number trong action chả dùng. VD ta add 1 post mới toanh vào listpost thì data đó ms phải dùng action
     }
 }
 const decrease = number => {
@@ -145,3 +146,18 @@ ReactDOM.render(
 store.dispatch({
     type: "INC",
 });
+
+function AddAttribute(){
+    //1 cách khác để add attribute vào thẻ chỉ dùng cho funcion component
+    const attributes = {
+        type: 'text',
+        name: 'address',
+        value: "hello"
+    }
+    return(
+        <div>
+            <input {...attributes} />
+        </div>
+    )
+}
+ReactDOM.render(<AddAttribute />, document.getElementById("5"));

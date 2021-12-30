@@ -14,6 +14,9 @@ function FirstBasic(){
         setCount(count + 1);
     }
     const test = useTest(count)
+    //thật ra kp là useTest là 1 hook được gọi lại liên tục đâu mà điều đặc biệt ta gọi custom hook là ta truyền vào 
+    //hàm số đó 1 state var để khi nào biến setState mà thực sự làm đổi state nó sẽ render lại hàm này=> sẽ gọi lại
+    //hàm custom hook nên nó mới bị gọi lại nh lần.
     React.useEffect(() => {
         console.log("effect")
         if(count%2 == 0)
@@ -36,7 +39,7 @@ const themes = {
     light: { color: "black", backgroundColor: "white"},
     dark: { color: "white", backgroundColor: "black" }
 }
-const ThemeContext = React.createContext(themes)
+const ThemeContext = React.createContext()
 function ContextProviderClass(){
     return(
         <ThemeContext.Provider value={themes}>
@@ -49,6 +52,7 @@ function ThemedButton(){
     const [isDark, setIsDark] = React.useState(true);
     const [objectStyle, setObjectStyle] = React.useState(null);
     const theme = React.useContext(ThemeContext)
+    console.log(0);
     const changeMode = () => {
         if(isDark)
             setIsDark(false)
@@ -66,7 +70,7 @@ function ThemedButton(){
 
     //Trap kinh điển của hook: ta giả sử dùng biến isDark như trên
     //TH1: dùng biến global objectStyle ngoài class và đổi nó trong useEffect -> khi ấn nút thì isDark đổi
-    //nên chạy vào useEffect đổi objectStyle->xong chạy hàm 1 lần nx mà k gọi useEffect-> ok 
+    //nên chạy vào useEffect đổi objectStyle->xong chạy hàm 1 lần nx mà k gọi useEffect-> ok -> có ok đâu
     //Th2: dùng biến objectStyle cục bộ trong function và đổi nó trong useEffect -> lỗi -> vì sau khi
     //chạy xong useEffect nó còn chạy thêm 1 lần nx mà k gọi useEffect mà ta khai báo object style trong hàm
     //thì lúc đó nó tạo mới biến đó mất r, k còn lấy giá trị đc gán trong useEffect nx
@@ -231,6 +235,7 @@ function Cha1(){
             <button onClick={() => setCount(count + 1)}>Cha1</button>
         </div>
     )//Ở Th này Con1 k có props gì cả mà bên trong Con1 cx k có state gì để đổi => Con1 sẽ kbh đc re-render ở TH này
+    //vì đối số 2 của memo là cái gì đổi thì nó ms render lại, nếu kcj thì chả bh render lại
 }
 ReactDOM.render(<Cha1/>, document.getElementById("8"))
 
@@ -238,9 +243,9 @@ ReactDOM.render(<Cha1/>, document.getElementById("8"))
 var Con2 = props => {
     return React.useMemo(() => {
         return (
-        <div name={console.log("Render Con2")}>
-            Con2
-        </div>
+            <div name={console.log("Render Con2")}>
+                Con2
+            </div>
     )},[])
 }
 function Cha2(){

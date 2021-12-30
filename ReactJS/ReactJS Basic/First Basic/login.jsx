@@ -54,7 +54,6 @@ class LoginControl extends React.Component {
     };
 };
 
-
 const UserGreeting = (props) => {
     return <h2>Welcome back!</h2>;
 };

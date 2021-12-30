@@ -43,7 +43,7 @@ class Product extends React.Component {
 
     Redirect = () => {
         this.setState({
-            isRedirected: true,
+            isRedirected: !this.state.isRedirected,
         })
     }
     //Đây là lệnh quyết định có enable "/" hay k, klq j đến component Redirect
@@ -88,7 +88,9 @@ class Product extends React.Component {
                     <Switch >
                         <Route exact path="/images" component={ProductImages} />
                         {this.state.isRedirected && <Route exact path="/" component={ProductFeature}/>}
-                        <Route exact path="/comments" component={ProductComments} />
+                        <Route exact path="/comments">
+                            <ProductComments/>
+                        </Route>
                     </Switch>
                 </div>
             </div>
@@ -121,4 +123,5 @@ phần bên trong. Với brower thì nó tạo / như bth còn hash thì là #/
  */
 // có sự khác biệt rất lớn là BrowserRouter nó cho thấy trang Route path k tồn tại khi ta vào trang đó bằng cách
 //gõ url trực tiếp nhưng HashRouter có tồn tại bất cứ lúc nào. Cho nên BrowerRouter nó chỉ cho phép refer đến 1 trang
-//con khi đi từ trang cha
+//con khi đi từ trang cha theo đúng nguyên tắc-> refresh lại trang là thấy k còn nx => chưa biết thực tế ta mà dùng với
+//hosting se như nào

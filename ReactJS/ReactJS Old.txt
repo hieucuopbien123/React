@@ -5,7 +5,7 @@ ReactJS là cho phát triển các ứng dụng web, còn React Navtice cũng đ
 
 Cơ chế nó tạo 1 virtual DOM thông qua react xác định các component bị thay đổi trong virtual DOM và chỉ đổi nó trong DOM thật.
 
-JSX là javascript syntax xml. 1 cách khác viết cấu trúc xml trong javascript. Khi dùng trình biên dịch sẽ chuyển từ JSX syntax sang JS. Nó dùng babel-> dùng trong trang web bằng cách script tới trang: https://unpkg.com/@babel/standalone@7.12.4/babel.js -> khi dùng code JSX ta dùng type script là "text/babel" thì babel có thể compile file của ta.
+JSX là javascript syntax xml. 1 cách khác viết cấu trúc xml trong javascript. Khi dùng trình biên dịch sẽ chuyển từ JSX syntax sang JS. Nó dùng babel-> dùng trong trang web bằng cách script cdn tới trang: https://unpkg.com/@babel/standalone@7.12.4/babel.js -> khi dùng code JSX ta dùng type script là "text/babel" thì babel có thể compile file của ta.
 Các file JSX có đuôi mở rộng là jsx cx là 1 text file. 
 ->link gốc: https://unpkg.com/browse/babel-standalone@7.0.0-beta.3/
 
@@ -57,6 +57,13 @@ Ngoài lề: 1 số trình duyệt nó k cho tệp tin javascript native hoạt 
 http://localhost:<số port>/
 =>Vc ta dùng lệnh npm để tạo 1 server như thế chính là tạo 1 NodeJS Server rồi. Server này nằm ngay trên máy của ta. Ta có thể code javascript trên server r.
 
+npm là 1 bộ quản lý package bằng lệnh npm của NodeJS. npx là lệnh có ở phiên bản mới của NodeJS chạy nhanh và tốt hơn npm. Chúng cài các dependencies của dự án vào file package.json và package-lock.json
+yarn là 1 phiên bản cải tiến của npm sử dụng file yarn.lock khắc phục lỗi version của npm khi cài cùng 1 module trên 2 máy khác nhau lại có phiên bản khác nhau gây bug, nó cx tiện lợi hơn ở nhiều thứ. Dùng chung file package.json và cài các dependencies vào folder node_modules, file yarn lock sẽ theo dõi phiên bản package trong node_modules.
+yarn add <tên gói> hoặc version cụ thể với: yarn add [package]@[version-or-tag]-> dùng cài đặt thêm dependencies và tự động thêm phiên bản tham chiếu vào package.json tương đương vói lệnh npm install <package>
+yarn upgrade <package> -> upgrade các gói lên phiên bản mới nhất theo rule trong package.json tương tự npm update và tạo lại yarn.lock
+yarn remove <package>
+3 cái --dev / --peer / -optional thêm vào cuối nếu specific với 3 loại dev dependencies, peer dependencies and optional dependencies.
+
 Component Life Cycle(no error handling):
 ReactDOM.render() --> <tên class>.defaultProps = {}
    ^                               |
@@ -78,6 +85,24 @@ componentWillUnmount()         <xử lý>---------------  ---------------------<
    |                                v
    ---------------   ReactDOM.unmountComponentAtNode(element)   
 
+Material ui là thư viện các react component tích hợp thêm Google's Material Design. Giao diện mới lạ khác với giao diện phổ biến là bootstrap. Nó là thư viện đc đánh giá là hay nhất hiện giờ của react về giao diện.
+Material Design là hình thức phát triển hơn của Flat Design(thiết kế phẳng). Bằng những gam màu nổi bật với đường nét đơn giản, chúng mang tới cảm giác 3D như có hiệu ứng nổi lên trên giao diện. Thiết kế này còn bao gồm những chuyển động tự nhiên, như khi các nút, menu hiện trên màn hình chẳng hạn. Ví dụ 1 bức ảnh màu xanh và 1 bức ảnh gradient từ xanh nhạt đến xanh đậm tạo ra sự khác biệt hoàn toàn. 
+yarn add @material-ui/core
+yarn add @material-ui/icons
+import { Button } from '@material-ui/core';
+
+yarn add @fontsource/roboto => font chữ cx add vào npm thoải mái => dùng với font-family: "Roboto"
+
+react bootstrap là bootstrap được xây dựng lại bằng react, làm cho giao diện đẹp hơn. Nó trở thành các component react. Trong ứng dụng của ta vẫn có thể dùng bootstrap bình thường .js và .css nhưng ta nên dùng react-bootstrap cho react sẽ ok hơn.
+Để cài: npm install react-bootstrap bootstrap
+Để dùng bootstrap bình thường ta cần thêm jquery và proper.js=> npm install --save jquery popper.js
+=>Dùng tiếp như cdn với: 
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap';
+import 'jquery';
+import 'popper.js';
+=> điều đặc biệt là khi ta install package gì thì cái tên package ta install, ta chỉ cần import '<tên package install>'; thì nó tự import file js cho ta. Chẳng qua bootstrap nó yêu cầu file css nên ta import thêm vào thôi.
+Vd thêm component: import { Button,<> } from 'react-bootstrap';
 
 ReactJS là 1 thư viện của javascript thì React Router lại là 1 thư viện định tuyến của React bên thứ 3. Nó giữ cho giao diện ứng dụng đồng bộ với URL trên trình duyệt. Nó cho phép định tuyến luồng dữ liệu trong ứng dụng 1 cách rõ ràng. Kiểu đường dẫn url thế này thì tương đương với router(tuyến đường này) và giao diện nó sẽ thế này. 
 Nó thg dùng phía server nh hơn ví dụ ứng dụng react trong NodeJS Server. React chỉ là load các component qua lại nên luôn có 1 trang -> nhưng nhờ router mà web của ta có đường dẫn khác nhau khi các component thay đổi trên trang đó-> Single Page Application. 
@@ -87,13 +112,14 @@ K dùng cdn, ta tạo 1 dự án bth và thêm router vào bằng cách cd đế
 Thật ra nó có 3 package: react-router / react-router-dom / react-router-native. Cái đầu là thành phần core để sử dụng 2 cái còn lại. react-router-dom sử dụng khi xd web app, react-router-native dùng khi xd React Native(mobile) app. Ta dùng cái gì thì install cái đó. 
 Xong rồi import { BrowserRouter as Router } from 'react-router-dom' để sử dụng
 
-
-npm là 1 bộ quản lý package bằng lệnh npm của NodeJS. npx là lệnh có ở phiên bản mới của NodeJS chạy nhanh và tốt hơn npm. Chúng cài các dependencies của dự án vào file package.json và package-lock.json
-yarn là 1 phiên bản cải tiến của npm sử dụng file yarn.lock khắc phục lỗi version của npm khi cài cùng 1 module trên 2 máy khác nhau lại có phiên bản khác nhau gây bug, nó cx tiện lợi hơn ở nhiều thứ. Dùng chung file package.json và cài các dependencies vào folder node_modules, file yarn lock sẽ theo dõi phiên bản package trong node_modules.
-yarn add <tên gói> hoặc version cụ thể với: yarn add [package]@[version-or-tag]-> dùng cài đặt thêm dependencies và tự động thêm phiên bản tham chiếu vào package.json tương đương vói lệnh npm install <package>
-yarn upgrade <package> -> upgrade các gói lên phiên bản mới nhất theo rule trong package.json tương tự npm update và tạo lại yarn.lock
-yarn remove <package>
-3 cái --dev / --peer / -optional thêm vào cuối nếu specific với 3 loại dev dependencies, peer dependencies and optional dependencies.
+React-transition-group là 1 thư viện phát triển bởi cộng đồng react-> giúp làm việc với CSS transition
+dùng cdn: <script src="https://cdnjs.cloudflare.com/ajax/libs/react-transition-group/2.4.0/react-transition-group.min.js"></script> trong dự án cứ lấy 
+với react trong NodeJS: npm install react-transition-group --save -> save là lưu vào package.json, ta có thể npm run <lệnh đó trong script package.json>. Thư viện này cung cơ bản 3 component: Transition, CssTransition, TransitionGroup
+import { TransitionGroup, CSSTransition, Transition } from "react-transition-group";
+Dùng v cx đc dù nó là phiên bản cũ và k còn đc nâng cấp. Ta cũng có thể sử dụng 1 phiên bản cũ khác là: 
+yarn add react-transition-group-v1@npm:react-transition-group@1.x và import { CSSTransitionGroup } from 'react-transition-group-v1'
+=> dùng đc CSSTransitionGroup
+Cả 2 cái này k còn hỗ trợ nên có các hàm cũ nhưng vẫn chạy đc là đc
 
 Redux là flux đơn giản dựa trên kiến trúc ELM(ngôn ngữ lập trình hàm). Redux js là một thư viện Javascript giúp tạo ra thành một lớp quản lý trạng thái của ứng dụng. Redux là kết hợp hoàn hảo của React nhưng cx dùng đc với các framework khác của js. Với các lib khác của js thì vc quản lý khi ứng dụng trở nên lớn hơn rất phức tạp. Có 1 nguyên lý là data chỉ nên live trong 1 component. Chính vì v vc share data rất khó khăn nhất là các component ở xa nhau. Để share đc thì state phải live trong component cha và pass đến các component con như props. Thế nếu 2 component cực xa nhau chia sẻ thì dữ liệu phải tồn tại ở cha rất nhiều-> redux giải quyết vấn đề, nó có 1 store lưu trữ toàn bộ state của app. Mỗi component có thể access trực tiếp đến state thay vì phải gửi qua props như cũ.
 Luồng redux: thực hiện 1 hành động trên giao diện là view provider(1 view framework như react/angular)->1 đối tượng action được tạo ra lưu các thông tin cần thiết-> dispatch action đó tới store-> trong store có middleware và reducer, middleware sẽ thực hiện các nhiệm vụ gì đó như dispatch các action mới/báo lỗi/..-> sau đó reducer sẽ xử lý action đó và cho ra từ state ban đầu cho ra 1 state mới copy->cái state mới đó được lưu vào store để quản lý-> trả ra trạng thái mới cho view provider để ta nhìn thấy sự thay đổi trên màn hình nếu có và cập nhập trạng thái mới cho component bằng mapStateToProps chuyển từ state mới sang props của component.
@@ -108,17 +134,6 @@ Dùng hàm nào thì import hàm đó ví dụ: import { connect } from "react-r
 Khắc phục lỗi install: cannot be loaded because running scripts is disabled on this system -> chạy lệnh: 
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
 Cơ bản dùng các hàm của redux: dispatch, mapStateToProps, connect, createStore, tạo reducer
-
-Khi ta dùng lệnh bth với npm để lập trình dự án react như v là ta đã sử dụng NodeJS r. Mà NodeJS là công nghệ tại phía server, thao tác với server trả ra HTML cho trình duyệt ng dùng-> Với dự án create-react-app, ta có thể dùng JS để viết ứng dụng tại 2 phía client/server. Các thứ ta chỉnh sửa trong thư mục src chính là trên môi trường server r, nếu muốn dùng 1 cái gì trong 1 module thì phải import vào tập tin giữa các file-> sai, chỉ là frontend mà thôi
-
-React-transition-group là 1 thư viện phát triển bởi cộng đồng react-> giúp làm việc với CSS transition
-dùng cdn: <script src="https://cdnjs.cloudflare.com/ajax/libs/react-transition-group/2.4.0/react-transition-group.min.js"></script> trong dự án cứ lấy 
-với react trong NodeJS: npm install react-transition-group --save -> save là lưu vào package.json, ta có thể npm run <lệnh đó trong script package.json>. Thư viện này cung cơ bản 3 component: Transition, CssTransition, TransitionGroup
-import { TransitionGroup, CSSTransition, Transition } from "react-transition-group";
-Dùng v cx đc dù nó là phiên bản cũ và k còn đc nâng cấp. Ta cũng có thể sử dụng 1 phiên bản cũ khác là: 
-yarn add react-transition-group-v1@npm:react-transition-group@1.x và import { CSSTransitionGroup } from 'react-transition-group-v1'
-=> dùng đc CSSTransitionGroup
-Cả 2 cái này k còn hỗ trợ nên có các hàm cũ nhưng vẫn chạy đc là đc
 
 Expressjs là một framework được xây dựng trên nền tảng của Nodejs cho web hoặc mobile. Khi làm việc với React, chúng ta sẽ thường có nhu cầu liên kết dữ liệu như MySQL, MongoDB, ..., tuy nhiên bản thân React là một Javascript, chỉ thao tác ở phía client, việc liên kết sử lý dữ liệu là không thể. Để giải quyết vấn đề này, chúng ta sẽ liên kết dữ liệu với React thông qua API với Expressjs. Khi cài bằng create-react-app nó tự cài express cho mình r.
 Nếu ta muốn tự cài riêng nó và chỉ mình nó từ 1 dự án trống:
@@ -193,25 +208,6 @@ CREATE USER <tên user> FOR LOGIN <tên login>;
 Để xóa 1 user hay login vào database->tìm tất cả các nhánh user có tên cần xóa và xóa đi
 SID là security id là số tồn tại ở mỗi user
 
-react bootstrap là bootstrap được xây dựng lại bằng react, làm cho giao diện đẹp hơn. Nó trở thành các component react. Trong ứng dụng của ta vẫn có thể dùng bootstrap bình thường .js và .css nhưng ta nên dùng react-bootstrap cho react sẽ ok hơn.
-Để cài: npm install react-bootstrap bootstrap
-Để dùng bootstrap bình thường ta cần thêm jquery và proper.js=> npm install --save jquery popper.js
-=>Dùng tiếp như cdn với: 
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap';
-import 'jquery';
-import 'popper.js';
-=> điều đặc biệt là khi ta install package gì thì cái tên package ta install, ta chỉ cần import '<tên package install>'; thì nó tự import file js cho ta. Chẳng qua bootstrap nó yêu cầu file css nên ta import thêm vào thôi.
-Vd thêm component: import { Button,<> } from 'react-bootstrap';
-
-Material ui là thư viện các react component tích hợp thêm Google's Material Design. Giao diện mới lạ khác với giao diện phổ biến là bootstrap. Nó là thư viện đc đánh giá là hay nhất hiện giờ của react về giao diện.
-Material Design là hình thức phát triển hơn của Flat Design(thiết kế phẳng). Bằng những gam màu nổi bật với đường nét đơn giản, chúng mang tới cảm giác 3D như có hiệu ứng nổi lên trên giao diện. Thiết kế này còn bao gồm những chuyển động tự nhiên, như khi các nút, menu hiện trên màn hình chẳng hạn. Ví dụ 1 bức ảnh màu xanh và 1 bức ảnh gradient từ xanh nhạt đến xanh đậm tạo ra sự khác biệt hoàn toàn. 
-yarn add @material-ui/core
-yarn add @material-ui/icons
-import { Button } from '@material-ui/core';
-
-yarn add @fontsource/roboto => font chữ cx add vào npm thoải mái => dùng với font-family: "Roboto"
-
 UUID(Universally Unique IDentifier) là 1 định danh duy nhất. nó mạnh mẽ đến mức cung cấp đc id cho hàng tỉ tỉ user và phức tạp khó có thể lộ ra ngoài, khi đó ta cần sử dụng uuid. JS có thư viện cung cấp uuid: 
 npm install uuid
 sử dụng: import { v4 as uuidv4 } from 'uuid/v4'; => có từ v1 đến v5
@@ -256,14 +252,3 @@ yarn add react-calendar => cuộn lịch
 waiter kết hợp với saga phức tạp vl, nếu sau này dùng thì đọc lại chứ bth chỉ cần có saga or 1 mình waiter là đc r chứ chưa cần kết hợp cả 2. Nếu dùng saga ta cx có thể cho nó loading được khi chưa success thì cho load=false và  hiển thị. Còn dùng waiter mà k dùng saga thì cx tương tự nó tự sinh start, success, error nhưng k hay bằng saga
 
 npm i react-cssfx-loading => import { BarWave } from "react-cssfx-loading"; để dùng
-
-
-??dbjson
-
-??dự án tổng kết sẽ sử dụng: nodejs server express, sql database, axios for request/fetch , react bootstrap, react transition, redux logger, redux saga, phân trang, đăng server lên public, react hook, react,..
-
-??bài tập: tạo ấn edit là vị trí age và name trở thành 1 input điền text cơ, nút edit biến thành finish, điền xong ấn finish tự cập nhật
-
-??Bài tập: tự làm đc ví dụ ở redux bài đầu tiên nhưng id khi xóa ở giữa sẽ tự cập nhập lại tăng dần-> à k chơi kiểu chỉ có cái cuối là luôn bằng cái trc +1 còn lại vẫn giữ nguyên
-
-??? useParams và useRouteMatch phải học đến react hook ms dùng đc

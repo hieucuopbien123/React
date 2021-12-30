@@ -112,3 +112,5 @@ ReactDOM.render(
 //cần đổi number 1 class nhưng class kia cũng có biến number-> giải quyết bằng cách chia reducer. Nếu reducer kia có 
 //number đổi nhưng reducer này k đổi number thì hàm mapStateToprops gọi reducer này thì nó vẫn k đổi. 
 //Xem ví dụ 4
+//=> tức là nhiều component dùng chung reducer thì các state đổi thì chỉ component nào có state của hàm mapStateToProps
+//đổi thì mới render lại-> redux rất tối ưu

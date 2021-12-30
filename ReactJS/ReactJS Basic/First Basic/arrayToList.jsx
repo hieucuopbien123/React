@@ -66,10 +66,10 @@ function NumberList(props) {
     );
     console.log(numbers);//gọi hàm tự do trong hàm là 1 component
     console.log(listItems);
-    console.log("Key: " + listItems[0].key);
+    console.log("Key: " + listItems[0].key);//1 biến jsx có thể gọi attribute của nó như này
     console.log(listItems[0].props);
     //khi có 1 biến lưu component thì dùng như object v, cứ chấm liên tục đến các thứ. Chú ý là props nó chỉ lưu 
-    //value mà thôi. Còn các giá tị khác lấy TT
+    //value mà thôi. Vì key nó kp props mà nó phải mặc định có trong mọi list của react, nó là 1 trường đặc biêt
     return (
         <ul>
             {listItems}

@@ -9,15 +9,15 @@ class Random extends React.Component {
         this.testFocusRef = React.createRef();
     }
 
-    //Pb:DOM khác Component,render component lên xong sẽ thành cây DOM trong html có root là node bao ngoài component đó
+    //Pb:DOM khác Component, render component lên xong sẽ thành cây DOM trong html có root là node bao ngoài component đó
     //Các cách truy cập vào text của 1 node bất kỳ trong mô hình DOM, xong ví dụ lấy text của nó
     //C1: dùng ref với hàm createRef. Cách này rất ổn, vào trong debug search mọi thứ cần có và lấy ra, dùng current
-    //Tạo createRef với tên trong constructor->dùng ref trong thẻ->sử dụng this.<tên>
+    //Tạo createRef với tên trong constructor->dùng ref trong thẻ->sử dụng this.<tên> => cách 1 hay nhất
     newRandomValue(event) {
         console.log(this.textURL.current.innerText.split(" ",3)[2]);//current chính là nơi lưu thẻ DOM
         this.testFocusRef.current.focus();
         this.testFocusRef.current.style.background = "#e8f8f5";
-        this.forceUpdate();
+        this.forceUpdate();//vì chỉ đổi mấy cái style thì nó đâu có đổi props nên k tự động update
     }//chỉ truy cập đc vào component của chính class này
     // C2: dùng javascript bth->nếu trước khi render component này thì chưa tồn tại sẽ k gọi đc
     newRandomValue1(event) {
@@ -42,7 +42,7 @@ class Random extends React.Component {
     newRandomValue4(event) {//dùng thế này thì gọi thông qua hàm khác cx đc or dùng arrow
         console.log(event.target.innerText);
         this.forceUpdate();
-    }//truy cập vào node phát ra sự kiện thông qua target, k truy cập đc vào các node khác
+    }//truy cập vào node phát ra sự kiện thông qua target, k truy cập đc vào các node khác. VD ở đây chỉ vào đc button
     //C5: callback ref. Lợi dụng callback ref mặc định lấy đc cái node của component đó r gán vào 1 biến lưu vĩnh viễn
     //để sử dụng=>cách này bỏ chả có gì cả
     newRandomValue5(event) {
@@ -55,7 +55,8 @@ class Random extends React.Component {
         <div>
             A
             <input type="text" ref={this.testFocusRef}/>
-            <button button onClick={event => this.newRandomValue(event)}>Random</button>
+            <button button onClick={event => this.newRandomValue3(event)}>Random</button>
+            {/* không cần như này, chỉ cần tên hàm bth cx tự truyền event r */}
             <div ref={this.textURL} id="Random">Random Value: {Math.random()}</div>
         </div>
         );

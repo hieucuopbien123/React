@@ -96,6 +96,7 @@ class Product extends React.Component {
                     chuyển trang đều đc */}
                     <Route exact render={ () => {
                         console.log(typeof ProductFeature)
+                        //cơ chế: ấn nút-> redirect là true-> đổi state-> render lại-> chạy vào hàm dưới-> redirect HOME
                         return (
                             this.state.isRedirected ? (<Redirect to="/" />) : null
                         )
@@ -109,6 +110,10 @@ class Product extends React.Component {
     }//đối số của component và render bắt buộc là định nghĩa 1 hàm số trả về component đó
     //bản thân tên component cx là tên 1 hàm số trả về giá trị component đó nên truyền đc như v
     //kể cả class hay function thì <tên component> đều có typeof là hàm số
+
+    //Ở Vd này có 2 ứng dụng: 1 là redirect làm trang mặc định hiện ra của web
+    //2 là bên cạnh việc ấn link thì chuyển trang thì ở đây ta ấn nút bất kỳ thì chuyển trang. Như v ta có thể tùy biến
+    //Vd ấn nút đồng hồ chạy, chạy xong thì gán isRedirected = true-> cx tự redirect tới trang mong muốn-> tùy biến
 }
 
 class App extends React.Component {

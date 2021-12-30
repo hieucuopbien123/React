@@ -19,7 +19,7 @@ class TodoList extends React.Component {
         const newItems = this.state.items.concat([
             prompt('Enter some text')
         ]);
-        this.setState({items: newItems});
+        this.setState(this.state.items.push(newItems));
     }
 
     handleRemove(i) {

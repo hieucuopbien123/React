@@ -1,33 +1,33 @@
 const { HashRouter, NavLink, Route, Link, BrowserRouter, Switch, Redirect } = ReactRouterDOM;
 
+//Đây là cách mà ta phân chia cấu trúc file, có thể để 1 folder routing chứa file chứa component dưới
 class App extends React.Component {
     render()  {
-    return  (
-        <BrowserRouter>
-            <div>
-                <ul>
-                    <li>
-                        <Link to="/">Home</Link>
-                    </li>
-                    <li>
-                        <Link to="/about">About</Link>
-                    </li>
-                    <li>
-                        <Link to="/topics">Topics</Link>
-                    </li>
-                </ul>
-                <hr />
+        return  (
+            <BrowserRouter>
+                <div>
+                    <ul>
+                        <li>
+                            <Link to="/">Home</Link>
+                        </li>
+                        <li>
+                            <Link to="/about">About</Link>
+                        </li>
+                        <li>
+                            <Link to="/topics">Topics</Link>
+                        </li>
+                    </ul>
+                    <hr />
 
-                <div className="main-route-place">
-                    <Route exact path="/" component={Home} />
-                    <Route path="/about" component={About} />
-                    <Route path="/topics" component={Topics} />
+                    <div className="main-route-place">
+                        <Route exact path="/" component={Home} />
+                        <Route path="/about" component={About} />
+                        <Route path="/topics" component={Topics} />
+                    </div>
                 </div>
-            </div>
-        </BrowserRouter>
-    );
+            </BrowserRouter>
+        );
     }
-
 }
 
 class Home extends React.Component {
@@ -59,6 +59,7 @@ class Topics extends React.Component {
                 <ul>
                     <li>
                         <Link to={`${this.props.match.url}/rendering`}>Rendering with React</Link>
+                        {/* hay vì nó lấy được đường dẫn kiểu này */}
                     </li>
                     <li>
                         <Link to={`${this.props.match.url}/components`}>Components</Link>

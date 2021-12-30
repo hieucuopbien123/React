@@ -61,6 +61,7 @@ class Posts extends React.Component {
                     {posts.map(post => (
                         <li key={post.id}>
                             <Link to={`/posts/${post.id}`}>{post.title}</Link>
+                            {/* or dùng this.props.match.url */}
                         </li>
                     ))}
                 </ul>

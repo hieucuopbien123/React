@@ -90,7 +90,7 @@ function TestCallbackAndMemo(){
         console.log(person);
     },[person]);
     //useCallback k hưu dụng bằng useMemo. VD: cần nếu persion true thì hàm này, persion false thì là hàm khác thì k dùng
-    //useCallback đc mà phải là useMemo-> useMemo nó bao cả useCallback
+    //useCallback đc mà phải là useMemo-> useMemo nó bao cả useCallback=> nên dùng thế hoàn toàn
     return (
         <div>
             <div>Name: {memoVar.name}; Age: {memoVar.age}</div>

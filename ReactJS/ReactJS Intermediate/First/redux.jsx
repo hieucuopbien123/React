@@ -35,38 +35,41 @@ class ProductsPane extends React.Component {
 
 
     render () {
-    const products = this.props.products;
-    console.log("Render")
-    // Example product: { productId : 4 , productName :'Profit' }
-    var trList = products.map( (product, index) => {
-        return (<tr key={product.productId}>
-        <td>{product.productId}</td>
-        <td><input type="text" onChange={this.editProduct.bind(null, product.productId)} value={product.productName} /></td>
-        <td>
-            <button onClick={this.removeProduct.bind(null, product.productId)}>
-            Remove
+        const products = this.props.products;
+        console.log("Render")
+        // Example product: { productId : 4 , productName :'Profit' }
+        var trList = products.map( (product, index) => {
+            return (
+                <tr key={product.productId}>
+                    <td>{product.productId}</td>
+                    <td><input type="text" onChange={this.editProduct.bind(null, product.productId)} 
+                    value={product.productName} /></td>
+                    <td>
+                        <button onClick={this.removeProduct.bind(null, product.productId)}>
+                            Remove
+                        </button>
+                    </td>
+                </tr>
+            );
+        });
+
+
+        return (<div>
+            <table border="1">
+                <thead>
+                    <th>ID</th>
+                    <th>Product Name</th>
+                    <th>Remove</th>
+                </thead>
+                <tbody>
+                    {trList}
+                </tbody>
+            </table>
+            <br/>
+            <button onClick={this.addProduct}>
+                Create
             </button>
-        </td>
-        </tr>);
-    });
-
-
-    return (<div>
-        <table border="1">
-        <thead>
-            <th>ID</th>
-            <th>Product Name</th>
-            <th>Remove</th>
-        </thead>
-        <tbody>
-            {trList}
-        </tbody>
-        </table>
-        <br/>
-        <button onClick={this.addProduct}>
-            Create
-        </button>
-    </div>);
+        </div>);
     }
 }
 
@@ -119,7 +122,7 @@ const appReducer = (state = {productList: []}, action) => {
     case 'REMOVE_PRODUCT':
         var idx = getIndexByProductId(products, action.productId);
         if(idx != -1)  {
-        products.splice(idx, 1); // Removes element at `idx`
+            products.splice(idx, 1); // Removes element at `idx`
         }
         break;
     case 'EDIT_PRODUCT':
@@ -133,7 +136,7 @@ const appReducer = (state = {productList: []}, action) => {
     // It makes sure we know our data can only be modified in one visible way
     // Also lets us time travel through our application state!
     const newState = {
-    productList: products
+        productList: products
     }
     console.log('Current State', newState);
     return newState;
@@ -161,7 +164,7 @@ const MyApp = ReactRedux.connect (
 // Render
 ReactDOM.render(
     <ReactRedux.Provider store={store}>
-    <MyApp />
+        <MyApp />
     </ReactRedux.Provider>,
     document.getElementById('redux')
 );

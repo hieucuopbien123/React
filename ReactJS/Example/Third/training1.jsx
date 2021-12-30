@@ -145,6 +145,7 @@ const reducer1 = (state = {number: 2}, action) => {
 //lúc đó ta có thể cho cả reducer B bắt và return để cập nhập->nhưng nếu mapStateToProps của reducerB éo cần cập nhập
 //thì lại k mong muốn 
 //=> Tốt nhất nên tránh điều đó xảy ra. 1 component thì 1 reducer và k có chuyện ông A thực hiện ảnh hưởng state ông B
+//=> tách reducer phải hợp lý
 var reducerAll = Redux.combineReducers({
     reducer, reducer1
 })
@@ -205,7 +206,7 @@ class BootstrapClass extends React.Component{
                     </ReactBootstrap.Card.Text>
                 </ReactBootstrap.Card>
 
-                <ReactBootstrap.Breadcrumb className="w-25">
+                <ReactBootstrap.Breadcrumb className="w-30">
                     <ReactBootstrap.Breadcrumb.Item>First</ReactBootstrap.Breadcrumb.Item>
                     <ReactBootstrap.Breadcrumb.Item active>Second</ReactBootstrap.Breadcrumb.Item>
                     <ReactBootstrap.Breadcrumb.Item>Third</ReactBootstrap.Breadcrumb.Item>

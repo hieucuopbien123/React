@@ -38,6 +38,7 @@ class ClassIndex extends React.Component {
 //lưu TT ở 1 thời điểm, ta kiểm soát bằng cách tạo các hàm thay đổi nó chứ mặc định thì có .defaultProps={<object>}
 //state và props là 1 thuộc tính có sẵn trong class của React-> dùng state thì thôi k dùng props nx, 2 cái chỉ khác nhau
 //ở chỗ state đổi giá trị ở trong bản thân class đó đc nhưng props thì giá trị là k đổi đc trong class
+//khi dùng class, muốn dùng props phải có constructor
 ReactDOM.render(
     <ClassIndex />,
     document.getElementById("index")
@@ -78,6 +79,7 @@ class Button extends React.Component {
         //sang phiên bản ES6 thì class của react các hàm sẽ k còn tự động bind this nx(trừ arrow function) nên ta phải
         //chủ động bind nó, ví dụ bind luôn ở constructor để dùng this là class trong hàm bth or arrow hết thì khỏi lo, cái
         //này chỉ giúp dùng hàm ngoài trong hàm khởi tạo thôi
+        //Chú ý ta đặt tên biến mới trùng vói tên hàm changeSearchText2
     }
     updateCount() {
         this.setState((prevState, props) => {
@@ -90,7 +92,7 @@ class Button extends React.Component {
     // setState(<function nhận 2 đối số là trạng thái hiện tại, và props là property của class này và nó return luôn
     //các thuộc tính của state sau khi chuyển đổi>)(<object state về sau>). Vẫn dùng đc props bên trong
     //dùng cách này nếu muốn dùng tham số là state hiện tại và thuộc tính fix có sẵn props
-    changeSearchText(event){
+    changeSearchText(event){//this trong hàm này là window
         var v = event.target.value;
         //.target là element gây ra cái event. Gọi hàm này trong event của javascript sẽ tự động truyền vào event
         this.setState((prevState, props) => {

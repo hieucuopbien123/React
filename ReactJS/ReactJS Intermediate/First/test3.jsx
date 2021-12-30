@@ -64,7 +64,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 const TestRedux = ReactRedux.connect (mapStateToProps,mapDispatchToProps)(Test);
 ReactDOM.render(
     <ReactRedux.Provider store={store}>
-    <TestRedux age="100" name={console.log("Chạy đến hàm ReactDOM render")}/>
+        <TestRedux age="100" name={console.log("Chạy đến hàm ReactDOM render")}/>
     </ReactRedux.Provider>,
     document.getElementById('test3')
 );
@@ -88,10 +88,10 @@ ReactDOM.render(
 
 //chỉ có 1 lỗi đó là mapStateToProps mà đổi thì giá trị ở reducer bị ảnh hưởng dù hàm này chưa kết thúc=> chia rõ ràng ra 
 //1 phần chỉ là chuyển đổi, 1 phần là code logic để tránh lỗi này-> đúng là có lỗi này thật nhưng lưu vào res mới bị chứ
-//in ngay k lưu thì éo bị đổi theo hàm mapStateToProps.
+//in ngay k lưu thì éo bị đổi theo hàm mapStateToProps => chốt là nên return mnl chứ đừng lưu res r ms return trong reducer
 
-//=>Đáng lẽ phải kiểm chứng điều đó nhưng trong dự án chia file: reducer nhận vào 1 mảng-> trả ra 1 mảng nhưng 
-//mapStateToProps lại nhận vào 1 object chứa mảng đó-> return 1 object, attribute của object trong mảng đó lại
+//=>Đáng lẽ phải kiểm chứng điều đó nhưng trong dự án chia file: reducer nhận vào 1 mảng-> trả ra 1 mảng và mapstatetoprops
+//nhận vào object chứa mảng đó-> return 1 object, attribute của object trong mảng đó lại
 //là tên của biến số mặc định của state trong hàm của reducer. 
 //truyền vào hàm ta cũng truyền dạng object-> cần giải thích tại sao return của reducer lại khác đối số 1 của 
 //mapStateToProps
