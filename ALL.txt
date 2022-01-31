@@ -1,0 +1,342 @@
+HTML->JSX basic:
+class="" => className=""
+<input value=""/> => <input defaultValue=""/>
+<label for=""> => <label htmlFor="">
+<option value=""> => <option value={}>
+style="" => style={{<gán thuộc tính>}}
+Khi viết về giá trị đc gọi => 
+<img src={path}>
+Hello {<biến>}
+
+JSX:
+function <tên component>(props){
+ return( <thẻ bao ngoài code JSX>
+ <content thẻ bên trong dùng props>
+</thẻ bao ngoài>
+)}
+onClick/ onSubmit/ onChange/ 
+!<condition> ? : null
+<condition> &&/|| <component>
+
+
+Javascript: 
+<tên event>.preventDefault;
+
+
+React:
+ReactDOM.render(<component>("<code JSX TTiep>"/ biến JSX),<thẻ hiển thị>);
+
+React.createRef();
+
+this.forceUpdate();
+
+class <tên class> extends React.Component{
+ constructor(props){
+ super(props);
+ this.state = {<object>}
+ this.props;
+ this.context;
+}
+ <tên hàm> = () => {
+ this.setState((prevState, props) => { return {<object>} })
+}
+ render(){
+ return ( <component {...props}/> ) }
+}
+
+componentDidCatch(error,errorInfo){
+ error.componentStack
+ error.toString()
+}
+<this/class>.props.children;
+
+<tên class>.defaultProps = <object default props>
+static getDerivedStateFromProps(nextprops, prevstate){ }
+componentDidMount(){ }
+shouldComponentUpdate(nextProps,nextState){ }
+getSnapshotBeforeUpdate(prevProps, prevState){ }
+componentDidUpdate(prevProps, prevState,snapshot){
+ ReactDOM.unmountComponentAtNode(<node element>)
+}
+componentWillUnmount(){ }
+
+var <biến component> = <this.props.list nào đó>.map(item => {
+ <<thẻ component> key={<item.id>} {<đối số truyền cho props>} />
+}
+
+React.Children.map(.forEach)(<this.prop.children>, <hàm số>(<con>));
+React.Children.count(.only/ .toArray)(children);
+React.isValidElement(<object>);
+React.cloneElement(<element>,{<props>},<children>);
+
+React.createContext(<default property>);
+<tên context>.displayName;
+<tên biến>.contextType = <tên context>;
+<<tên component>.Provider value={{<object>}}>
+ <<component>/>
+</<tên component>.Provider>
+
+
+React deprecated:
+React.createElement(<tag>,null({<property>}),null([<child element>]));
+React.createFactory(<tag/component type/fragment type>);
+ReactDOM.findDOMNode(<DOM element>);
+UNSAFE_componentWillMount();
+UNSAFE_componentWillUpdate(nextProps,nextState){ }
+
+<<tên component>.Provider value={{<object>}}>
+ <<tên component>.Consumer>
+ {{<attribute of context>} =>(
+    <<component sử dụng attribute of context>/>
+ )}
+ </<tên component>.Consumer>
+</<tên component>.Provider>
+
+
+React-router:
+<BrowserRouter>
+ <div>
+  <NavLink exact to="/<link>" activeClassName=""> </NavLink>
+   <NavLink to={{
+    pathname:"/<link>",
+    search:"?<key>=<value>",
+    hash:"#<giá trị>",
+    state: {
+     <state send to next page>
+    }
+   }}> </NavLink>
+    <Switch>
+     <Route exact path="/<link>" component={<component>} />
+     <Route path="./<link>" render={<func trả ra 1 component>} />
+     <Route path="/<link>/:id" children={<func trả ra 1 component>} />
+    </Switch>
+ </div>
+</BrowserRouter>
+
+<Redirect to="" />
+
+this.props.match.params(.isExact/ .path/ .url);
+
+
+React-router deprecated: 
+<Link> </Link>
+<HashRouter> </HashRouter>
+
+
+React-redux: 
+window.__REDUX_DEVTOOLS_EXTENSION__.open();
+Redux.bindActionCreators(<function cần bind>/{<object các function cần bind>},<hàm dispatch phải có>);
+const reducer=(state=<default value>,<action>)=>{
+ switch(action.type){
+  case: 
+ }
+ return <giá trị trả về cùng kiểu với state>;
+}
+var <biến lưu tập hợp reducers> = combineReducers({object các reducers})
+const mapStateToProps=(state,ownProps)=>{
+ return <giá trị này là props component này luôn>;
+}
+var <middleware> = Redux.applyMiddleware(<biến object lưu gt có getState và dispatch> => {
+ return next=>action=>{
+  next(action);
+ }
+})
+Redux.createStore(<biến lưu tập hợp reducers/biến lưu reducer>,<gt mặc định từng reducer>,Redux.compose(<các middlewares cách nhau dấu phẩy>));
+
+const mapDispatchToProps=(dispatch,ownProps)=>{
+ return { 
+  <object các hàm dẫn có dispatch action>, 
+  dispatch, 
+  ...Redux.bindActionCreators(<function cần bind>/{<object các function cần bind>},<hàm dispatch phải có>); 
+ }
+}
+const actionCreators = {<object các action creator k có dispatch>}
+
+mergeProps=(stateProps,dispatchProps,ownProps){
+ return <object các thứ truyền vào props>;
+}
+var <component redux> = ReactRedux.connect(mapStateToProps,mapDispatchToProps,mergeProps)(<tên class>);
+<ReactRedux.Provider store={store}>
+ <<1 component redux> <các ownProps>>
+</ReactRedux.Provider>
+
+store.dispatch( {<action>} )
+store.getState();
+
+
+React-redux deprecated:
+window.devToolsExtension;
+
+
+React-transition-group:
+
+<Transition 
+ unmountOnExit=true(false/ )
+ mountOnEnter=true(false/ ) 
+ className={{
+ appear:'<tên class>',
+  appearActive:'',
+  appearDone:'',
+  enter:'',
+  enterActive:'',
+  enterDone:'',
+  exit:'',
+  exitActive:'',
+  exitDone:'',
+  }}
+ in= true(false/ )
+ timeout={{ enter:<số>, exit:<số>}}
+ onEnter={<function>}
+ onEntering={<function>}
+ onEntered={<function>}
+ onExit={<function>}
+ onExiting={<function>}
+ onExited={<function>}
+ addEndListener={(node, done) => {
+  node.addEventListener('transitionend', done, false);
+ }}
+ appear= true(false/ )
+ enter=true(false/ )
+ exit=true(false/ )
+>
+ {<status name> => (
+  <component className="<dùng status name để đổi css>" />
+)}
+</Transition>
+<CSSTransition> </CSSTransition>
+
+css:
+.<tên>-enter(exit/ appear) / .<tên>-enter-active/ .<tên>-enter-done 
+
+
+React-transition-group deprecated:
+npm install react-transition-group-v1
+
+<CSSTransitionGroup
+ transitionName=""
+ transitionEnterTimeout={<số>}
+ transitionAppearTimeout={<số>}
+ transitionLeaveTimeout={<số>}
+ transitionAppear=true(false)
+ transitionEnter=true(false)
+ transitionLeave=true(false)
+>
+  <component>
+</TransitionGroup>
+
+
+React-bootstrap:
+<Col md> </Col>
+<Row> </Row>
+<Container fluid> </Container> 
+
+<Form>
+ <Form.Group controlId="formEmail">
+  <Form.Label tag="h6">
+   <content của label>
+  </Form.Label>
+  <Form.Control type="email" placeholder="" />
+  <Form.Text className="text-muted">
+   <content của text>
+  </Form.Text>
+ </Form.Group>
+</Form>
+
+<Button variant="secondary(warning/ primary)" type="submit">
+ <chữ trên button>
+</Button>
+
+<Card className="mb-3" style={<object thuộc tính>}>
+ <Card.Img variant="top" src="https://picsum.photos/200/50"/>
+ <Card.Body>
+  <Card.Title className="text-center">
+   <Title của card>
+  </Card.Title>
+  <Card.Subtitle> <subtitle text> </CardSubtitle>
+  <Card.Text>
+   <content của card>
+  </Card.Text>
+ </Card.Body>
+</Card>
+
+<Breadcrumb>
+ <Breadcrumb.Item> <text của item> </Breadcrumb.Item>
+ <Breadcrumb.Item active> <item text> </Breadcrumb.Item>
+ <Breadcrumb.Item> <item text> </Breadcrumb.Item>
+ <Breadcrumb.Item> <item text> </Breadcrumb.Item>
+</Breadcrumb>
+
+<Alert variant="success"> <alert text> </Alert>
+
+
+Express/mssql/axios/concurrently/package.json/NodeJS basic/Modal:
+"proxy":"<link>"
+
+npm run <tên scripts>
+npm run concurrently "npm run <script>" "npm run <script>"
+node <file server>.js
+npm run start --prefix <tên folder client>
+
+
+var <biến> = require('express');
+var app = express();
+app.use(express.urlencoded({
+ extended: true
+)})
+app.use(express.json());
+
+
+var sql = require('mmsql');
+var <Config Object> = {
+ server: 'localhost\\<tên instance>',
+ database: '<tên database>',
+ user: '',
+ password: '',
+ options: {
+  trustedConnection: true,
+  instanceName: "<tên instance>",
+  trustServerCerfiticate: true
+ }
+}
+sql.connect(<config object>, <function callback>(err))
+
+var conn = new sql.ConnectionPool(<Config Object>);
+var request = new sql.Request(conn);
+request.query("<nd lệnh query>", <function>(err,res){ res.recordset; })
+conn.close();
+
+app.get('<link>', <callback function>(request,res){ res.send({<object gửi đi>}); })
+app.post('<link>', <callback function>(request,res) { res.json({<object gửi đi>}); })
+
+var <tên server> = app.listen(<port>, <callback function>)
+
+
+Modal.setAppElement('<tên tag>');
+
+<Modal isOpen={<function>} onRequestClose={<function>}>
+ <các component bị đè hoàn toàn lên>
+</Modal>
+
+
+componentDidMount(){
+ axios.get('<link>')
+      .then(<function cập nhập giá trị>)
+      .catch(err=>console.log(err));
+}
+
+axios.post('<link>'),<object gửi đi>,{ header: {'Content-Type':'application/json'} })
+     .then(<function cập nhập lại giá trị>)
+     .catch(err=>{
+      console.log(err, err.config)
+      if(err.response){
+       console.log(err.response.data, err.response.status, err.response.headers)
+      }
+      else if(err.request){
+       console.log(error.request);
+      }
+      else{
+       console.log(error.message);
+      }
+});
+
+

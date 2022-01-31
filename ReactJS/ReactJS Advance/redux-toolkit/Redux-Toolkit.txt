@@ -1,0 +1,130 @@
+redux code nó bị dài dòng và k có 1 quy chuẩn thống nhất. Khi mà 1 người có thể viết redux như này, người kia lại viết kiểu khác thì khi làm chung sẽ rất khó VD actions k nhất thiết phải có type cũng như reducer có thể k sử dụng switch case=> k có 1 quy tắc nào cả mà chỉ cần code js. 
+Redux-Toolkit ra đời thực ra chỉ là 1 cách viết khác của redux giúp code nhanh gọn và tuân theo 1 chuẩn thống nhất toàn bộ dự án.
+
+npm install @reduxjs/toolkit vào dự án react bth
+
+Test dự án basic:
+Trường text điền vào và bấm nút thì data lấy được sẽ đổi thành dữ liệu trong text khi ta đã gõ sẽ lấy ở 1 component khác
+Bấm 1 nút nx thì dữ liệu async được xử lý
+
+Với redux, để tạo 1 store: tạo actions constant-> tạo action creator-> tạo reducer -> tạo store từ reducer
+Thay thế bằng hàm configureStore
+
+=> configureStore, createReducer, createAction, createSlice, extraReducers, builder.addCase, builder.addMatcher, builder.addDefaultCase, createAsyncThunk 
+
+redux cho phép ta chia reducer thành nhiều reducer nhỏ hơn với hàm combineReducer để gộp thành 1 reducer chung của ứng dụng
+Nhưng thông thường các reducer khi được chia ra nó sẽ quản lý từng phần riêng biệt của ứng dụng-> data reducer này k thể liên kết với data reducer khác. VD ta chia ứng dụng như sau:
+store
+   --> module1
+       --> reducer.js
+       --> actions.js
+       --> actionTypes.js
+   --> module2
+       --> reducer.js
+       --> actions.js
+       --> actionTypes.js
+  ...
+
+Để quản lý điều này dễ dàng, ta thường tạo ra 1 convention trong dự án đặt tên theo module.
+VD: 
+const context = 'module1'
+// action name must contains module prefix
+const 'ACTION_01' = `${context}_ACTION_01`
+=> Để khi 2 module đều có tên ACTION_01 thì phân biệt được action nào module nào
+=> redux toolkit hiện thực hóa điều này và gom mỗi module vào 1 slice tạo ra bằng hàm createSlice
+
+createSlice sẽ tạo ra 1 slice ngắn gọn chứa luôn reducer và action theo quy ước. VD: 1 module counter
+import { createSlice } from '@reduxjs/toolkit';
+
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState: { count: 0 },
+  reducers: {
+    increment: state => state.count += 1,
+    decrement: state => state.count -= 1
+  }
+})
+
+export const { increment, decrement } = counterSlice.actions
+export default counterSlice.reducer
+
+=> nó sinh ra 2 action có types là counter/increment và counter/decrement và @@INIT mặc định
+=> nó nhóm reducer và action lại trong 1 object và ta export ra để sử dụng duy nhất 2 thứ này ở chỗ khác mà thôi
+
+Khi gom vào 1 slice thì action và reducer chung 1 nhóm. Thế nếu reducer muốn bắt action chung nào đó của ứng dụng thì phải dùng đến extraReducers
+
+
+Có TH ta xử lý action nhiều action type cùng 1 hàm. VD:
+function reducer(state = initState, action) {
+    switch (action.type) {
+        case 'FETCH_DATA_FAIL':
+        case 'UPDATE_DATA_FAIL':
+        case: 'DELETE_DATA_FAIL:
+            return {
+                ...state,
+                errors: action.payload.errors,
+                loading: false
+            };
+        default:
+            return state;
+    }
+}
+=> thật ra TH khá hiếm vì như thế thì ta nên dispatch chung 1 action type mà thôi nhưng nếu muốn chia kiểu trên thì toolkit cho hàm builder.addMatcher giúp giải quyết vấn đề gọn(phải dùng builder k được dùng object):
+const isErrorAction = (action) => {
+    return action.type.endsWith('FAIL')
+}
+const reducer = createReducer(initState, (builder) => {
+    build
+        .addMatcher(isErrorAction, (state, action) => {
+            state.errors = action.payload
+        })
+        .addDefaultCase((state, action) => {})
+})
+=> addMatcher có 1 là function nhận vào action được dispatch và trả ra kiểu boolean để check reducer cần lắng nghe action nào
+
+VD: mỗi module của ứng dụng nên là 1 slice riêng
+
+Khi ta dùng: 
+export const store = configureStore({
+    reducer: {
+        formSlice: formreducer,
+    }
+})
+=> tức là nó đã chỉ định thêm các middleware mặc định trong redux-toolkit rồi, bao gồm cả redux-thunk(có sẵn trong kit)
+
+Khi ta dùng: 
+import customMiddleware from './customMiddleware'
+const store = configureStore({
+    reducer: rootReducer,
+    middleware: [customMiddleware],
+})
+=> tức là ta k dùng các middleware mặc định nx mà chỉ dùng customMiddleware
+
+Khi ta dùng: 
+import customMiddleware from './customMiddleware'
+const store = configureStore({
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(customMiddleware)
+})
+=> tức là ta vẫn dùng các middleware mặc định xong còn dùng thêm middleware khác nx. Ở đây là có cả redux-thunk lẫn customMiddleware luôn
+
+redux toolkit hỗ trợ redux-thunk pro hơn với createAsyncThunk 
+
+Data ta dùng từ redux kp lúc nào cũng là lấy khởi nguồn từ redux
+VD: data ta lấy từ blockchain thì khi lấy nó ra để dùng từ redux thì data ban đầu của nó phải dùng useSelector để hiển thị khởi nguồn từ redux initialState
+Thế nhưng data cũng lấy từ redux nhưng lại k khởi nguồn từ blockchain mà là của riêng với mỗi user cơ thì sẽ khác
+Vd: ta làm tính năng search
+=> nếu thanh search và bảng hiển thị ở cùng 1 component => quá tốt vì ta dùng useState searchData để lọc data hiển thị luôn ra bảng ở trong cùng file
+=> nếu thanh search và bảng hiển thị ở 2 component khác nhau => éo ổn
+  => ta có thể làm kiểu trong 1 file có thanh search (vì nó đơn giản) và bên dưới thanh search là bảng hiển thị thì viết ở component khác thì ta sẽ truyền searchData từ cha sang con là bảng hiển thị lấy ra dùng
+  => nếu thanh search và bảng hiển thị ở 2 component 2 file khác nhau và 1 file chung chứa 2 component đó => éo ổn
+
+Vì ta biết để 1 component dùng props 1 component khác buộc phải chung 1 file or cha con chứ sibling khác file thì buộc phải dùng redux thì mới truyền được
+=> Như v dữ liệu search k lấy từ blockchain hay database mà chỉ là từ các component frontend mà mỗi client sẽ có 1 giá trị riêng(refresh lại khi F5). Nhưng ta lại dùng nó trong redux => k nên
+Do tính năng search nó nhỏ thì nên ghép chung bảng hiển thị và thanh search cùng file or dùng cách số 2 bên trên là cách tốt nhất cho bài toán. Nhưng nếu trong 1 TH nào đó bắt buộc phải tách ra như v thì buộc dùng redux
+=> Ở TH này, searchData khi nhét vào redux có giá trị mặc định là "" chẳng hạn nhưng trong thanh search ta k dùng searchData useSelector nhé mà useState nó thôi => dữ liệu đồng nhất mọi client thì mới lấy từ redux ban đầu. Còn dữ liệu riêng biệt mỗi client riêng và refresh trang là mất thì cái chỉnh sửa dữ liệu đó sẽ dùng useState, cái hiển thị dữ liệu đó mới dùng useSelector
+
+Trong redux toolkit có 2 hàm createDraftSafeSelector và createSelector. Thực chất createSelector được lấy từ thư viện reselect.
+createSelector giúp giải quyết vấn đề: giả sử redux có nhiều thứ cần lấy về ta xử lý khác nhau. Vd 1 trường user của data lấy về ta có thể dùng nó trong nhiều component và mỗi component lại lấy 1 kiểu riêng VD ô này thì lấy id của trường user, ô kia thì lấy age của user xong bên trong còn xử lý phức tạp nx. Thế thì mỗi khi user được update, tất cả công đoạn tính toán đều phải thực hiện lại. Hàm createSelector sẽ so sánh sự thay đổi nếu tham số cũ khác tham số mới thì mới thực hiện lại. Từ đó tốc độ tối ưu hơn.
+createDraftSafeSelector và createSelector có cú pháp y hệt nhau. Nhưng createDraft sẽ bắt sự thay đổi trực tiếp trong quá trình tốt hơn là createSelector. VD ở trong reducer mà ta dùng createSelector thì nó không đổi gì hết còn dùng createDraft thì nó đổi theo thời gian thực luôn
+import { createSelector } from 'reselect'; và createSelector này cũng có sẵn trong redux-toolkit

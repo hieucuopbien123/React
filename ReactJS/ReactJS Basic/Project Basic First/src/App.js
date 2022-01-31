@@ -15,7 +15,7 @@ import { Checkbox, FormControlLabel, TextField, Box } from '@material-ui/core';
 
 import { orange, green } from '@material-ui/core/colors';
 
-import 'fontsource-roboto';
+import "@fontsource/roboto"; // Defaults to weight 400
 import Typography from '@material-ui/core/Typography';
 
 import Container from '@material-ui/core/Container';

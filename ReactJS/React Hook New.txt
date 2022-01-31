@@ -52,3 +52,13 @@ http://example.com/register.php?message=<label>Gender</label><select class = "fo
 Để sửa đổi module npm, ta có thể fork repo đó về git của mình và sửa, sau đó sửa đổi file package.json thay số phiên bản bằng "git+<url repo>" => cách này k tốt vì các pakage to lại là con package khác rất phức tạp có thể k chạy. Trang https://gitpkg.vercel.app/ cho phép nhận link github ra câu lệnh npm, rất hay vì npm thực chất cũng chỉ là clone từ github về nhét vào node_modules
 Cách 2: ta sửa đổi trực tiếp trong node_modules r chạy: npx patch-package <package name> thì nó sẽ yêu cầu cài package patch và tạo ra thư mục patches chứa package ta đã sửa-> ta cứ dùng bth là ok r
 => nếu ta xóa nodemodules và cài lại thì có thể phải làm lại nên thêm lệnh: "postinstall": "npx patch-package" vào script để tự render theo thay đổi của ta khi install lại
+
+Các vấn đề khác của ReactJS:
+Dùng fragment còn lợi hơn div ở chỗ nó k tạo thẻ khi render ra nên chiếm ít bộ nhớ hơn.
+React khuyến khích sử dụng key khi render array. Khi đó react sẽ dễ dàng nhận biết phần tử nào đang thật sự bị thay đổi thông qua key để render lại DOM nhanh, đúng hơn
+Phân biệt useMemo và useCallback: useMemo ta lấy giá trị trả về của hàm còn useCallback ta lấy hàm. Tức dùng useMemo nó sẽ thực thi hàm đó và lấy giá trị trả về của hàm gán cho 1 biến. Nếu tham số hook k đổi thì hàm đó k thực thi lại. Còn useCallback ta lấy cả hàm bên trong của nó luôn, nếu tham số hook k đổi thì hàm đó sẽ không khởi tạo lại.
+Phân biệt useMemo với memo: memo nhận vào 1 functional component và nhận vào props và nó chỉ render lại nếu props của nó đổi=> useMemo rộng hơn k chỉ với components còn memo chỉ được với components; memo dùng kiểu truyền props cũ và điều này là không nên vì nó ở phiên bản cũ; useMemo nó là param k đổi sẽ k thực thi lại hàm còn memo thì giống kiểu callback nếu props k đổi nó sẽ k khởi tạo lại hàm số trả ra components của ta
+React.StrictMode là 1 component hỗ trợ đánh dấu lỗi tiềm ẩn trong ứng dụng. Nó chỉ hoạt động trên môi trường development và không tạo phần tử mới trên DOM node
+Ta có thể re-render lại component khi kích thước trình duyệt bị đổi bằng cách bắt sự kiện resize và cho render lại.
+Có thể sử dụng react mà không render HTML trong component không? Có ta dùng return false/ []/ null/ <Fragment></Fragment>/ <></>
+props của 1 component là bất biến theo, khi 1 component nhận được props thì nó sẽ k đổi được props của chính nó. Nếu nói đến việc đổi props thì chỉ có thể là cha truyền lại cho con 1 props khác.

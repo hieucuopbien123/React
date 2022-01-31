@@ -1,0 +1,71 @@
+react MUI
+nodejs version 14
+react version 17
+pages
+dữ liệu lưu trong redux
+abi/backend lấy vào redux và lấy các thứ trong component page hiển thị ra
+=> fake tạm dữ liệu đẩy vào redux
+tạo branch mới=> feat/trava-knight-ui
+fake dữ liệu chưa dùng đến web3
+css có dùng k
+husky check lỗi format github
+docker là cho production
+
+dự án này học là chính, phải hiểu mọi thứ
+
+npx prettier --write . là hàm format cả project
+
+Ta có thể ghi đè thuộc tính bằng thẻ style nhưng có những thuộc tính ở trong class phải tạo 1 component mới với withStyles, nhưng cũng có những thuộc tính khác tìm ra để đè 
+=> field classes trong các components cho phép ta ghi đè css có sẵn như tạo ra 1 button mà k có border trong MUI phải dùng trường classes
+
+Vẽ SVG làm position nó bị lệch 1 tí so với dòng chính, cho nó postion absolute phát là hết
+
+task: cái width và height là kích thước màn hình hiện tại k tính scroll bar
+ta muốn khi screen nhỏ hơn kích thước web page thì width phải bằng web page(nếu k sẽ xấu thử là biết)
+còn khi screen lớn hơn thì width là kích thước screen-> dùng kết hợp minwidth và width
+
+Cần tạo ra là dùng data mặc định của reducer: và lấy sẵn hàm get sao cho sau này khi gọi được data bằng web3, chỉ cần gọi 1 hàm của reducer để update ez mà thôi
+
+filter theo rarity + experience như trong trava.finance
+trong collection ghép từng mảnh 1 thành 1 collection hàm có sẵn
+src/icons/externallink nft front-end
+
+Nếu ấn vào search sẽ hiện ra-> nếu "" thì hiện ra mặc định
+nếu có data thì search cái địa chỉ theo data nhớ trim 2 đầu data
+Nếu ấn filter sẽ hiện ra Modal có các options: mặc định, tăng rarity, giảm rarity, tăng experience, giảm experience
+
+Giải quyết vấn dề: khi ta ấn filter thì trường rarity đổi-> trường này cần được bắn vào redux để nó gọi đến http: ... &rarity=[...] tức là nó thực hiện fetch GET lại. Nhưng nên nhớ fetch GET thì phải có full url như limit, page, sort,... nhưng các trường đó lại bị đổi bởi 1 components khác. Nên ta mới tư duy là: khi đổi trường rarity, ta truyền nó vào redux, cũng như các trường khác ta truyền hết vào redux. Sau đó, components nào có nhiều dữ liệu nhất sẽ lấy trường đó từ redux ra, sau đó kết hợp với các trường mà bản thân nó có như table có page,... và thực hiện, nếu rarity đổi thì fetch lại. 
+=> tức là ta phải gom các trường params trong url vào chung 1 components và để components đó gọi tất cả. Tuy nhiên thầy có cách giải khác, thầy nhét toàn bộ các trường cần thiết cho url vào chung 1 object đặt trong state của redux. Bất cứ khi nào các components update các trường của url sẽ update vào object đó-> trong slice khi fetch đơn giản gọi url với param là object đó-> problem solved!
+
+dùng axios create và .get của nó sẽ tốt hơn vì undefined nó tự động k cho vào param
+ở trong hàm fulfilled ta update status theo kiểu nếu nó khác success thì mới gán success. Bởi vì ta hạn chế việc gán liên tục tránh render lại mà check trước
+
+để là _ khi params k dùng đến
+
+selector cũng chỉ là chọn cái này hay cái khác nhưng lợi hơn...(học sau) 
+data nào lấy trực tiếp được thì dùng TT, data nào mà khi null sẽ in ra lỗi thì dùng createDraftSafeSelector
+
+null là trống, undefined là không tồn tại. Nhiều cái undefined bị lỗi or null bị lỗi. VD url ta dùng trường undefined nó sẽ k hiện gì cả nhưng nếu null VD limit=null thì url nó ghi là &limit&... thì lỗi còn gì. VD null ta dùng được map nhưng undefined thì k
+Nch là ta xử lý data lấy được từ redux ở trong createDraftSafeSelector. Chỉ cần lấy ra và làm tiếp. Trong components hoặc là dùng luôn, có thể thêm công đoạn checkc nếu cần
+nên nhớ (!undefined) và (!null) và (!0) đều trả ra true
+Kiểu: trong redux, nếu có data thì nó xử lý, else trả ra null
+trong front-end, nếu trả ra null thì hiện ra gì, nếu k thì hiện ra gì
+
+image import từ png thì trả ra string link static đến ảnh
+
+Bản chất của việc bắt lỗi là phải xử lý được cái lỗi đó thì làm gì chứ k làm gì cả mà để hệ thống tự báo lỗi thì đó k gọi là bắt lỗi. Tức là nó có lỗi và được xử lý theo ý ta chứ kp máy tự báo lỗi.VD gọi hàm a xong lấy data gọi hàm b thì data hàm a mà lỗi thì hàm b k được gọi mới đúng chứ kp là hàm b vẫn đc gọi xong bị sai và hệ thống báo lỗi hàm b. Máy chỉ được báo lỗi syntax mà thôi.
+
+Hàm createDraft ta cứ hiểu là kể cả input thay đổi nhưng nó xử lý xong ra data vẫn k đổi thì vẫn k render lại. Do đó nó tăng hiệu suất => chỉ dùng createDraft khi cần process dữ liệu. Các dữ liệu tiềm tàng sự thay đổi hay k chứ front-end vẫn có thể xử lý thêm data những thứ khác.
+
+Tuy nhiên điều đó k có nghĩa là lúc nào lấy data ta cx phải check sự tồn tại sẽ rất cồng kềnh và giảm hiệu suât. VD lấy data từ slice thì check để xử lý xong về sau về front end lại xử lý. Những thứ chắc chắn tồn tại thì k cần check. VD: totalNFT lấy từ contract là thứ chắc chắn có. Chỉ cần lấy được amouryStatistic thì chắc chắn lấy được rarities,.. nên k cần check vì nó cx quá đơn giản
+
+Nó hạn chế việc truyền props từ cha sang con bằng cách nhét luôn chữ filter ở bên trong drawer cùng component vs drawer
+
+VD amouryRegistry chỉ cần lấy về
+
+Cấu trúc refactor:
+tư duy nhóm liên tục như nào mà nghĩ được v
+ghi tất cả các điểm lợi so với code cũ: 
+
+fulfil là tt trả về bất chấp thât bại hay thành công
+
