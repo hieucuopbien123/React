@@ -65,7 +65,6 @@ VD amouryRegistry chỉ cần lấy về
 
 Cấu trúc refactor:
 tư duy nhóm liên tục như nào mà nghĩ được v
-ghi tất cả các điểm lợi so với code cũ: 
 
-fulfil là tt trả về bất chấp thât bại hay thành công
+fulfil là tt trả về bất chấp thât bại hay thành công trong redux async toolkit
 
