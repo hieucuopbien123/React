@@ -1,0 +1,23 @@
+# Dùng webpack
+
+Là tool giúp lập trình web trở nên đơn giản. Kết hợp với tool babel, nó tạo ra config cho các dự án web như React thay vì làm thủ công từng bước thì nó sẽ tối ưu hóa mọi thứ thành các lệnh ngắn gọn. Các bộ tạo dự án như CRA cũng dùng webpack ở tầng dưới và chỉ cung ra 4 lệnh script cho người dùng chạy
+
+-> setup react thủ công với webpack
+=> refer tới "Projects / Setup / setup react thủ công với webpack"
+
+-> npm run eject: Khi chạy lệnh này, tool này sẽ không còn tự động hóa mọi vấn đề khi phát triển nữa mà nó sẽ bung ra toàn bộ các config để những dev hiểu về Webpack hay Babel... có thể config lại theo ý đồ của mình. Nếu k rành mà chạy lệnh này mà quên backup là toi, đây là lệnh 1 chiều.
+
+-> Lỗi: khi ta npm run build dự án react xong sẽ ra index.html nhưng khi vào thì ra 1 trang trắng kcj. NN là vì webpack config khi dùng bản production thì build vào đường path là "/" tức absolute tìm trong application chứ k tìm trong application/build
+Ta có thể sửa điều này bằng cách thêm vào package json "homepage":".", để chỉ định tải các file static của dự án với url là relative trong thư mục hiện tại là application/build
+=> Nhờ v có thể mở file index.js để xem dự án trực tiếp. Nên dùng như v
+
+Có thể custom:
+"homepage": "./test", thì nhét thư mục static vào folder test cùng cấp là lại chạy được
+
+-> webpack ở v4 có đầy đủ NodeJS polyfills nhưng với các phiên bản mới nó k còn support. Điều này gây lỗi khi thao tác với web3 vì để dùng các module web3 buộc có mọi polyfills của nodejs 
+
+--> Cách fix 1: downgrade react-scripts xuống v4.0.3
+
+--> Cách fix 2: Tự config webpack thêm các polyfills cần thiết vào kèm với react-app-rewired
+=> refer tới "Projects / Setup / setup react mui web3 full"
+

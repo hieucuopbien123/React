@@ -1,0 +1,495 @@
+## Dùng tools cho React
+
+=> refer tới "Projects / Setup / setup react thủ công với webpack"
+
+
+# Basic
+Tất cả các repo nổi đều code tuân theo 1 chuẩn chung. VD quy ước về dấu ; ở cuối hàm hay khoảng trăng ở tên function, hay cả tên commit khi push lên cũng đều có chuẩn như feat/fix:... chứ k được ghi bừa. Các tool của React sẽ giúp tự động làm điều đó và báo lỗi nếu làm sai.
+
+
+
+# Tool formatter có sẵn của VSC
+Trong VSC có formatter có sẵn mà ta có thể dùng: mở file type nào đó mà VSC hỗ trợ -> CTRL+SHIFT+P -> Format Document With -> Chọn formatter mặc định(sẽ tự động format cho page hiện tại) -> Ta phải chọn Configure Default Formatter để dùng formatter nào mặc định.
+
+Như v mỗi lần chọn sẽ format file hiện tại. Còn để mở tự động format bằng formatter mặc định khi save file: CTRL+SHIFT+P
+=> nếu chỉ mở để save ở file hiện tại: open workspace setting -> chỉnh editor formatting -> format on save
+=> nếu mở để save mọi lúc: open user setting -> chỉnh editor formatting -> format on save
+Như v ta luôn có 2 file setting. Nếu chỉnh workspace setting thì trong folder dự án hiện tại sẽ sinh 1 file .vscode/settings.json và bên trong chứa setting ta vừa set, còn chỉnh user setting thì phải mở open setting json mới xem được. Ta vào các file này chỉnh sửa, có thể xóa các thiết lập formatter vừa set. Đây là ta dùng tool có sẵn của VSC chứ k liên quan gì đến code tool vì code tool mới là thứ quan trọng nằm trong dự án và chia sẻ với mn.
+Cái setting này chỉ cho ta dùng trong dự án của ta chứ người khác k có formatter đó cài trong VSC dưới dạng extension như ta sẽ k dùng được. Vì v, file .vscode phải được nhét vào .gitignore
+
+=> Chú ý với kiểu file khác nhau có thể phải thao tác lại để dùng formatter khác nhau, đó là việc ta set formatter mặc định của VSC
+
+
+
+# Eslint
+-> Cài đặt
+Eslint phân tích code JS để xác định đoạn code có lỗi or khả năng là có lỗi và tự fix chúng cho ta(về mặt format), giúp dùng cho tất cả mn code dự án chứ kp chỉ những ai dùng tool VSC. Bên cạnh Eslint có nhiều tool khác như JSLint, JSHint nhưng Eslint là tốt nhất. Eslint kp là 1 formatter cài vào trong VSC là xong mà nó như 1 tool dùng cho từng dự án:
+Tạo 1 dự án -> npx eslint --init -> quyết định cài dùng những cái gì nó sẽ tự động cài package tương ứng cho eslint -> tự sinh ra file config của eslint -> thêm configure dùng cho react: 
+settings:{
+  react: {
+    version: "detect",
+  },
+},
+-> vào package.json thêm script sử dụng eslint như ý ta. VD: "lint": "eslint src --ext .ts,.tsx" là sử dụng eslint với các file ts và tsx trong thư mục src -> npm run <script> thì ở đây là npm run lint để chạy lệnh đó -> edit file .eslintrc.js để thêm các rules
+
+--> Custom lệnh script
+VD:
+{
+    "scripts": {
+        "eslint": "eslint đường/dẫn/tới/thư/mục/src/muốn/dùng", 
+        ...
+    }
+    ...
+} => npm run eslint
+Ta có thể dùng: npm run eslint -- --fix để tự động sửa 1 số TH nhanh or nhét nó vào script package.json(--fix sẽ tự động dùng prettier xác định trong config)
+VD: "lint": "eslint src --ext .js" => là check mọi file có đuôi gì trong thư mục src, có báo lỗi ra console nếu vi phạm format
+
+--> K nên cài thủ công
+Vc dùng lệnh init làm nó tự cài eslint và các plugin liên quan như eslint-plugin-react tùy dự án ở phần devDependencies
+
+Ta có thể k dùng như trên mà cài thủ công: npm install --save-dev eslint và tự cài các tool và package cần thiết(như: npm install --save-dev eslint-plugin-react) rồi tự tạo file .eslintrc.js cũng như thêm các script(nếu thế thì nên làm theo 1 dự án mẫu nào đó chứ tạo thủ công rắc rối lắm)
+
+--> Ta cũng có thể cấu hình từng file bằng cách thêm comment trực tiếp vào file chứa code JS VD: /* eslint quotes: ["error", "double"], curly: 2 */ => k nên dùng như v
+
+-> Tuy nhiên lúc này mỗi lần check ta phải chạy lệnh thì mới check, nếu muốn nó báo lỗi trực tiếp thì phải cài extension eslint về VSC -> cài xong phát là các file tự động bắt theo cú pháp eslint trực tiếp code đến đâu báo đến đấy
+
+Cài đặt cho VSC tự động fix lỗi eslint trong dự án nếu có bằng cách: sau khi cài extension vào VSC -> CTRL+SHIFT+P -> open setting JSON(dùng workspace thôi) -> thêm:
+"editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll.tslint": true //file typescript
+},
+"eslint.validate": [ "javascript", "javascriptreact", "html", "typescriptreact" ] //với các file có ngôn ngữ cần check
+=> Mỗi khi bấm save là các lỗi eslint quick fixes được thì sẽ tự động fix cho ta. Cái phần tự fix và extension là VSC có thôi, các tool khác thì dùng command là đúng với mọi tool
+
+Khi cài extension thì ở commandline tab output chọn task có thể chọn eslint để hiển thị output của extension này or dùng tab problems để hiển thị debug của tool này khi xử lý file
+
+-> Custom các rules
+File global .eslintrc.js(đuôi .js có thể đổi tùy vào ngông ngữ ta thích dùng VD có thể là json, yml,.. or có thể ghi TT config vào file package.json) nhưng dù dùng đuôi nào thì cũng có các chuẩn chung: 
+{
+  "plugins": [
+      "react"
+  ],
+  ...
+} => dùng plugins để mở rộng hoạt động của ESLint VD ở đây sẽ check cả với code JSX
+{
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
+    ...
+} => extends có config có sẵn và có thể thêm vào config của riêng ta. Ở đây ta sử dụng cấu hình của người khác làm tích hợp sẵn trong eslint với eslint:recommended và react/recommended. Tương tự trên github còn có nhiều người làm sẵn các cấu hình eslint cho người dùng tải về để dùng xong chỉ cần thêm vào extends này là xong. VD strongloop
+{
+    "rules": {
+        "quotes": [//ép string dùng '
+            2,
+            "single"
+        ],
+        "react/jsx-uses-react": 2,//check code jsx
+	"indent": [//lùi dòng phải chuẩn 2 space. Với switch case thì chỉ 1
+            2,
+            2(or "tab" nếu lấy 1 tab),
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "linebreak-style": [//dùng line-break khác nhau ở 2 hđh
+            2,
+            "unix"
+        ],
+        "semi": [//luôn có dấu ; ở cuối hàm
+            2,
+            "always"
+        ],
+        "curly": [//phải có {} chứ k được bỏ nhanh như kiểu if else
+            2,
+            "all"
+        ],
+        "camelcase": [//tuân thủ camel case(k phải tất cả luôn là camelcase nhé)
+            2,
+            {
+                "properties": "always"
+            }
+        ],
+        "eqeqeq": [//phải dùng === or !== khi so sánh bằng và khác. "smart" tức là trừ các TH ss với typeof, literal value, ss với null thì k dùng === và !==
+            2,
+            "smart"
+        ],
+        "one-var-declaration-per-line": [//always thì 1 line là declaration(k khởi tạo giá trị ban đầu) 1 var, initializations thì 1 line là initialization of 1 var
+            2,
+            "always"
+        ],
+        "new-cap": [//new Constructor phải viết hoa tên Constructor
+	    2,
+	    {
+	    	"capIsNew": true/false
+	    }
+	]
+        "no-case-declarations": 0//let const function class khai báo trong case của switch case thì phải có { } bao case đó. var thì thoải mái
+	"no-empty": "warn",//cấm {} bị bỏ trống bên trong {}
+    }
+    ...
+} => rules định nghĩa các quy tắc mà code phải tuân theo. Mỗi rule có 2 thông số: 1 là off(0), warn(1), error(2) và các tùy chọn. Tùy chọn có thể bỏ qua, các thông số kia có thể viết rõ dạng chữ or số. VD đầu tiên ở trên là ap dụng dấu ' cho mọi string trong code và kiếm tra import có đúng không, nếu sai sẽ trả ra error với exit code là 1.
+Mọi rule: https://eslint.org/docs/rules/ => gần như đầy đủ mọi thứ
+{
+    "parserOptions": {
+        "ecmaVersion": 13,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+    ...
+} => ESlint mặc định check ES5, với ES6 trở đi phải cấu hình bằng parserOptions và cả JSX cũng phải cấu hình ở đây. Ở trên là cấu hình chuẩn cho code JSX và cả version ES6
+{
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    ...
+} => cấu hình môi trường mà code chạy. VD browser có biến window, document còn ES6 sẽ có các kiểu dữ liệu mới như Set chẳng hạn
+{
+    "globals": {
+        "arguments": true,
+        ...
+    }
+} => nơi đưa danh sách các biến global dùng trong dự án. Nếu không khi truy cập vào biến global nào đó thì ESLint sẽ báo lỗi truy cập biến chưa định nghĩa, nên list toàn bộ biến global ra. 1 số biến global như window, document không cần định nghĩa lại vì env đã có sắn r. Trong JS có 1 object truyền vào hàm là arguments mà không có môi trường định nghĩa nó. Nếu muốn sử dụng phải đưa vào global như trên.
+
+=> Nó có 2 kiểu viết object JS và dạng JSON, nên dùng kiểu object JS với mẫu là trong dự án trava
+
+-> .eslintignore
+
+
+
+# Prettier
+Prettier là code formatter. Eslint cũng format code nhưng có nhiều TH buộc dùng Prettier mới được. Kết hợp 2 cái này thì code của ta sẽ luôn được check lỗi và format rất ok. Thực tế ta có thể check được mọi lỗi format với Eslint nhưng sẽ rất phức tạp và rất dài. Có những cái dùng prettier 1 hit là xong nên dùng prettier hơn. Nó chỉ là 1 tool format được xây dựng hợp với eslint(or mọi linter khác) thôi. Prettier là 1 tool format thông thường nên khi tải về nó hiển thị trong list các formatter trên máy còn Eslint thì k có
+Trong VSC cũng có sẵn formatter nhưng ta k nên dùng nó mà nên thay nó bằng Prettier vì formatter có sẵn beautify bị lỗi với code JSX. Nếu đã set sẵn formatter rồi có thể đổi trong open setting JSON của VSC.
+Prettier thiên về kiểu căn lề, khoảng cách. Còn Eslint thiên về coding style dấu chấm phẩy, cách đặt tên biến và nó cũng bao cả chức năng của prettier.
+
+-> Cài đặt với extension: 
+Tải extension Prettier-> ctrl shift p -> format -> chọn configure formatter chọn là prettier -> đặt phím tắt nếu thích -> mỗi lần cần format là làm như v.
+-> ctrl + , -> chỉnh cài đặt formatting cho VSC -> chỉnh các tính năng khác như format on save để save tự động format. Kết hợp eslint cx có format khi save thì save phát cả 2 tool chơi cùng lúc. Ở đây eslint ta set workspace còn prettier set user space
+
+-> Cài đặt package:
+Tuy nhiên khi làm việc kp ai cũng dùng VSC và kp ai cũng cài extension prettier nên người ta thg dùng CLI của Prettier dưới dạng package và dùng file cấu hình để chỉnh vì k thể mỗi người có 1 cấu hình prettier riêng được:
+npm install --save-dev --save-exact prettier -> tạo file mới đặt tên là .prettierrc.extension(bỏ .extension cũng được và nó tự hiểu là json) và bên trong:
+{
+  "printWidth": 120,
+  "singleQuote": false,
+  "tabWidth": 2,
+  "semi": true,
+  "trailingComma": "es5" // trailingComma là dấy phẩy ở cuối 1 cái dạng list, es5 sẽ có ở cuối của array và object
+}
+=> sau đó mỗi lần format bằng prettier dùng: npx prettier --write .
+=> chú ý nếu ta có extension xong vẫn dùng package mọi thứ như bth nhé và cấu hình nó tự đồng bộ thoải mái
+Có thể dùng prettier cặp trong eslint luôn mà k cần file config riêng như 1 plugin: "plugins": ["react", "prettier"],
+"rules": {
+     "prettier/prettier": [
+         "error",
+         {
+             "printWidth": 80, // format chiều dài của 1 dòng nếu quá sẽ tự xuống dòng
+             "trailingComma": "es5",
+             "semi": false,
+             "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
+             "no-unused-vars": ["error"]
+         }
+     ]
+}
+
+-> Dùng Prettier kết hợp Eslint: k chơi với extension Prettier Eslint mà sẽ thao tác với CLI. Thực chất để bình thường thì eslint và prettier được kết hợp r nhưng các thuộc tính trùng nhau của 2 cái chưa được xử lý nên phải cài thêm package.
+Cài: npm install -g prettier eslint -> npm install --save-dev eslint-config-prettier để loại bỏ các eslint rule mà conflict với prettier
+
+Ngoài ra còn có:
+-> npm install eslint-plugin-prettier tích hợp các prettier rules với eslint rules => ở trong .eslintrc.json thêm 1 rule
+"rules": {
+    "prettier/prettier": ["error"]
+}
+và phần plugin có thêm: plugins: ["prettier"],
+=> Thông thường k cần quá cồng kềnh như v mà chỉ cần cài prettier(package or extension đều được) + eslint và eslint-config-prettier phát là xong dùng như bth thôi. Nếu VSC có sẵn prettier thì k cần cái prettier nx cx đc(package.json có thì vẫn cài cho đồng bộ cho mọi người trong team chứ chả dung)
+=> Cái file config của prettier sẽ đè lên extension prettier. Prettier + eslint tự cân bằng cho nhau nhờ package eslint-plugin-prettier là xong
+
+Phân biệt: eslint-config-prettier và eslint-plugin-prettier, khi cài prettier và eslint vẫn phải cài thêm 2 cái này
+eslint-config-prettier loại bỏ eslint rule config với prettier rule. Để dùng cần có:
+"extends": [
+    "...",
+    "prettier"
+],
+eslint-plugin-prettier tích hợp prettier rules với eslint rule. Để dùng cần có:
+{
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "error"
+  }
+}
+=> chú ý đúng thứ tự thêm. Nhưng bên cạnh đó còn có:
+{
+  "extends": ["plugin:prettier/recommended"]
+}
+là plugin giúp config hộ cho ta, nếu dùng cái này trong plugin thì ta k cần set như bên trên. Nếu k dùng như này or như trên thì package tải về coi như chả dùng.
+Thực tế, ta có thể chỉ dùng eslint để check lỗi còn prettier để format ở cuối mỗi khi commit thôi thì có thể k cần phải dùng đủ plugin làm gì
+
+Cài locally -> cho là lint-staged làm 1 dòng lệnh format được
+Cài globally -> prettier --write . để format được tất cả. Nếu k phải dùng npx prettier --write .
+
+-> .prettierignore
+
+
+
+# Lint-staged
+Khi ta format code bằng prettier(k dùng extension auto save mà dùng package cơ, mặc định đi vì mọi người trong team chắc gì họ đã có extension) thì phải chạy lệnh npx prettier --write . -> nhưng ta chẳng hạn có 100 file mà mỗi lần chạy như v sẽ format toàn bộ mất thời gian, ta chỉ muốn format các file đã thay đổi mà thôi. Ta sẽ tận dụng lint-staged chỉ format các file ở trạng thái staged của git mà thôi
+
+-> Cài đặt: npm install --save-dev lint-staged -> vào package.json thêm vào cấu hình "lint-staged": {...} -> ở đây ta định nghĩa tập hợp các lệnh với các file ở trong trạng thái staged nếu có thay đổi thì chạy ntn. VD: 
+"lint-staged": {
+    "*.ts": [
+      "prettier --write",
+      "git add ."
+    ]
+}
+sau đó thêm script: "lint:staged": "lint-staged" để dùng npm run lint:staged sẽ chạy toàn bộ các file xác định ở trên là đuôi .ts và chạy lần lượt các lệnh. Chú ý ta thêm git add . ở cuối đề phòng TH nếu có sự thay đổi thật thì sẽ add lại luôn mà ta k cần chạy lại
+=> Nếu dùng prettier với formatonsave thì lint stage chả cần. 
+
+-> Bình thường dùng lint-staged ta sẽ tạo ra lệnh chạy eslint prettier với các file nào trong package.json => Thực tế ta có thể làm điều đó bằng cách tạo ra file .lintstagedrc và thêm vào các option đó. VD:
+{
+	"*.(js|ts)": "eslint --fix"
+}
+=> k cần ghi vào dùng package.json
+
+
+
+# Husky
+Husky là tool bắt event khi add or commit lên git repo. Bắt được, ta có thể xử lý kiểu nếu code chưa đúng coding style sẽ k cho commit. Husky và lint-staged đảm bảo code 1 khi đã commit thì luôn chuẩn clean code. 
+
+Vc dùng lint-staged: tức là ta commit xong -> sửa file sai space chẳng hạn -> lại git add (để đưa vào vùng staged) -> chạy script commit: npm run lint:staged -> file đó tự động fix lại tùy command ta viết trong script
+Vc dùng husky: mỗi khi commit lên, nó sẽ tự bắt và lệnh bên trên được thực hiện tự động chứ éo phải lúc nào ta cũng add xong run lint:staged như v đc
+
+-> Cài husky và dùng tool pre-commit: npm install --save-dev husky -> khởi tạo: npx husky install -> xuất hiện thư mục .husky -> gõ command: npx husky add .husky/pre-commit "yarn lint-staged" sẽ bắt khi user gõ: git commit và sẽ tự chạy command yarn lint-staged -> nó tự sinh ra file pre-commit trong .husky chưa thông tin về lệnh đó. 
+
+Hook pre-commit giúp tự động chạy lệnh eslint và prettier. Bên cạnh vc dùng lệnh bên trên có thể làm thủ công:
+Nếu đã có file pre-commit thì chỉ cần sửa  file đó. Nếu chưa thì tạo mới bằng cách sử dụng mẫu trong file ẩn .git
+=> cp .git/hooks/pre-commit.sample .git/hooks/pre-commit
+-> 2 dòng cuối sửa thành:
+set -e
+npm run eslint
+# If there are whitespace errors, print the offending file names and fail.
+exec git diff-index --check --cached $against --
+=> Chu ý npm run <script> còn tên script đặt là eslint thì mới v nhé
+=> Có thể thêm exit 1 vào cuối file pre-commit của husky để nó luôn fail -> nếu chỉ muốn test
+
+Để đảm bảo code chung với mn thì quá trình setup husky được tự động với tất cả thì trong package.json thêm script: "postinstall": "husky install" và "prepare": "husky install", => thì mọi thứ sẽ tự động được setup khi 1 người mới tham gia vào dự án gọi npm/yarn install
+Bh add r commit -> husky bắt được -> gọi lint-staged -> thực hiện prettier và eslint -> xong. Do nó thực hiện prettier mà có cài với eslint nên nếu coding style k chuẩn thì nó cũng báo lỗi khi commit
+
+Thật ra, lệnh npx husky install -> cài husky và tự thêm "prepare": "husky install" trong package.json và tạo ra thư mục .husky và có sẵn pre-commit tự chạy npm test. Vc nó tự chạy npm test là nó hiểu ta tạo ra unit test chạy bằng lệnh npm test nên test trước khi commit k lỗi ms đi tiếp
+
+=> Bên cạnh đó eslint và prettier kết hợp sẽ tự fix format cho code nhưng nếu eslint báo error và prettier k fix được vì VD lỗi biến k sử dụng thì prettier chỉ format lại chứ đâu có tự dùng lại biến được và khi đó husky sẽ báo lỗi và k commit được file đó -> file 1 khi đã commit sẽ luôn tuân thủ quy tắc code style. Trong dự án leader board ở cuối lint-staged k có git add . nên bảo sao commit lên code vẫn k clean vì nó fix xong k add lại mà chạy commit luôn
+=> Bh ta thử sửa k thỏa mãn prettier, sau đó add r commit lên là nó tự sửa lại file chuẩn luôn. Nó chạy đúng lệnh trong package json như ta đã viết thôi.
+
+-> Với husky ta có thể thao tác với tất cả các loại hook trong git/hooks folder chứ k chỉ pre-commit. VD chạy: npx husky add .husky/pre-receive 'echo "pre-received"' => để dùng hook pre-receive
+
+Hook commit-msg tương tự tool commitlint
+
+
+
+# Commitlint
+CommitLint đảm bảo commit message phải chuẩn
+
+-> Cài: npm install --save-dev @commitlint/config-conventional @commitlint/cli -> config-conventional là cấu hình commit dựa theo chuẩn commit của Angular 
+Setup husky bắt commit message: npx husky add .husky/commit-msg "" -> hiện file .husky/commit-msg -> mở file đó ra và sửa undefined thành: npx --no-install commitlint --edit "$1" => tự chạy commitlint check commit message với husky
+-> tức là lấy commit message của cái commit gần nhất. Tạo file .commitlintrc.js -> bên trong viết: module.exports = {extends: ['@commitlint/config-conventional']}; or trong package.json dùng: 
+"commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+=> Để commit buộc phải theo chuẩn message là: type(scope?): subject với:
+type ở trên có thể là:
+build: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
+ci: Changes to our CI configuration files and scripts (example scopes: Gitlab CI, Circle, BrowserStack, SauceLabs)
+chore: add something without touching production code (Eg: update npm dependencies)
+docs: Documentation only changes
+feat: A new feature
+fix: A bug fix
+perf: A code change that improves performance
+refactor: A code change that neither fixes a bug nor adds a feature
+revert: Reverts a previous commit
+style: Changes that do not affect the meaning of the code (Eg: adding white-space, formatting, missing semi-colons, etc)
+test: Adding missing tests or correcting existing tests
+scope thì là optional, và nếu có thì nó nên là tên của package mà commit hiện tại làm ảnh hưởng. Mình thấy scope thường dùng ở các repository mà chứa nhiều packages dạng monorepo, ví dụ repo của Vue 3, scope sẽ là tên của 1 package nào đó ở folder packages
+subject là nội dung của commit
+=> Ta cũng có thể thêm các chuẩn riêng của ta vào commit lint xem trên trang git hướng dẫn nhưng kệ mẹ, dùng chuẩn có sẵn đi.
+
+=> Tool husky có thể k check được nếu thêm option --no-verify, VD: git commit -m "test dummy message" --no-verify -> vẫn commit như thg kể cả commitLint. Điều này có thể fix băng CICD của gitlab nhưng thôi h chưa động tới.
+
+-> Thực tế commitlint có thể thay thế bằng git hooks là commit-msg. hook này cho phép ta check message commit có theo chuẩn k do ta tự custom. Nhưng người ta vẫn dùng commitlint vì cấu hình file commit-msg cho husky phức tạp: npx husky add .husky/commit-msg 'echo "pre-received"' -> cấu hình file commit-msg là xong
+
+
+
+# Commitizen + cz-conventional-changelog
+Tool giúp generate commit message chuẩn conventional
+
+Có thể thêm README biểu tượng commitizen|friendly badge bằng: 
+[![Commitizen friendly](https://img.shield.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+
+-> Cài đặt:
+npm i -D commitizen -> cài global nx để dùng command -> npm install cz-conventional-changelog --save-dev -> commitizen init cz-conventional-changelog --dev --exact [--force] thì nó sẽ thêm config url vào file packagejson -> Để dùng: git add . và k dùng git commit nữa mà dùng git cz -> git push như bth
+
+
+
+# Other
+-> Có nhiều tool khác như: tslint, commitizen + cz-conventional-changelog
+
+-> Tổng quan: k xét config trên editor mà chỉ set code, giả sử k có extension mà chỉ có file và lệnh.
+- *eslint: viết file config đặt ra tiêu chuẩn, thêm lệnh vào package.json để chạy. (Cài extension và setting để tự động fix khi save)
+- *prettier: cài locally làm command trong package.json khi chạy lệnh lint-staged thì chạy luôn prettier. Cài eslint-config-prettier và eslint-plugin-prettier và thêm rules vào config của eslint để đồng bộ. Dùng npx prettier --write . để format bằng command
+- *lint-staged: cài package và chỉnh lệnh trong package.json dùng prettier và eslint như nào khi file đạt trạng thái staged chứ kp check với tất cả các file như bth
+- *husky: cài package -> setup tự động cài husky trong package.json -> khởi chạy dự án với husky -> thêm vào muốn chạy lệnh gì trước khi commit với tool pre-commit
+- *pre-commit của git husky: chỉnh file pre-commit và tự động chạy lệnh khi commit lên. Có thể dùng command để set up file pre-commit
+=> Combo: eslint cấu hình -> prettier cấu hình -> viết 2 cái đó trong lint-staged -> viết 2 lệnh chạy lint staged trong husky -> 1 lần commit thì cả 4 tool đều tự dùng k cần setup gì thêm. Có thể phải chạy thủ công nếu có tool k ghi lệnh or k chạy được
+- *Commitlint: cài package -> setup husky bắt commit dùng cho commitlint -> sửa lệnh trong package.json -> thao tác bth
+
+- stylelint: cài package -> chỉnh config rule cho stylelint -> set up command trong package.json -> chạy lệnh. Có thể setup tất cả đồng thời trong lint-staged luôn
+- tslint: cài package -> chỉnh config rule chco tslint -> setup command trong package.json -> chạy lệnh. Có thể setup kèm trong lint-staged luôn
+- commitizen: cài commitizen -> setup command nó dùng conventional nào -> dùng lệnh git cz luôn -> chọn loại commit -> scope gõ commitizen -> viết description cho commit -> body có thể k có -> No breaking change -> No open issues
+
+-> Setup nhanh mọi tools cơ bản:
+-> npx eslint --init
+-> npm i --save-dev prettier eslint-config-prettier eslint-plugin-prettier lint-staged husky @commitlint/config-conventional  @commitlint/cli
+-> sửa file .eslintrc.js thành:
+module.exports = {
+    env: {
+        browser: true,
+        es2021: true,
+        node: true,
+    },
+    extends: ["eslint:recommended", "plugin:react/recommended", "prettier"],
+    parserOptions: {
+        ecmaFeatures: {
+            jsx: true,
+        },
+        ecmaVersion: "latest",
+        sourceType: "module",
+    },
+    plugins: ["react", "prettier"],
+    settings: {
+        react: {
+            version: "detect",
+        },
+    },
+    rules: {
+        // "linebreak-style": ["error", process.platform === "win32" ? "windows" : "unix"],
+        "linebreak-style": 0,
+        quotes: ["error", "double"],
+        semi: ["error", "always"],
+        "no-unused-vars": [
+            "warn",
+            {
+                vars: "all",
+                varsIgnorePattern: "^_$", 
+                argsIgnorePattern: "^_$", 
+                ignoreRestSiblings: true, 
+            },
+        ],
+        "no-console": "off", 
+        "no-prototype-builtins": "off",
+        "no-empty": "warn", 
+        "react/prop-types": "off",
+        "prettier/prettier": ["warn"],
+    },
+};
+-> sửa file .prettierrc.js thành:
+{
+    "printWidth": 120,
+    "singleQuote": false,
+    "tabWidth": 4,
+    "semi": true,
+    "trailingComma": "es5"
+}
+-> sửa jsconfig.json thành:
+{
+    "compilerOptions": {
+        "baseUrl": "."
+    },
+    "include": ["src"]
+}
+-> sửa .commitlintrc.js thành:
+module.exports = { 
+    extends: ["@commitlint/config-conventional"] 
+};
+-> thêm vào package.json:
+ "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint:staged": "lint-staged",
+    "postinstall": "husky install",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "git add ."
+    ]
+    "*.{ts,js,jsx,ts,tsx,json,yml,md}": [
+      "prettier --write",
+      "git add ."
+    ]
+  },
+-> npx husky install -> px husky add .husky/pre-commit "yarn lint-staged" -> npx husky add .husky/commit-msg "" -> sửa commit-msg của husky từ undefined thành: npx --no-install commitlint --edit "$1"
+=> Dùng thêm format on save nếu k sợ lag với prettier extension
+
+-> Tool stylelint + stylelint-config-recommended => tool này là k cần thiết trong các dự án mà k chú trọng cho style css, nếu dự án dùng các thư viện UI thì càng k cần viết file css luôn
+Cách dùng: npm i styleint stylelint-config-recommended -> thêm vào package.json:
+"stylelint:check": "stylelint \"src/**/*.css\"" -> tạo .stylelintrc.json và thêm style -> mỗi khi dùng thì npm run stylelint:check -> nếu muốn tự động với pre-commit thì thêm vào package.json:
+"husky": {
+    "hooks": {
+      "pre-commit": "stylelint:check"
+    }
+},
+
+-> thêm .prettierignore:
+**/*.svg
+package.json
+/dist
+/build
+.dockerignore
+.DS_Store
+.eslintignore
+*.png
+*.toml
+docker
+.editorconfig
+Dockerfile*
+.gitignore
+.prettierignore
+LICENSE
+.eslintcache
+*.lock
+yarn-error.log
+.history
+CNAME
+
+-> thêm .eslintignore:
+/build/**
+!.eslintrc.js
+
+-> thêm .gitignore:
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+# testing
+/coverage
+# production
+/build
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/.vscode
+
+=> Thêm nginx.conf, Dockerfile .dockerignore, README.md, .env nếu dùng (tham khảo dự án trava leaderboard)
+

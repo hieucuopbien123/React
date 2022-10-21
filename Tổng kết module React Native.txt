@@ -1,0 +1,28 @@
+React Native:
+-> React Native là framework tạo bởi facebook cho phép dùng javascript để tạo mobile app trên Android và iOS. Viết 1 lần là build đc cho cả iOS lẫn Android. Nó là 1 cross-platform.
+React Native khác với hybrid app. Hybrid app là kết hợp ứng dụng web và mobile, cũng xd bằng html/css/js + truy cập vào phần cứng mobile như máy ảnh, danh bạ,.. nhưng chậm và k đầy đủ, nó gặp vấn đề về hiệu năng => React Native ra đời giải quyết vấn đề hiệu năng của hybrid app.
+
+-> Ngày trc lập trình android phải học java, kotlin, bộ android sdk. iOS thì phải học Swift và Objective-C. BH học 1 bộ công cụ phát là xong. Hơn nx React Native cho ta chia sẻ code các component vượt trội. Điểm lợi nx là hot reloading(giống live server của html xem trực tiếp luôn)
+Nhược điểm là k làm đc các ứng dụng quá phức tạp. React Native có tuổi đời mới hơn các ngôn ngữ khác nên các component chưa thật sự phong phú - 2020. Ta vẫn có thể dùng các component có sẵn từ khắp mọi nơi được viết từ Objective-C or java do cộng đồng phát triển nhưng nếu muốn có 1 component chưa tồn tại thì phải tự viết bằng java, Swift. Nhưng chắc khoảng 5-6 năm nx thì các component sẽ cực kỳ nhiều và phủ kín thôi.
+
+-> Native App là các ứng dụng được phát triển và build trên những công cụ mà nhà phát triển iOS, Android cung cấp như XCode, Android Studio. Chúng đc viết bằng Swift(với iOS, Objective-C là xưa r), và java song song kotlin của android. Do sử dụng những tính năng sẵn có của hệ điều hành mà k phải thông qua bên thứ 3 nào khác nên tốc độ là nhanh nhất
+
+
+
+# Basic
+-> Cài đặt: Ta có thể sử dụng Expo để tạo app cho nhanh, khi đã có kinh nghiệm, ng ta sẽ tạo app bằng ReactNative thuần tức dùng Android Studio or XCode
+Cài expo, ở cmd: npm install -g expo-cli => cài 1 trình tạo dự án mới 
+Tạo folder dự án: expo init <link đến folder chứa dự án> => chọn mode có sẵn để tạo app
+-> dự án của ta đã dc tạo hoàn chỉnh trong folder -> mở bằng VSC
+-> yarn start -> vô trang web -> dùng expo go trên điện thoại scan QR Code -> chọn mode Tunnel để chạy trên điện thoại thực
+-> có thể chọn run in webbrowser để dùng TT luôn trên mạng.
+Màn hình của trang web tương tự như console sẽ báo lỗi trong quá trình kết nối, cũng có thể xem TT trên android và iOS.
+=> Nếu k có điện thoại ng ta còn dùng android studio để tạo emulator mobile r dùng điện thoại ảo đó scan QR code để chạy nx cơ
+
+Thậm chí React Native còn có trang web riêng giúp code online và chạy online cả trên expo nx => snack.expo.dev
+Cấu trúc dự án của ReactNative cơ bản như 1 dự án app mobile bth:
+Có .expo , .expo-share , node-modules
+.json và file babel.config.js dùng để chứa các thông tin của app như màn hình chào, icon, tên ứng dụng, phiên bản phần mềm, thư viện
+
+
+

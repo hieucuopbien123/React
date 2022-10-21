@@ -1,0 +1,13 @@
+/* # Dùng các thư viện chức năng / Dùng react-transition-group  */
+
+.my-msg-entering {
+    color: blue;
+}
+
+.my-msg-entered {
+    color: red;
+}
+
+.my-highlight  {
+    color: red;
+}

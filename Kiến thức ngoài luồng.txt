@@ -1,0 +1,52 @@
+-> React(hay React.js, ReactJS) là thư viện javascript xd giao diện ng dùng, ban đầu từ facebook, giúp trang lấy và xử lý dữ liệu tối ưu, dùng cho cả mobile và desktop.
+Điểm mạnh là kp reload lại trang mà nó chia thành các commponent, mỗi khi có sự đổi mới thì nó chỉ đổi các component liên quan, tái sử dụng các thành phần giao diện, component(giống như 1 function). Đó chính là việc giải quyết vấn đề của tầng view trong MVC.
+
+ReactJS là cho phát triển các ứng dụng web, còn React Navtice cũng đc facebook công bố sau khi React ra đời giúp phát triển các ứng dụng mobile.
+
+Cơ chế nó tạo 1 virtual DOM thông qua react xác định các component bị thay đổi trong virtual DOM và chỉ đổi nó trong DOM thật để show ra.
+
+
+-> JSX là javascript syntax xml. 1 cách khác viết cấu trúc xml trong javascript. Khi dùng trình biên dịch sẽ chuyển từ JSX syntax sang JS bằng babel -> dùng trong trang web bằng cách script cdn tới trang: https://unpkg.com/@babel/standalone@7.12.4/babel.js -> khi dùng code JSX ta dùng type script là "text/babel" thì babel có thể compile file của ta.
+Các file JSX có đuôi mở rộng là jsx cx là 1 text file. Trong craete-react-app, có thể dùng .js để viết jsx nhưng nên dùng chuẩn .jsx
+Link gốc: https://unpkg.com/browse/babel-standalone@7.0.0-beta.3/
+
+Viết JSX dễ hơn rất nhiều so với viết code React thuần túy vì XML nó gần giống với HTML chỉ sửa đổi 1 số thuộc tính,.. 
+VD: tạo element mới 
+const element = React.createElement(,,)
+const element = {<code element XML gần giống HTML>}
+Ta có thể convert từ HTML sang JSX online là viết mọi thứ ez
+
+
+-> React giống như javascript nó dùng để chạy tại phía Client. Nhưng JS cũng có thể chạy được trên Server nếu Server đó hiểu được Javascript, chẳng hạn như NodeJS Server. NodeJS là 1 platform chạy javascript runtime. Với NodeJS, ta có thể chạy JavaScript trên server và tăng tốc độ xử lý. Nó kp 1 framework mà là 1 nền tảng phát triển web nhanh chóng độc lập, có thể tạo ra 1 ứng dụng độc lập như dùng các ngôn ngữ C++ chứ k chỉ ứng dụng web. Nó cx k đc coi là 1 ngôn ngữ lập trình, mà là 1 nền tảng server đc viết bằng javascript, tương thích nhiều thiết bị. Cần cài đặt NodeJS để tạo ứng dụng React.
+
+Như v, có 2 cách tiếp cận React: Ta có thể cài đặt môi trường NodeJS Server, khi đó lập trình ứng dụng fullstack với javascript, có thể dùng javascript cho các chức năng phức tạp ở server; Cách khác là ta chỉ dùng React lập trình ứng dụng tại Client sử dụng javascript còn phía server vẫn có thể dùng các ngôn ngữ khác Java, DotNet, PHP,..
+
+
+-> Ta có thể cài đặt React thông qua cdn với 2 file:
+<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+or
+<script crossorigin src="https://unpkg.com/react@***/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@***/umd/react-dom.production.min.js"></script> 
+với dấu *** là phiên bản ta muốn, ví dụ 16.4.2 nếu chỉ 16 thì tức là phiên bản 16 nào đó mới nhất
+-> link phiên bản: https://github.com/facebook/react/releases
+
+Kèm babel: <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+
+
+-> Để cài React trên máy(trong tổng kết module nói chi tiết hơn):
+Cài bằng CRA:
+Cài NodeJS -> node -v kiểm tra phiên bản trên cmd
+Cài bộ cài app React mới nhất với: npm install -g create-react-app
+Tạo 1 project: create-react-app <link tới react-project> (chú ý tên k đc chứa space,in hoa)
+Chạy: cd đến thư mục đó -> npm start (k cd trên cmd đc có thể dùng terminal của VSC)
+=> Với lệnh create-react-app thì nó sẽ tự tạo các thứ cần thiết để phát triển 1 ứng dụng react, tức là ta k cần quan tâm đến từng cái react-dom, react, babel như trước nx. Có thể dùng code JSX viết react thoải mái
+
+-> Cấu trúc react-project: 
+node_modules: cài đặt các dependencies lưu hết vào đây, ví dụ babel, redux,.. các file dữ liệu toàn bộ ở đây
+package.json: lưu các thông tin như tên thư viện và phiên bản sử dụng của chúng, tên ứng dụng, phần script còn cho biết lệnh chạy ứng dụng. Ví dụ cần thêm 1 thư viện mới vào ứng dụng ta có thể thêm tên và phiên bản vào đây r gọi npm install -> nó sẽ tìm phiên bản vào down vào package.json, chứ bth gọi npm install <package> là nó tự tìm package phiên bản mới nhất. Ví dụ xóa hết file node_modules r gọi npm-install sẽ reinstall toàn bộ
+public: chứa các file output tương tác trực tiếp với trình duyệt như HTML,image,..
+src: file input-> ta code nội dung ở đây, phần lớn là file javascript và css
+
+Với React.js, những gì ta viết kp ở html mà là ở file js. Mọi thứ hiển thị ta đều phải dùng trong file js. File html chỉ là cầu nối liên kết code javascript với trình duyệt. 
+

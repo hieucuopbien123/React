@@ -1,0 +1,63 @@
+# Module authentication authorization:
+
+
+
+# Authorization và authentication:
+Trong các dự án, ta cần xác thực 1 ai đó đúng là người hợp lệ và ủy quyền là quyết định những tài nguyên mà người đó được truy cập. Xét loại app là SPA.
+
+Cũng có nhiều kiểu đăng nhập: 
+Có thể đăng nhập bằng các tài khoản của các trang nổi tiếng như facebook, google, github để nhận về 1 credential và dùng credential này để đăng nhập tới các website liên quan nhau.
+Có thể đăng nhập bằng cổng thông tin, điều này phổ biến trong các doanh nghiệp có cổng portal nội bộ cho nhân viên với nhiều trang web liên quan. Ta phải quản lý đăng nhập 1 lần là vào được tất cả các trang web chứ kp mỗi trang là 1 lần đăng nhập, đăng nhập bằng user và password. 
+=> Giải pháp này đăng nhập 1 lần mà vào được nhiều trang gọi là single sign-on (SSO)
+
+--> Giải pháp SSO này khá hay vì 1 set các website liên quan nhau thì chỉ phải đăng nhập 1 lần tăng trải nghiệm người dùng, đồng thời chỉ cần quản lý authentication của người dùng trong 1 single database chứ kp mỗi web 1 database. VD ta làm trong dự án SE, nếu ta tách riêng authentication ra 1 phần riêng và có nhiều website dùng nó thì cũng tạo thủ công SSO.
+Khi đó, trong database chính của website k cần phải là password mà chỉ cần lưu ủy quyền or nhận dạng từ 1 nguồn đáng tin cậy khác. Người dùng nhập vào username và password như nào kệ họ miễn là khi gửi tới 1 nguồn khác nó trả về 1 cái credential, mọi thao tác check cái credential đúng là ok. Nguồn đó có thể là third party (third party tạo credential và cũng cung hàm giúp check credential) or ta tạo ra thủ công (bằng jsonwebtoken chẳng hạn) trên 1 database và server riêng ok. Có 3 protocol hỗ trợ SSO phổ biến nhất.
+
+-> Phân biệt 3 loại authencation protocol:
+--> OpenId Connect: là chuẩn authenticaction được quảng bá bởi tổ chức phi lợi nhận OpenID Foundation. Có hơn 1 tỷ tk OpenID được dùng trên internet và các công ty như Google, WordPress, Yahoo, Paypal sử dụng. 
+VD Google là 1 OpenID identity provider, cung cho 1 người nào đó. Khi đó người này có thể dùng tk này để đăng nhập bất cứ website nào chấp nhận xác thực bằng OpenID như Youtube, Okta,..
+
+Ta có thể dùng firebase tạo OpenID connect với google được rất tiện lợi.
+Khi dùng xác thực với kiểu google thì cũng có nhiều cách như nhập email và gửi mã xác thực tới mail or ấn vào link trong mail để đăng nhập đều ok
+Có thể kết hợp cả bên thứ 3, cả tài khoản mật khẩu đều ok. Có thể chia người bình thường dùng đăng nhập với google, nhân viên thì đăng nhập riêng bằng tk mk.
+Còn Facebook trước đây dùng OpenID nhưng nay đã chuyển qua Facebook Connect
+
+Phiên bản mới nhất của OpenID là OpenID Connect, nó kết hợp OpenID authentication và OAuth2 authorization để vừa xác thực vừa ủy quyền
+
+--> Oauth 2.0: là chuẩn để phân quyền. OAuth2 cũng là nền tảng OpenID Connect cung cấp OpenID xác thực ở phía trên. 
+Chú ý là OpenID Connect(OIDC) và OAuth2 là 2 giao thức hoàn toàn độc lập.
+
+OAuth2 cung cấp quyền truy cập đã được ủy quyền an toàn, ứng dụng sau khi được ủy quyền thậm chí có thể truy cập vào tài nguyên trên server của OpenID identity provider cơ nhưng với đk là identity provider phải hỗ trợ
+Vd: Alice đk tài khoản tại NewsApp và có tính năng tùy chọn xem ai là bạn bè của cô ấy cũng dùng NewsApp để kết nối với họ. Có 1 nút đăng nhập bằng Facebook, Alice sau khi chấp nhận sẽ được điều hướng tới Facebook và đăng nhập. Sau đó Alice sẽ được hỏi có muốn chia sẻ list bạn bè trên Facebook với NewsApp không. Nếu chọn có, Alice sẽ được điều hướng trở lại NewsApp với 1 token, NewsApp dùng token này để lấy list friends. Tức là NewsApp k cần biết tk mk của Alice để tránh nguy cơ lừa đảo.
+
+=> Bản chất là người dùng chỉ cần ủy quyền cho ứng dụng truy cập vào tài nguyên của OpenID provider. Do đó mới nói OAuth2 có 1 lớp OpenID ở bên trên bởi vì chính vc ủy quyền authorization cũng là 1 hình thức xác thực authentication rồi.
+
+--> SAML: là chuẩn lâu đời nhất từ năm 2001 rồi. Security Assertion Markup Language cung cả authentication và authorization.
+Cơ chế nó giống như token của OpenID hoặc OAuth2 nhưng thuật ngữ khác: principal là người dùng cuối; service provider là nhà cung cấp dịch vụ mà principal muốn truy cập; identity provider là nhà cung cấp nhận dạng như bth; identity provider gửi trả 1 assertion chứa thông tin ủy quyền, VD truy cập vào email, số điện thoại,...
+
+SAML 2.0 định nghĩa các assertion và protocol, binding,... các thứ cung cấp kết nối giữa service provider và identity provider sử dụng HTTP POST, nhiều tùy chọn hơn cho các TH khác nhau như SSO chẳng hạn.
+
+
+
+# Dùng Okta
+Okta là 1 third party organization cung khả năng xác thực người dùng, khi cần đăng nhập phân quyền trong trang web, ta có thể dùng Okta cho nhanh. Nó hỗ trợ nhiều ngôn ngữ và nhiều loại dự án kể cả Go, C#, React, Vue, Java, PHP,... Có code mẫu và trong link có hướng dẫn chi tiết. Hỗ trợ React18 và tương thích với react-router 
+
+-> Dùng Okta trong React: 
+Vào https://developer.okta.com/login/ và đăng nhập -> Application -> Tạo 1 ứng dụng với OpenID Connect và SPA -> Sign-in và sign-out URI là đường dẫn của ứng dụng khi redirect, chuyển port sang 3000 khi dev React -> Allow everyone in your organization to access
+Sau đó nó sẽ cung 2 thứ quan trọng để dùng ứng dụng trong app là ClientID(xác định app nào) và Okta domain. Okta domain là dev-xxxxxxxx.okta.com 
+Ngoài frontend cũng cần tạo thêm 1 server tương tác với các tài nguyên database và xử lý phân quyền, check token nhận được từ front end thông qua Okta API với OAuth 2.0 access token: Tạo 1 app mới là API Services cũng nhận được ClientID cho app này, Client Secret, okta domain vẫn v
+
+-> Để cài dự án với okta-cli: tải okta cli or dùng choco install okta nếu có choco trong window -> okta login thì org url là https://dev-xxxxxxx.okta.com còn id là client id của app -> okta create react chạy dự án mẫu với okta
+ISSUER ID là https://dev-xxxxxxx.okta.com
+
+-> Dự án thủ công React dùng Okta:
+Setup: backend dùng dotenv và các setup eslint, tsconfig, dùng typescript nodejs; phía frontend dùng react với Vite(dùng với CRA bị lỗi lười fix)
+Front end cài: npm i @okta/okta-auth-js @okta/okta-react react-router-dom
+
+Các tính năng có thể tạo ra: ta muốn 1 trang login, khi login xong thì tự redirect đến trang nào, đang login sẽ loading, login fail sẽ quay về lại trang login và báo lỗi, có 1 trang dashboard ghi log mọi login của người dùng, tự động xử lý lấy được access token, tự dùng cookies và localStorage để có tự động đăng nhập
+
+Dừng: k học okta vì phức tạp. Có thể dùng với Redux và typescript. Dùng với React18, react-router-dom v6 k dễ
+Nếu học thì theo dự án mẫu và url:
+https://developer.okta.com/blog/2022/08/29/react-typescript-redux?fbclid=IwAR2L63Huwc6Muqbs-c56ukmASdFpsYXb5EWc8MN2_TLpnDYLm3QwKpRKiDY
+là tốt nhất
+

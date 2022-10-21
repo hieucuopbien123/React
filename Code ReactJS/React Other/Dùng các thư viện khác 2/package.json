@@ -1,0 +1,70 @@
+{
+  "name": "usepackagefrontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.1.1",
+    "@testing-library/user-event": "^13.5.0",
+    "animate.css": "^4.1.1",
+    "compare-versions": "^4.1.3",
+    "fontfaceobserver": "^2.1.0",
+    "hoist-non-react-statics": "^3.3.2",
+    "husky": "^7.0.4",
+    "immer": "^9.0.12",
+    "intl": "^1.2.5",
+    "invariant": "^2.2.4",
+    "lodash": "^4.17.21",
+    "lucene-query-parser": "^1.2.0",
+    "moment": "^2.29.3",
+    "prettier": "^2.6.2",
+    "prop-types": "^15.8.1",
+    "public-ip": "^5.0.0",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "react-error-overlay": "^6.0.11",
+    "react-intl": "^5.25.1",
+    "react-router-dom": "^6.3.0",
+    "react-scripts": "5.0.1",
+    "shelljs": "^0.8.5",
+    "styled-components": "^5.3.5",
+    "stylelint": "^14.8.1",
+    "web-vitals": "^2.1.4",
+    "whatwg-fetch": "^3.6.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "build:clean": "rimraf ./build",
+    "eject": "react-scripts eject",
+    "stylelint:check": "stylelint \"src/**/*.css\""
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "stylelint:check"
+    }
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "coveralls": "^3.1.1",
+    "stylelint-config-recommended": "^7.0.0"
+  }
+}

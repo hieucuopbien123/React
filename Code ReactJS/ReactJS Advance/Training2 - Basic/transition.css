@@ -1,0 +1,49 @@
+.transition-appear{
+    margin-left: 300px;
+    opacity: 0;
+    background:  #f9e79f;
+}
+.transition-appear-active{
+    margin-left: 0px;
+    opacity: 1;
+    background:  #eafaf1 ;
+    transition: opacity 500ms ease-in, margin-left 500ms ease-in;
+    /* dùng multiple transition buộc viết với dấu phẩy như này */
+}
+.transition-appear-done{
+    margin-left: 0px;
+    opacity: 1;
+    background:  #eafaf1 ;
+}
+.transition-enter{
+    margin-left: 300px;
+    opacity: 0;
+    background:  #f9e79f;
+}
+.transition-enter-active{
+    margin-left: 0px;
+    opacity: 1;
+    background:  #eafaf1 ;
+    transition: opacity 500ms ease-in, margin-left 500ms ease-in;
+}
+.transition-enter-done{
+    margin-left: 0px;
+    opacity: 1;
+    background:  #eafaf1 ;
+}
+.transition-exit{
+    margin-left: 0px;
+    opacity: 1;
+    background:  #eafaf1 ;
+}
+.transition-exit-active{
+    margin-left: 300px;
+    opacity: 0;
+    background:  #f9e79f;
+    transition: opacity 500ms ease-in, margin-left 500ms ease-in;
+}
+.transition-exit-done{
+    margin-left: 300px;
+    opacity: 0;
+    background:  #f9e79f;
+}

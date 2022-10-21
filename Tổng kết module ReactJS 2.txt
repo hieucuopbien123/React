@@ -1,0 +1,399 @@
+ReactJS 2:
+
+-> Trang tổng hợp thư viện React: https://github.com/brillout/awesome-react-components
+Nó có hầu hết mọi thứ cần dùng(kp là tất cả), trước khi tự code hãy thử check xem có sẵn thư viện chưa trong đây
+
+-> js.coach là search mọi thứ về JS, React: https://js.coach/?collection=React
+
+-> React-starter-projects là tool tổng hợp các cách khởi tạo dự án React: https://www.javascriptstuff.com/react-starter-projects/
+
+-> Các thư viện UI khác mang các style hoàn toàn khác nhau: Ant Design, Blueprint UI, Rebass, Fluent UI, Evergreen UI, Chakra UI, Grommet, react-foundation
+
+-> Tip and trick và cách dùng React nâng cao tổng hợp, design pattern cho React: https://vasanthk.gitbooks.io/react-bits/content/ => học tiếp từ đây !!!!
+
+-> Có nhiều khởi tạo dự án React khác như dùng: Gatsby, Nextjs, Remix Run,... Dù cùng là React nhưng nhiều điểm lợi riêng
+
+-> Trang tổng hợp cheetsheet: https://devhints.io/
+
+
+
+# Tổng kết các tools khác của React
+bit cloud, devtool, ReactAdmin
+
+
+
+# Các thư viện components
+Điểm mạnh của React là ta có thể thêm bất cứ component nào vào App của ta dễ dàng. Cần gì thì search google là ra. Có thể với 1 vài package ta phải import thêm cả file css để sử dụng
+
+-> react-calendar là package giúp tạo cuộn lịch: npm i react-calendar
+Để dùng: import Calendar from 'react-calendar'; import 'react-calendar/dist/Calendar.css'; => dùng component Calendar và pick được giá trị ngày đang chọn
+=> vào github có sample sử dụng và custom được css cho cuốn lịch => ít dùng vì nó xấu vl, nếu dùng thư viện UI nào thì nên dùng luôn component kiểu này của thư viện đó
+
+-> react-cssfx-loading là package tạo loading: npm i react-cssfx-loading => import { BarWave } from "react-cssfx-loading"; để dùng
+Thư viện này thực chất xây dựng từ html css thuần https://cssfx.netlify.app/
+
+-> react-modal là thư viện tạo modal dialog cơ bản. Hỗ trợ tốt React18, nếu ta k dùng các thư viện UI có thể cân nhắc dùng thư viện này tạo dialog
+
+-> react-burger-menu: tạo animation cho thanh menu dọc thg khi màn hình nhỏ
+
+-> react-player: thư viện custom play video rất mạnh, support đủ thể loại video từ nhiều nguồn nổi tiếng
+Vài video k load được
+
+-> react-beautiful-dnd: thư viện giúp tạo draggable item trong 1 list, move item giữa các column, move giữa các column, custom mọi thứ
+Url full course tutorial: https://github.com/eggheadio-projects/Beautiful-and-Accessible-Drag-and-Drop-with-react-beautiful-dnd-notes
+
+-> react-slick slick-carousel: tạo carousel slider
+
+-> react-dnd: thư viện drag drop của React. Nó rất mạnh, thậm chí mạnh hơn cái trên. Có tutorial chi tiết
+
+-> react-trend: vẽ đường line
+
+-> react-md-spinner: chuyên dùng với spinner => éo ai dùng, đầy thư viện tạo loading icon mạnh hơn
+
+-> react-avatar-edit: edit ảnh làm avatar
+HTMLCanvasElement là 1 kiểu thẻ canvas. K thể render trực tiếp thẻ này thành component React được mà phải cho vào src của thẻ img 
+
+-> react-paginate: tạo component phân trang => nên dùng component có sẵn
+
+-> react-grid-layout: tạo grid draggable items
+
+-> react-spinners: thư viện component loading
+
+-> react-spinners-css: thư viện component loading
+
+-> fireworks: thư viện tạo pháo hoa. Thg dùng kiểu ấn nút thành công thì bắn pháo hoa
+
+-> react-perfect-scrollbar: thư viện tạo thanh scrollbar, nó cung thêm tính năng khác như bắt sự kiện scroll đến vị trí trục y nào
+Phải import cả css và component js
+
+-> react-snowfall: hiển thị mưa tuyết, custom thoải mái
+
+-> react-text-transition: tạo text animation 
+
+-> react-select: tạo đủ loại component input
+
+-> reactflow: thư viện rất mạnh để vẽ flow chart động, tạo được cả các chương trình chỉnh sửa flow chart phức tạp
+
+-> react-markdown: thư viện giúp render từ kiểu markdown ra văn bản đẹp
+
+-> react-color: chuyên cung cấp đến 13 kiểu color picker
+
+-> recharts: thư viện vẽ biểu đồ trông khá tĩnh và đơn giản. Nó phù hợp kiểu vẽ đồ thị học thuật, có responsive và code mẫu chi tiết. Nếu k cần kiểu đẹp như highchart thì recharts nên là lựa chọn tiếp theo
+
+-> react-content-loader: thư viện tạo component loading animated skeleton. Dùng cho cả react native.
+
+-> react-window: thư viện giúp hiển thị 1 phần dữ liệu cực lớn. VD ta có 1 khung nhỏ nhưng cần hiển thị 1 bảng data cực lớn thì thư viện này gói nó trong 1 component kích thước tùy chỉnh kèm scroll bar mà thôi. Điều đặc biệt là dùng nó rất hiệu suất với data cực lớn vì nó k hiện hết mà scroll tới đâu là nó mới render tới phần đó nên k gây lag để load
+
+-> react-pdf: hiển thị PDF trong trình duyệt dễ như image
+
+-> react-icons: thư viện tổng hợp mọi icon miễn phí từ tất cả các nguồn như fontawesome, bootstrap, mui, antdesign,...
+
+-> react-autosuggest: tạo autosuggest khi gõ input, chỉ được với input text. Trong docs nó cho custom rất mạnh. Thực tế, nếu có thể hãy dùng autocomplete mặc định
+
+-> react-datepicker: chuyên tạo date picker
+
+-> highcharts-react-official highcharts: tạo graph đẹp
+--> Tổng hợp đầy đủ options của highcharts thuần
+--> Tổng hợp options của highchart barchart
+--> Tổng hợp options của highchart stockchart
+
+Highchart có rất nhiều module tạo ra đủ thể loại chart, drilldown chỉ là 1 trong số các module
+CSV là kiểu file chuyên biểu diễn data. Trong DMaML nó thg dùng biểu diễn 1 lượng data cực kỳ lơn
+
+Ta có thể chỉnh rotation cho title
+Highchart cũng có cách dùng responsive cũng như loading riêng. Loading ta phải dùng theo nó chứ k được dùng loading của ta k sẽ lỗi
+
+
+
+# Thư viện react-rainbow-component
+Thư viện UI đặc điểm là số lượng component có sẵn rất nhiều, có nhiều component lạ mà các thư viện khác k có như hiển thị Google Map, Timeline, các component bình thường cũng hiển thị theo kiểu mới lạ
+
+npm i react-rainbow-component
+
+Chính vì thư viện có nhiều component hay nên dùng kết hợp với bit cloud để import mọi component cần dùng
+
+
+
+# Dùng responsive:
+-> Để tạo style responsive cho từng element, ta dùng @media của css thuần hoặc dùng code style theo các thư viện UI nếu dùng.
+
+-> Đôi khi ta cần dùng kích thước màn hình trong code component bằng JS để thay đổi nhiều thứ khác mà css k làm được
+--> Dùng thư viện react-device-detect giúp lấy device hiện tại là gì
+--> Có thể tự tạo 1 hook useDevice trả ra các biến phục vụ lấy kích thước màn hình hiện tại, cách này tốt hơn dùng thư viện vì ta custom mọi thứ dược
+--> Trong các thư viện UI có thể có sẵn hàm giúp lấy responsive VD trong mui có useMediaQuery 
+
+VD: ta cần check nếu màn hình điện thoại thì ẩn 1 nút bấm, màn hình máy tính thì hiển thị nút bấm => có thể dùng css thuần cho display none thẻ đó or dùng code JSX check if else có render ra hay không
+
+=> refer tới "Projects / Setup / setup react mui web3 full"
+
+
+
+# Phương pháp dùng try catch:
+Khi catch được thì try sẽ k thực hiện tiếp mà thực hiện tiếp trong catch nên ta dùng catch để undo các thứ đã thực hiện trong try
+Có thể gọi try catch tiếp trong catch vói mục đích là fix cái lỗi expected bắt được trong catch, còn lỗi lạ k expected thì ta chỉ cần log và hiển thị thông báo và undo
+
+Ta biết rằng k thể tự mình bắt hết tất cả lỗi cho nên nếu lỗi và mọi thứ xảy ra k như ý của người dùng thì ta hiển thị thông báo lỗi ra cho người dùng trong catch còn đi tiếp thì hiển thị thông báo thành công cho người dùng trong try. Lỗi ta bắt kiểu if else nếu lỗi này là thế này thì làm gì, nếu nó thoát hết mọi điều kiện if thì in ra lỗi mặc định JSON.stringify(error).slice(0, 80) và thực hiện hàm undo => tức là trong từng hàm undo ta phải xử lý nếu tồn tại a thì mới gọi a.undo();
+Đôi khi mọi thứ k như ý kiểu k có lỗi catch nhưng vẫn sai hoặc có lỗi catch dù đúng. Vd connect web3modal thì trên điện thoại mấy cái app connect thành công nhưng vẫn báo lỗi. Ta có cách làm chặt chẽ luôn là vẫn dùng try catch nhưng k làm gì trong catch cả. Bên dưới lời gọi hàm đó ta check 1 lệnh chặt chẽ để xem hàm đó có cho ra kết quả đúng k. VD cái cách ta switch network trong dự án web3modal
+=> refer tới "Project / Connect web3modal"
+
+try catch thg dùng bao ngay các hàm async
+Trong catch cần làm 3 thứ: log lỗi, thông báo lỗi nếu cần or yêu cầu làm gì để fix, undo các thứ đã làm trong try, nếu expect nó bị lỗi tiếp thì dùng thêm vòng try catch nữa bên trong. Cố xử lý hay bảo người dùng làm gì chứ đừng báo lỗi không vì nếu bị lỗi thì chỉ báo lỗi là xong thì bắt làm éo gì.
+Có những TH k có lỗi VD giá trị null thì ta phải tự check nếu null thì throw new Error
+Nếu try catch gọi 1 hàm, trong hàm lại có try catch thì nếu hàm bị lỗi và vòng try catch bên trong bắt thì bên ngoài sẽ k bắt được nữa. Cần chú ý dùng thế nào cho đúng, có thể kết hợp pattern bên trên
+
+
+
+## Các thứ quan trọng khác
+
+
+
+# Dùng biến môi trường
+-> Dùng cross-env
+npm i cross-env -> trong các câu lệnh script của package.json ta có thể khởi tạo các biến môi trường -> dùng các biến đó trực tiếp qua process.env trong chương trình khi lệnh đó được chạy
+=> cross-env thường dùng khi cần dùng giá trị biến khác nhau giữa các môi trường, mỗi lệnh chạy truyền giá trị khác nhau. Chỉ nên truyền max 2-3 biến thôi
+
+-> Có sẵn
+Trong React có sẵn biến môi trường bằng cách khởi tạo có tiền tố REACT_APP_<tên biến> trong file .env -> dùng trực tiếp với process.env
+=> 1 dự án React bth chỉ cần dùng cách này với cross-env là đủ
+
+-> Dùng dotenv
+Tạo .env và khai báo các biến thoải mái
+ES6: gọi dotenv.config() sớm nhất có thể trong dự án 
+CommonJS: gọi require("dotenv").config() sớm nhất có thể
+-> sau khi load thì dùng được biến qua process.env
+=> Thg dùng bên server như NodeJS chứ chả ai dùng cho React
+
+
+
+# Về file package.json
+
+
+
+# Dùng các thư viện chức năng
+-> Dùng react-intl: thư viện giúp format số và chữ
+
+-> animate.css: thư viện animation nhanh dưới dạng css
+
+-> clsx: thư viện giúp tạo string với điều kiện. Thg dùng nó cho trường className VD:
+className={clsx("content", {
+  ["success"]: item.status = TX_SUCCESS,
+  ["error"]: item.status = TX_FAILED
+})}
+VD2: k cần tham số 1 cũng được, tham số 1 kiểu mặc định thôi ấy
+clsx({[`animate__animated animate__${route.animation}`]:
+  Boolean(
+    route.animation
+  ),
+})
+
+-> prop-types: thư viện giúp typecheking và gán default value cho props của 1 component. prop-types(PropTypes) sẽ Runtime check props type giảm thiểu lỗi
+VD: ta muốn Wrapper IconButton thành 1 component riêng và dùng ở các file khác truyền vào props cho nó y như IconButton xong pass lại cho nó thì type check chuẩn ta có thể:
+TextCopyButton.propTypes = {
+    ...IconButton.propTypes,
+    //other props
+} rồi truyền vào IconButton bên trong TextCopyButton là {...rest} sau khi tách ra các thành phần: const { text, tooltipTitle, ...rest } = props;
+
+-> react-device-detect: thư viện giúp lấy loại device hiện tại
+
+-> react-copy-to-clipboard: thư viện giúp copy to clipboard
+
+-> react-infinite-scroll-component: tính năng scroll đến cuối sẽ fetch tiếp data hiển thị tiếp
+
+-> react-moment moment: npm i --save react-moment moment
+react-moment giúp hiển thị ngày giờ theo 1 format nào, nó cũng cung nhiều utils VD hiện ra còn bnh ngày là đến ngày nào chẳng hạn. Tự hiển thị trong thẻ time giúp SEO dù k bõ lắm
+moment giúp lấy tg hiện tại, nó giống new Date() nhưng cung nhiều utils khác thao tác với thời gian
+Ngoài ra có thể dùng thêm moment-timezone nếu cần thao tác thời gian theo múi giờ khác nhau
+
+-> hoist-non-react-statics: 
+Khi ta tạo HOC component nhận 1 component khác và cho ra 1 component mới thì static data nó k tự copy. Static data là các attribute thêm vào tên của function đó về sau, nó khác với props
+=> Chính vì người ta đa phần toàn dùng props chứ ít dùng static nên thư viện này ít khi được sử dụng 
+
+-> styled-components: thư viện giúp style 1 thẻ html thuần thành 1 thẻ mang tên khác 
+
+-> @emotion/styled: thư viện tương tự styled-components dùng để thêm css cho component
+
+-> whatwg-fetch: thư viện cho fetch mọi thứ => ít dùng vì fetch quanh đi quẩn lại vài thứ cứ dùng các thư viện bth là được r
+
+-> immer: ta muốn 1 biến const có mọi thứ của 1 biến const khác nhưng vài giá trị thay  đổi đi 1 tí thì immer giúp điều này dễ dàng => thư viện này ít dùng ít khi ta cần thay đổi biến const, dùng state và redux toolkit đều tự làm có sẵn cho ta r
+
+-> compare-versions: thư viện giúp compare 2 biến version cái nào mới hơn cái nào và nhiều thao tác tương tự => thư viện ít dùng vì có bh cần ss 2 version đâu
+Version Release Candidate là phiên bản rc dùng thử trước bản chính thức
+
+-> intl: thư viện giúp format giá trị theo vùng miền, thg dùng kiểu format đơn vị tiền tệ => ít dùng
+
+-> invariant: thư viện báo error và dừng chạy bên dưới => ít dùng vì throw để làm gì
+
+-> public-ip: thư viện lấy ip network của máy
+
+-> lodash: thư viện utilities cho mảng, object, function, string, number trong JS
+isFunction, capitalize, random
+join, last, chunk, fill, findIndex, drop, size, filter, sortBy, includes, map, range
+has, pick, findKey, merge, conformsTo, isObject
+
+Full hàm: https://lodash.com/docs/4.17.15
+
+VD trong trava ta thấy hàm mergeObject trong utils rất phức tạp nhưng với lodash nó làm sẵn với merge. Nếu master lodash thì hầu hết mọi thứ utils với các kiểu của JS đều có thể làm được rất ngắn gọn
+Có thể import lẻ kiểu: npm i lodash.merge
+
+-> lucene-query-parser: thư viện parse văn bản rất mạnh
+
+-> Dùng UUID(Universally Unique IDentifier) là 1 định danh duy nhất. Nó mạnh mẽ đến mức cung cấp đc id cho hàng tỉ tỉ user và phức tạp khó có thể lộ ra ngoài, khi đó ta cần sử dụng uuid. JS có thư viện cung cấp uuid tương thích với React18: npm install uuid -> import { v4 as uuidv4 } from 'uuid/v4'; => có từ v1 đến v5
+Để dùng: var id = uuidv4();
+=> Hiện tại React18 đã có hàm useId cung id duy nhất rồi nhưng thư viện này mạnh hơn
+
+-> Dùng react-transition-group 
+Là 1 thư viện phát triển bởi cộng đồng react -> giúp làm việc với CSS transition. Ta phải tự tạo animation thuần bằng css và thư viện này sẽ quản lý trạng thái, DOM, tên class, group các element, bản thân nó k tự tạo ra animation => ít dùng. Hoạt động với React18
+--> Cài đặt:
+=> Dùng CDN: <script src="https://cdnjs.cloudflare.com/ajax/libs/react-transition-group/4.4.5/react-transition-group.min.js"></script>
+=> Dùng npm với react: npm install react-transition-group --save 
+=> Thư viện này cung cơ bản 3 component: import { TransitionGroup, CSSTransition, Transition } from "react-transition-group";
+
+-> react-awesome-reveal: Tạo animation basic, có thể canustom với css
+Dùng kết hợp với keyframes của @emotions/react để custom animation, @emotions/react cũng  là nguồn cung giúp tạo object style với keyframes của css
+
+-> screenfull
+
+-> react-hook-form: xử lý form, tương tự formik. Nó còn có tool generate code luôn.
+
+-> Dùng formik: thư viện xử lý form
+--> C1: Dùng Formik + FastField truyền vào component input + trường name trùng tên với trường giá trị => formik đã làm giúp ta onChange các thứ rồi. Trừ TH nhập input mà k bắn ra event mà bắn ra giá trị VD khi custom thì phải dùng form.setFieldValue, còn không thì field.onChange dùng event là có tự động
+--> C2: Làm tất cả mọi thứ như bth nhưng dùng useFormik để pass mọi thứ cho các component input là xong
+
+
+
+# React lập trình web3
+
+
+
+## Pattern thiết kế
+
+
+
+# Pattern fetch API redux loading
+-> Component chính useEffect gọi hàm fetch API với [] => có thể dùng pattern với Suspense throw promise để tối ưu fetch hơn nữa
+Hàm fetch API trong createAsyncThunk gọi Promise.all mọi hàm fetch data cần dùng khi truy thấy component ở lần đầu tiên với axios
+Slice xử lý hàm đó 3 trạng thái gán cho biến fetchingStatus: pending là FETCHING, fulfilled thì check nếu không FAIL thì SUCESS và gán data. Với từng hàm con thì gán fetchingStatus là FAIL nếu thất bại và reset lại state, fullfilled thì gán data.
+Trong component chính check nếu fetchingStatus INITIAL or FETCHING thì loading, FAIL thì hiện trang báo lỗi, thành công thi hiển thị mọi thứ
+=> Tức ta tái sử dụng các hàm fetch con bằng cách gọi promise all nó trong hàm fetch tổng, về sau nếu làm cái gì gọi hàm fetch con mà bị lỗi thì component lớn bên ngoài vẫn hiện trang báo lỗi. Còn loading thì chỉ cần nếu centralized server với lượng data lớn mới cần
+
+Khi từng component nhỏ bên trong ta fetch API đơn lẻ từ server tập trung thì tốc độ rất nhanh, k cần xử lý loading mà cho lag hiện ra luôn. Còn component fetch data từ web3 hoặc fetch API từ server nhưng lượng data lớn có thể gây lag lâu thì dùng loading
+1 quy trình thông thường là tạo hàm async ở trong redux xử lý 3 TT và gọi trong component action và hiển thị ra ở component show. Trong đó component action và show đều check nếu pending bằng true thì action k cho thực hiện và show sẽ hiện loading. Có data sẽ trở về bth
+
+=> refer tới "Projects / Leaderboard trava / Leaderboard Basic / TravaArmoury"
+
+-> TH trên dùng global redux loading, trong nhiều TH khác, VD như khi component hiển thị chỉ trong phạm vi 1 component ta có thể dùng biến useState loading trong component đó chứ kp loading cho cả trang. Component đó có thể có các con ok vì chỉ cần truyền biến loading vào props cho các con, thường thì case này sẽ dùng skeleton chứ k dùng spinner
+=> refer tới "Projects / Trava Auction"
+
+-> Pattern thường dùng là vào page dùng data nào thì fetch data đó, nếu data đó k thay đổi nhiều và lớn thì có thể check nếu null thì mới phải fetch lại or đúng hơn là stale mới fetch lại
+
+-> Pattern trên có thể k đúng với 1 số component có sẵn vc hiển thị loading
+=> refer tới "Projects / Leaderboard trava / Leaderboard HighChart"
+
+=> Ncl 5 vđ: dùng loading có sẵn của component, pagination fetch tất cả 1 lúc khi dùng web3 vì k cho filter search, dùng useState loading skeleton/spinner khi chỉ dùng trong phạm vi component kp cả page, lag hiện ra luôn hay có loading với các thứ nhỏ, data lớn + ít đổi thì phải stale mới fetch lại
+
+
+
+# Pattern search filter
+Ta cần search và filter data theo các trường và các component chỉnh sửa các trường này ở xa nhau. Data đó có thể là fetch hết tất cả r lọc or mỗi lần chỉnh sửa là 1 lần gửi request mới fetch data về kèm các trường params để lọc
+
+Cách làm naive luôn là để 1 component cha chứa hết các trường và truyền cho con. Nếu các trường đó dùng ở nhiều component như v nên để global
+
+-> Mỗi lần ấn là fetch: tốc độ fetch nhanh nên k cần xử lý loading, có thể gây lag ở màn hình hiển thị nhưng thao tác của người dùng thì phải k lag
+Ta viết redux chứa object config và hàm update biến config
+Hàm createAsyncThunk fetch API dựa vào params truyền vào 
+Component chỉnh sửa sẽ dispatch update vào redux luôn
+Component hiển thị dùng useEffect [config] gọi hàm thunk fetch lại, lấy data từ redux hiển thị ra. Khi gọi hàm fetch lại phải truyền cả config vào thunk từ đầu
+
+=> refer tới "Projects / Leaderboard trava / Leaderboard Basic / TravaArmoury / ArmouryRegistry"
+
+
+
+# Quy tắc chia ra component
+Phạm vi reload là từng hàm component nên nếu 1 component có thể thay đổi trạng thái mà k ảnh hưởng đến các component khác thì nên tách ra để k reload lại tất cả. 1 component tái sử dụng nhiều nơi cũng tách ra riêng
+
+2 TH:
+1) 
+<Search>
+<Hiển thị>
+2) 
+<Search> -> phần cuối của component Search ta dùng component <Hiển thị>
+=> Cách 2 tốt hơn cách 1 vì ở đây nội dung ta hiển thị ra phụ thuộc vào người dùng search cái gì. Khi dùng cách 1 thì mục đích là ta muốn chia ra các component con nhưng muốn dùng data của <Search> trong <Hiển thị> thì phải dùng biến search từ component cha truyền cho con. Điều này k tốt vì xử lý con k độc lập. Ta có thể dùng cách 1 nếu ta nhét biến search vào redux nhưng thường component nhỏ thì nên gom riêng. Ta chỉ cần dùng redux nếu: data là async, nếu data đó được tác động từ nhiều component xa nhau.
+=> Ta ưu tiên redux khi data lấy từ 1 nguồn asynchronous chứ data xuât hiện do sự tương tác của người dùng và khi refresh lại page nó biến mất như kiểu 1 thanh input hay đổi màu vớ vẩn thì chỉ cần dùng useState thôi là đủ. 
+=> Trong trava dùng redux cho search và filter vì nó phục vụ cho query asynchronous và bản thân component cũng khá lớn và phức tạp khi có rất nhiều trường để lọc, thay đổi cả url chính của web nữa. Dù data để search và filter ở đây không phải async và refresh là mât nhưng nó phần nào cũng phục vụ cho 1 query API trong 1 slice, data cần để query đó mà nhét trong redux thì nhìn nó dễ hình dung hơn. 
+=> Nch là có nhiều lý do và phải tùy biến để chia component cũng như quyết định nên dùng redux hay không. Phải căn cứ và hình dung tùy TH để xem có hợp lý k.
+=> Thực chất có thể lấy con từ cha được với useRef mà 
+
+Việc tái sử dụng quá mức cx k đáng vì vc ta copy code từ component này sang component khác là chuyện bth. Nếu k tái sử dụng được nhiều thuộc tính 1 lúc thì cứ copy ra.
+
+-> Pattern button dialog
+Nếu có 1 button, ấn button hiện ra dialog thì nên để button đó và dialog cùng là 1 component chứ k tách 2 file riêng. Tương tự 1 button ấn vào hiện drawer thì cũng chung 1 component
+
+-> Pattern thường chia như sau:
+Trong 1 folder page có index.js -> cả trang web được chia thành VD là 3 phần -> tách ra 3 folder mỗi folder 1 phần -> mỗi phần có 1 file index.js -> mỗi phần cũng có các file là các component thành phần mà dùng bởi file index.js đó -> file index.js ngoài cùng chỉ cần import file index.js đó là được
+Cấp ngoài cùng có thể có folder components và assets để dùng nếu components dùng chung trong trang web đó. Nếu component dùng trong cả trang web thì phải dùng resource và components ở ngay trong mục src
+=> refer tới "Projects / Leaderboard trava / Leaderboard Basic / TravaArmoury"
+
+
+
+# Pattern kiểm soát bố cục
+Khi code 1 trang web, ta luôn muốn kiểm soát hoàn toàn từ lớn tới nhỏ, cái nào có style gì và chứa cái nào bên trong có vị trí như nào với cái cha. Khi đó các cái bên trong bao giờ cũng nhỏ hơn và co trong cái cha. Điều đặc biệt là kích thước phải cha lớn hơn con và luôn kiểm soát chặt chẽ điều đó, kể cả khi kích thước màn hình lớn hay nhỏ ntn
+K nên dùng các thứ như fit-content để tránh kích thước cha theo kích thước con thì có thể vì 1 lý do gì đó, kích thước của con tự dưng lớn quá kéo theo cha cũng to ra theo, như v là k đúng với quy tắc trên, cha k được phụ thuộc vào con.
+Nên dùng các thứ như max-width hay xử lý rõ overflow để kbh cho 1 con dôi ra ngoài cha. Nếu ta tưởng tượng ra được design trong đầu thì chắc chắn có cách code để cho nó trở thành hoàn toàn như ý ta, chỉ là ta tìm ra được hay không.
+Thẻ con khi set fix cứng phải đảm bảo luôn nhỏ hơn kích thước fix cứng của cha, bằng không thì chỉ được dùng đơn vị relative. Vì nếu con fix cứng thì luôn có thể tràn ra ngoài cha nếu 1 lúc nào đó nó vượt cha. Do đó ta chỉ thường fix cứng với các thứ nhỏ nhỏ như nút bấm hay icon trên trang web thôi.
+
+Khi viết các thẻ lồng nhau, để đảm bảo quy tắc trên ta phải luôn set đúng kích thước. VD cha có max-width là 100px thì ta luôn expect thẻ con kích thước cũng kbh quá 100px. Với mọi thẻ ta cứ từ từ set max-width dần dần cho đến wrapper của thẻ con để đảm bảo các component kbh quá mức đó, kbh ngoài tầm kiểm soát, nếu ta k set như v thì nó mặc định là fit-content và thẻ con mà dôi ra thì wrapper cũng thế, v thì wrapper tồn tại mà vô dụng. Nếu thẻ con kích thước kbh quá được vì rất nhỏ thì ok. Nếu thẻ con có thể quá được thì ta có nhiều case để xử lý:
+Cho thẻ con responsive theo kích thước màn hình, đặc biệt là dùng quan hệ relative cho width với thẻ cha để đảm bảo k dôi ra ngoài cho đến iPhoneSE
+Nếu thẻ con nhất quyết dôi ra ngoài và k thể co nhỏ thì cứ để nó lớn như v, set cho nó 1 cái max-width đến cái mốc nó k thể fit được với màn hình nữa thì wrapper bên ngoài vẫn fit màn hình và hiện scrollbar ngang cho con bên trong. Các element position có bị scroll hay không thì tùy mà dùng position absolute
+
+
+
+# Pattern force reload lại component dù chỉ đổi biến phụ thuộc localStorage
+=> Chú ý rằng component A chứa component B, component B set giá trị cho localStorage, component A refer đến giá trị trong localStorage. Component A sẽ k render lại nếu component B đổi giá trị. Thực tế trong solatex ta quá naive khi dùng redux với biến trùng nhau để reload lại trang, ta có thể làm điều này ez bằng cách dùng react-router-dom gắn trang component B 1 router riêng, component A là router cha của B. Vc navigate ngược về sẽ giúp nó load lại React component của A sẽ lấy lại localStorage giá trị mới => 1 cách hay để force update
+=> refer tới "Projects / Solatex"
+=> refer tới "Projects / BattleHand"
+
+
+
+# Pattern style component
+Khi dùng các component có sẵn từ nhiều nơi, ta khó có thể custom tùy ý được, nó thường cung API ở 1 mức độ nhất định thôi. Ta có thể ép style theo ý ta bằng CSS Selector, viết 1 thẻ bao ngoài và mang 1 class rồi cứ dùng css selector để style cho các con bên trong tùy ý.
+Có thể dùng makeStyle của MUIv4, styled của MUIv5, css selector thuần or dùng thư viện hỗ trợ như @emotion/styled, styled-components
+
+
+
+# Các pattern có sẵn của React
+-> Component A chứa component B, cả 2 cùng useEffect dependencies đến biến x, nếu biến x đổi thì useEffect của cha sẽ thực hiện trước r đến dần các useEffect của con.
+Nếu component A useEffect mà thực hiện chuyển trang khác nên component con k hiện ra nữa thì k chạy useEffect của con nữa.
+
+=> refer tới "Projects / BattleHand / index.js của BattleHand"
+
+
+
+# Thao tác với SVG
+Có thể dùng svg bth trong thẻ img làm ảnh
+
+-> Custom tái sử dụng SVG dạng component
+
+=> refer tới "trava-nft-frontend/src/icons/ExternalLink.jsx"
+
+
+
+# Tạo số chạy
+Tự tạo component có số chạy
+=> refer tới "Projects / Leaderboard trava / Leaderboard HighChart / Trang statistics / src / components / Animated Numbers"
+
+Số chạy theo số liệu thay đổi chỉ cần thiết khi số liệu làm gì đó mà hiển thị khác đi ngay trong page hiện tại or hiện ra lần đầu tiên vì ta k muốn nó đùng phát thay đổi từ cái này sang cái khác. Bất cứ khi nào số liệu thay đổi thì nó sẽ tự chạy.
+const [a, setA] = useState(0); thì ta có thể dùng kiểu setA((prev) => { <prev dùng được ở đây là giá trị a trước đó> })
+=> còn AnimatedNumber thực chất là component tự tạo của react. Điều đặc biệt là nó k return 1 component mà chỉ trả ra 1 số, số này được lấy và update giá trị liên tục để gửi giá trị cho component bao nó hiện ra. Nó giống như kiểu FormatNumber của react-intl ấy
+
+
+
+# Full client and server: dùng CSR
+
+
+
+# Kinh nghiệm
+-> Kể cả ảnh 3D hay các hiệu ứng kinh hoàng cũng chỉ là ảnh mà thôi, tùy thuộc vào team design figma. Tương tự nếu tạo được video có thể chèn vào kiểu hiệu ứng động. Có thể edit 1 bức ảnh thô bằng CSS nhưng rất nặng. 
+VD: Border của Box là hình xiên kèm gradient rất ảo thực chất là 1 bức ảnh svg tạo bằng backgroundImage mà thôi, lại dựa vào figma để tạo ra hình đó. Những người master figma có thể tạo ra những hình rất ảo giúp cho dev rất nhiều tạo ra giao diện cực kỳ dị bằng svg. Lưu lại figma của trava có ích cho sau này khi cần các hình đó
+
+-> Truyền params là _ khi k dùng đến
+

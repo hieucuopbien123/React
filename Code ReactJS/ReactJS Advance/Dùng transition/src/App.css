@@ -1,0 +1,137 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.transition-entering{
+    color: green;
+    margin-left: 5px;
+    opacity: 1;
+    transition: margin-left 1s ease-in, color 1s, opacity 1s;
+}
+.transition-entered{
+    color: green;
+    margin-left: 5px;
+}
+.transition-exiting{
+    color: red;
+    transition-duration: 1000ms;
+    margin-left: 300px;
+    opacity: 0;
+}
+.transition-exited{
+    opacity: 0;
+    /* lúc này margin-left mặc định là 0 */
+}
+/* trap là các tt enter hay exit nó tự nối tiếp nhau. VD: ta cho exiting maring-left là 300px, nhưng exited ta k set
+margin-left=> margin left nó tự đặt mặc định là 0=> dẫn đến các TT cần phải khai báo nối tiếp nhau để đảm bảo TT cuối
+của cái kia là đầu của cái này. Các TT enter/entered exit/exited rât quan trọng chứ kp bỏ đi. VD ta muốn lúc enter nó
+đi từ dưới lên, nhưng lúc exit nó đi từ phải qua thì phải set cái enter và exit để bắt đầu từ đâu chẳng hạn. VD ta set
+entering color green thì buộc phái set entered color green và các thuộc tính muốn duy trì của entering trong enterd. 
+Nếu k entered trở lại default màu đen và margin left = 0 ngay default=>chỉ cần chỉnh những cái khác default
+VD ở trên ta set đang exit mà enter thì đi từ phải qua nhưng exited r mới enter thì ở ngay đó luôn*/
+
+/* .transition-enter{
+  margin-left: 300px;
+  opacity: 0;
+}
+.transition-enterActive{
+  color: green;
+  margin-left: 5px;
+  opacity: 1;
+  transition: margin-left 1s ease-in, color 1s, opacity 1s;
+}
+.transition-enterDone{
+  color: green;
+  margin-left: 5px;
+}
+.transition-exitActive{
+  color: red;
+  transition-duration: 1000ms;
+  margin-left: 300px;
+  opacity: 0;
+}
+.transition-appear{
+  margin-left: 300px;
+  opacity: 0;
+}
+.transition-appearActive{
+  color: green;
+  margin-left: 5px;
+  opacity: 1;
+  transition: margin-left 1s ease-in, color 1s, opacity 1s;
+}
+.transition-appearDone{
+  color: green;
+  margin-left: 5px;
+} */
+
+
+.transition-enter{
+  margin-left: 300px;
+  opacity: 0;
+}
+.transition-enter-active{
+  color: green;
+  margin-left: 5px;
+  opacity: 1;
+  transition: margin-left 1s ease-in, color 1s, opacity 1s;
+}
+.transition-enter-done{
+  color: green;
+  margin-left: 5px;
+}
+.transition-exit-active{
+  color: red;
+  transition-duration: 1000ms;
+  margin-left: 300px;
+  opacity: 0;
+}
+.transition-appear{
+  margin-left: 300px;
+  opacity: 0;
+}
+.transition-appear-active{
+  color: green;
+  margin-left: 5px;
+  opacity: 1;
+  transition: margin-left 1s ease-in, color 1s, opacity 1s;
+}
+.transition-appear-done{
+  color: green;
+  margin-left: 5px;
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Hello React</title>
+  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+  <!-- (bỏ) -->
+  <div id="member"></div>
+
+  <script type="text/babel">
+    class Member extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            users: [
+              { 
+                id: 1,
+                name: "Bùi Văn Tèo",
+                age: 25
+              },
+              {
+                id: 2,
+                name: "Trần Văn An",
+                age: 29
+              },
+              {
+                id: 3,
+                name: "Nguyễn Thị Bưởi",
+                age: 22
+              }
+            ],
+            job: "IT Communicator"
+          };
+        };
+
+    changeItem = () => {
+      let key = 2;
+
+      this.setState(prevState => ({
+        users: prevState.users.map(
+          item => item.id === key? {
+            ...item,
+            name: 'Dương Minh Trí',
+            age: 4
+          }: item
+        )
+      }));
+    };
+
+  render() {
+    return (
+      <div>
+        <ul>
+          {this.state.users.map(item => (
+            <li key={item.id}>
+              <h2>Tên: {item.name}</h2>
+              <p>Tuổi: {item.age}</p>
+            </li>
+          ))}
+        </ul>
+        <button type="button" onClick={this.changeItem}>Update</button>
+      </div>
+    );
+  };
+      };
+
+      ReactDOM.render(
+        <Member />,
+        document.getElementById('member')
+      );
+    </script>
+
+    <div id="training2"></div>
+    <script type="text/babel" src="training2.jsx"></script>
+    <!-- <div id="training"></div>
+    <script type="text/babel" src="training.jsx"></script> -->
+</body>
+
+</html>

@@ -1,0 +1,118 @@
+SEO trong React:
+Front end chỉ cần hiểu cách tối ưu SEO trong React dung CSR và cách dùng NextJS khi dùng SSR.
+
+
+# SEO
+Là công cụ cốt lõi của Digital Marketing, giúp tối ưu xây dựng content để tăng khả năng hiển thị của thương hiệu trên các phương tiện trực tuyến.
+
+Vc tối ưu SEO và performance của trang web là code frontend chứ vẫn cần có đội ngũ chuyên về SEO chạy traffic hút người vào web. Code tốt chỉ là phần thứ yếu trong SEO
+
+
+
+# Basic
+React là CSR nên nội dung trong thẻ body sẽ k hiển thị trong source page mà chỉ có các thẻ header, còn body có mỗi thẻ div trống. Dù trình crawler của google đã mạnh hơn rằng có thể thực thi code JS nhưng với các request API data bất đồng bộ, VD ta set timeout chờ 10s mới set data thì nó sẽ k hiển thị data đó trên source page. Với các framework dùng CSR, điều này vẫn là hạn chế chưa giải quyết triệt để. 
+
+Do đó với các bức ảnh lấy request về, dù ta thêm alt hay descriptive text vào thoải mái kết quả SEO chả khá hơn
+
+Để check 1 website dùng CSR hay SSR chỉ cần CTRL+U để check chứa toàn bộ source hay không 
+
+
+
+# Tối ưu SEO
+Với ReactJS thuần mà dùng CSR, ta chỉ có thể tối ưu SEO nhưng k thể nào bằng được khi dùng bằng SSR.
+Tool crawler của google ta có thể check cho nó crawler web thử và xem trả về cái gì nhưng với đk phải là chủ website.
+
+Nên sử dụng chuẩn descriptive text cho mọi thẻ có thể dùng để tối ưu hóa SEO. Với CSR nếu nhưng data đó thông qua JS lấy được luôn thì vẫn có thể đẩy SEO lên 1 chút
+
+-> Với React CSR:
+Ta dùng React Helmet để update các thẻ metadata ở từng router, nên viết cả các thẻ metadata ở file index.html có giá trị mặc định cho nó để làm trang chủ. Thẻ Helmet luôn để ở đầu của từng Route. Nó tương thích với React18, hỗ trợ cả CSR và SSR => ta cứ hiểu mặc định là crawler bị hạn chế rất nhiều khi exec code JS nên react-helmet dùng thực sự k cải thiện SEO là mấy mà chỉ dùng để show người dùng mình đang ở trang nào
+Khi đổi giá trị bằng React Helmet thì CTRL+U nó vẫn ra source code ban đầu vì cái đó chỉ đi vào file html được lấy trực tiếp từ server về thôi, khi thực thi phần JS sẽ thấy nó đổi và google crawler có nhìn thấy sự thay đổi. Thực chất giá trị các thẻ head vẫn có bị đổi bằng helmet. 
+Helmet thao tác với các thẻ cơ bản như title, base, meta, link, script, noscript, style,...
+
+Nếu crawler k thực hiện code JS thì nó sẽ lấy các giá trị từ server chứ k thay đổi theo từng router như ta muốn. VD ta paste 1 trang web vào messenger thì trình crawler của twitter sẽ tạm thời fetch html trang web đó và tiêu đề nó lấy từ trong index.html chứ ko đúng trong helmet
+
+Thay vì dùng helmet ta có thể dùng JS thuần để update head tag thông qua global var document cũng được.
+Bên cạnh đó có các thư viện khác như seo-injector cũng hỗ trợ đổi thẻ meta tương tự.
+
+Chính vì CSR nên nó luôn bị hạn chế về các API ta fetch về và cách tối ưu duy nhất chỉ có tối ưu các thẻ meta như v thôi
+VD trong trava: tối ưu SEO điểm lighthouse đến 90 bằng cách specific mọi thẻ meta trong head mặc định và với từng url nhỏ đều dùng react-helmet xử lý. Các giá trị thẻ meta mặc định đều phục vụ SEO cho router chính, còn các router nhỏ vẫn có thẻ meta y hệt router chính. Đó là nhược điểm vì ta k SEO các page nhỏ của từng con NFT nên chưa tốt, nếu đúng thì dùng SSR là mọi thứ của từng con NFT đều hiện ra thì chi tiết crawler mới lấy được nhưng dùng CSR thì chịu thôi. Điểm SEO cao thực ra chỉ dựa vào mỗi thẻ meta ở header mà thôi.
+
+Code tốt chỉ là phần thứ yếu trong SEO vì đủ các tag meta đã có 90% rồi, chưa cần fetch về nội dung
+
+-> Các phương pháp khác tăng SEO cho React
+Dùng cấu trúc url tốt, ngắn và descriptive
+Tối ưu hóa tệp robots.txt 
+Sử dụng CDN để cung css, js, font chữ nếu có thể để giảm thời gian tải
+Hạn chế lỗi để nội dung ẩn sau biểu mẫu đăng nhập, kể cả không đăng nhập cũng phải thấy gì đó. 
+Mọi URL có thể có nếu k bí mật thì nên có 1 cái url trỏ tới trong trang web
+
+--> Giải pháp khác:
+1) Prerendering
+Ta có thể dùng proxy kiểu nginx để check:
+$http_user_agent ~* "googlebot|bingbot|yandex|baiduspider|twitterbot|facebookexternalhit|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest\/0\.|pinterestbot|slackbot|vkShare|W3C_Validator|whatsapp"
+or
+map $http_user_agent $limit_bots {
+     default 0;
+     ~*(google|bing|yandex|msnbot) 1;
+     ~*(AltaVista|Googlebot|Slurp|BlackWidow|Bot|ChinaClaw|Custo|DISCo|Download|Demon|eCatch|EirGrabber|EmailSiphon|EmailWolf|SuperHTTP|Surfbot|WebWhacker) 1;
+     ~*(Express|WebPictures|ExtractorPro|EyeNetIE|FlashGet|GetRight|GetWeb!|Go!Zilla|Go-Ahead-Got-It|GrabNet|Grafula|HMView|Go!Zilla|Go-Ahead-Got-It) 1;
+     ~*(rafula|HMView|HTTrack|Stripper|Sucker|Indy|InterGET|Ninja|JetCar|Spider|larbin|LeechFTP|Downloader|tool|Navroad|NearSite|NetAnts|tAkeOut|WWWOFFLE) 1;
+     ~*(GrabNet|NetSpider|Vampire|NetZIP|Octopus|Offline|PageGrabber|Foto|pavuk|pcBrowser|RealDownload|ReGet|SiteSnagger|SmartDownload|SuperBot|WebSpider) 1;
+     ~*(Teleport|VoidEYE|Collector|WebAuto|WebCopier|WebFetch|WebGo|WebLeacher|WebReaper|WebSauger|eXtractor|Quester|WebStripper|WebZIP|Wget|Widow|Zeus) 1;
+     ~*(Twengabot|htmlparser|libwww|Python|perl|urllib|scan|Curl|email|PycURL|Pyth|PyQ|WebCollector|WebCopy|webcraw) 1;
+ } 
+location / {
+  if ($limit_bots = 1) {
+    return 301 $scheme://domain.com$request_uri;
+  }
+}
+=> Tức nếu request đến từ yêu cầu client bth thì show web react ra. Nếu request đến từ các bot crawler thì ta redirect đến 1 cache server mà ta chuẩn bị từ trước, server này sẽ query database lấy dữ liệu và trả về html với metadata chuẩn y hệt như SSR nhưng người dùng vẫn trải nghiệm CSR. 
+=> Nhược điểm là phải code dự án 2 lần cho CSR và SSR nên ít dùng
+Link: https://stackoverflow.com/questions/62149383/react-helmet-seo
+
+Prerendering có nhiều kiểu như sử dụng các dịch vụ SaaS, or thư viện Prerender.io, Prerender.cloud, SEO.js, BromBone
+
+2) Dùng Isomorphic với Reac thuần như: React Redux Universal, AfterJS, Goldpage cho phép chạy cả trên môi trường server và client như NextJS nhưng là với React thuần
+
+-> SEO bằng SSR
+K nên dùng React với SSR mà dùng NextJS. Framework NextJS dùng SSR tự động build static page dùng kèm với ReactJS mà ta k cần quan tâm, mọi thứ đều tự động. Nên xác định page cần tối ưu hóa SEO thì dùng NextJS ngay từ đầu
+
+NextJS ngoài các yêu tố khách quan như ít plugin, ít cộng đồng hơn, khó hơn thì kết quả nếu tạo được trang web thì nhìn chung sẽ tốt hơn React.
+
+Thực chất React Isomorphic là khái niệm chỉ máy chủ có dạng tương tự như máy khách, là phương pháp để máy chủ hiển thị React gửi bản đã kết xuất cho browser trong khi JS thực thi nền y hệt SSR => 2 framework SSR phổ biến nhất là Gatsby và NextJS đã áp dụng cách này.
+
+Khi chuyển trang sử dụng thẻ Link của react-router-dom, nó k request tới máy chủ mà dùng các tài nguyên đã tìm nạp cho trang web từ trước để sử dụng nên nó điều hướng nhanh hơn và cần React-Helmet để change title còn thực sự vẫn ở trang đó. Còn thẻ a của html thuần sẽ request lại tài nguyên từ máy chủ. Khi đó mamsy chủ có thể xử lý kiểu đổi meta của file html r mới gửi lại tùy theo request vào trang nào
+
+Gặp nhiều vấn đề như làm vc trên SSR sẽ k truy cập được vào localStorage hay window 
+
+-> File robots.txt 
+Xđ phần nào của search engine nên và k nên thu thập dữ liệu, nằm cùng cấp thư mục gốc của dữ liệu. Thg để mặc định.
+
+Nếu Googlebot không thể tìm thấy tệp robots.txt cho một trang web, nó sẽ tiến hành thu thập dữ liệu trang web.
+Nếu Googlebot tìm thấy tệp robots.txt cho một trang web, nó thường sẽ tuân theo các đề xuất và tiến hành thu thập dữ liệu trang web.
+Nếu Googlebot gặp lỗi khi cố gắng truy cập vào tệp robots.txt của trang web và không thể xác định xem tệp đó có tồn tại hay không, nó sẽ không thu thập dữ liệu trang web.
+
+robots.txt cũng dùng ngăn các crawler khác thu thập thông tin website nhưng k thể cản được crawler của các công cụ tìm kiếm
+
+
+
+# Bộ thẻ meta chuẩn SEO => ref tới "# Các thẻ metadata" của HTML_CSS
+
+
+
+# Google crawler:
+Google bot duy trì 1 hàng đợi thu thập thông tin chứa mọi url mà nó cần để đánh chỉ mục. Lần lượt nó lấy từng url trong hàng đợi và xử lý parse html đó. Sau khi parse, nó lại phân tích có cần execute JS để hiển thị nội dung không, nếu có thì nó lại thêm cái URL của JS vào render queue. Cái render queue này chứa url của JS, khác với crawl queue ban đầu chứa url của html. Trình renderer lại exec JS để hiển thị trang. Nó gửi HTML được render ra từ JS trở lại crawl queue. Cứ thế lấy mọi thẻ a để xử lý và cho vào crawl queue html. Khi mọi html được xử lý, bot dựa vào các thông tin trích xuất ra để đánh chỉ mục cho nội dung.
+
+Do thực thi JS tốn kém nên google bot ưu tiên parse html ngay và xếp JS chạy sau và có thể khá lâu. Và vc phân chia băng thông cũng bị giới hạn nên nếu 1 website quá lớn chứa nhiều nội dung với hàng nghìn trang và mỗi trang dùng nhiều JS để hiển thị thì google có thể đọc ít nội dung hơn từ trang web đó.
+
+-> React khó SEO
+Google bot luôn nhìn thấy trang trống đầu tiên trong web react làm trì hoãn việc lập chỉ mục, nhất là khi số lượng page lớn
+CSR cần request API xong mới có nội dung hiển thị. Google đánh giá thời gian tải lâu sẽ xếp hạng thấp hơn.
+
+
+
+# Dùng Google Tag Manager
+Phổ biến với những người làm quảng cáo google. Nó giúp ta dễ dàng cập nhật và quản lý các thẻ trong website, đó có thể là những thẻ theo dõi website (Google Analytics), thẻ tiếp thị lại (Google Ads, Facebook Pixel), những thẻ tối ưu chuyển đổi (Google Optimize, Hotjar, Crazy Egg),... 
+Cụ thể ta tạo tài khoản các thứ rồi nhận được 1 url thì cắm vào index.html của trang web. R dùng tool của nó để theo dõi.
+Kiểm tra số lượng đo lường bằng Google Analytics.
+

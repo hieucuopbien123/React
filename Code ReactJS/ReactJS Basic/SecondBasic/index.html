@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-router-dom/5.3.2/react-router-dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.2.0/redux.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-redux/8.0.2/react-redux.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-transition-group/4.4.5/react-transition-group.min.js">
+    </script>
+    <link rel="stylesheet" href="transition.css">
+    <link rel="stylesheet" href="transition3.css">
+    <link rel="stylesheet" href="transition2.css">
+</head>
+
+<body>
+    <!-- <div id="app"></div>
+    <script type="text/babel" src="index.jsx"></script> -->
+
+    <div id="app1"></div>
+    <div id="button"></div>
+    <script type="text/babel" src="nestRouting.jsx"></script>
+
+    <div id="redux">Loading...</div>
+        
+    <!-- <script type="text/babel" src="test.jsx"></script>  -->
+    <!-- <script type="text/babel" src="reduxbasic2.jsx"></script> -->
+    <!-- <script type="text/babel" src="reduxCollision3.jsx"></script>  -->
+    <script type="text/babel" src="redux.jsx"></script> 
+
+    <div id="transition">Loading...</div>
+    <script type="text/babel" src="transition.jsx"></script>
+
+    <div id="transition2">Loading...</div>
+    <script type="text/babel" src="transition2.jsx"></script>
+
+    <div id="transition3">Loading...</div>
+    <script type="text/babel" src="transition3.jsx"></script> 
+
+
+    <div id="router"></div>
+    <script type="text/babel" src="router.jsx"></script>
+
+    <!-- học useCapture. Vừa có event file js vừa có event của react-> nó thực hiện hết js trc -->
+    <!-- <form>FORM
+        <div>DIV
+            <p>P</p>
+        </div>
+    </form>
+
+    <script>
+        // # Dùng sự kiện JS / Dùng useCapture
+        for (let elem of document.querySelectorAll('*')) {
+            elem.addEventListener("click", e => alert(`Capturing: ${elem.tagName}`), true);
+            elem.addEventListener("click", e => alert(`Bubbling: ${elem.tagName}`));
+        }
+    </script> -->
+
+    <!-- <div id="context"></div>
+    <div id="context1"></div>
+    <script src="context.jsx" type="text/babel"></script> -->
+
+    <!-- <div id="test2">Loading...</div>
+    <script type="text/babel" src="test2.jsx"></script> -->
+    <div id="test3"></div>
+    <script type="text/babel" src="test3.jsx"></script>
+
+    <!-- <script src="./test.js"></script> -->
+</body>
+
+</html>

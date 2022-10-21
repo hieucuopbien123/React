@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>React Component</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+
+    <style>
+        .orderDetail{
+            float: left;
+            padding: 10px;
+            margin: 10px
+        }
+        .total{
+            clear: both/*hay*/
+        }
+        .order{
+            border: 1px solid red;
+            width: fit-content;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- # Basic -->
+
+    <!-- <div id="member"></div>
+    <div id="client">A</div>
+    <script type="text/babel">
+        function Avatar(props){
+            return(
+                <div className="avatar">
+                    <img src={ props.avatar.path } alt="avatar" />
+                </div>
+            )
+        };
+    //component là tập hợp 1 cục thẻ html hiển thị.
+    //Avatar là 1 component. Nó có cấu trúc như 1 class or 1 function. Là function thì buộc có return và return JSX
+    //có 1 tag bao ngoài tất cả các tag khác. Ở đây là div có className avatar.
+    //Trong thực tế mỗi component ta tách riêng ra 1 file để xử lý từng cái chứ kp reload cả trang web
+
+    function MemberInfo(props){
+        //nhờ có props này mà tái sử dụng hàm này nhiều nơi với tên và age khác nhau
+        //trước return là code javascript/react. return 1 biến là () tức bắt đầu 1 đối tượng component bằng JSX
+        //trong thẻ div bao ngoài của JSX chính là XML
+        //nếu return k dùng () thì có thể hoặc là return 1 biến javascript bth. Hoặc là return 1 component nhưng k viết
+        //bằng JSX mà bằng hàm tạo component bth của react
+        return(
+            <div className="info">
+                <Avatar avatar={ props.info } />
+                <h2>{ props.name }</h2>
+                <p>Tuổi: { props.info.age }</p>
+                <p>Sở thích: { props.info.favorite }</p> 
+            </div>
+        )
+        //ta thử dùng Avatar ở trong MemberInfo nhưng đặc biệt là dùng chung props với info luôn
+        //như thế này bắt buộc phải truyền cả info vào để dùng cho avatar chứ kp chỉ age vs favourite là bắt buộc
+        //và cái info buộc có path để dùng trong avatar nhé. Còn ta gán avatar nên đặt tên gì cx đc. Nếu gán kiểu 
+        //pathName=props.info.path thì dùng là props.path luôn, ta có thể truyền đôi tên bất kỳ như v và props chấm
+        //nó trực tiếp để truy cập vào nó luôn
+    };
+
+    function Comment(){
+        return(
+            <div className="comment">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit proin sit amet neque.
+            </div>
+        )
+    };
+    
+    const infoPerson1 = {
+        name: "Nguyen Van A",
+        info: {
+            age: 18,
+            favorite: "Animal",
+            path: "./image/avatar.jpg"
+        }
+    }
+
+    const infoPerson2 = {
+        name: "Nguyen Thi B",
+        info: {
+            age: 19,
+            favorite: "Animal",
+            path: "./image/avatar.jpg"
+        }
+    }
+    var memberList = (// gom lại thành 1 biến
+        <div>
+            <MemberInfo name="Nguyen Van A" info={ infoPerson1.info } />
+            <MemberInfo name={ infoPerson2.name } info={ infoPerson2.info } age={ infoPerson2.info.age } />
+        </div>
+        //ta có thể dùng props vs vc phân chia nhiều attribute object lồng object như này nhưng vấn đề là phải đúng obj
+        //Tức là ta bắt buộc phải thông qua info mới tới đc age và favourite. Nếu 1 object k tuân thủ như v
+        //mà truyền vào sẽ gây lỗi. Tức là nếu trước info nó qua nhiều cái khác vẫn đc miễn là phải có info.age ở cuối
+        //trừ TH trực tiếp như name thì mới đc truyền trực tiếp=> tức props phải tương ứng với 1 thuộc tính nào đó ở
+        //bên ngoài or là object luôn chứ kbh props k tương ứng với thuộc tính nào
+        //tức là name="infoPerson.info.name" ok; name="name" ok; age="infoPerson.info.age" ok nhưng age="19" thì k đc.
+        //ý là age = {} phải có ngoặc {} thôi. Khi truyền string dùng luôn ""; khi truyền number dùng {}
+        //Điều này đồng nghĩa với việc, nếu ta gán info luôn thì ta có thể đặt tên info đó 1 cái tên bất kỳ, nhưng nếu ta
+        //muốn gán age và name thì cần phải đúng là có cái tên ấy
+    );//cặp () báo hiệu code 1 đối tượng JSX
+    ReactDOM.render(
+        memberList,//do kp là 1 class or function mà là 1 kiểu biến lưu component thì k cần viết hoa và dùng đc TT như này
+        document.getElementById('client')
+    );
+
+    //tạo 1 component chứa các component khác
+    // function Member(){
+    //     return(
+    //     // k dùng biến ở bên trong cặp tag bao ngoài đc, cx k comment đc vì đó là code JSX hay code XML
+    //         <div className="member">
+    //             <MemberInfo name={ infoPerson1.name } info={infoPerson1.info} age={ infoPerson1.info.age } />
+    //             <Comment />
+    //         </div>
+    //     )
+    // };
+    // ReactDOM.render(
+    //     <Member />,
+    //     document.getElementById('member')
+    // );
+    //làm như trên ok hết nhưng ng ta thường chia ra kiểu: component xử lý các thao tác logic còn gán dữ liệu nên 
+    //dùng ở phần render=>props cho ta khả năng truyền dữ liệu từ component or 1 biến sang 1 component khác.
+    var Member = (props) => {
+        return(
+        // k dùng biến ở bên trong cặp tag bao ngoài đc, cx k comment đc vì đó là code JSX hay code XML
+            <div className="member">
+                <MemberInfo name={ props.name } info={props.info} age={ props.info.age } />
+                <Comment />
+            </div>
+        )
+        //Nó chỉ đơn giản là thay vì truyền luôn giá trị cho tham số của MemberInfo thì ta sẽ truyền cho Member r
+        //dùng nó trong MemberInfo. Xong thực ra MemberInfo cx truyền cả giá trị đối số của Avatar nx. Cứ như v component
+        //lồng rất nhiều component khác=>Dùng kiểu này cần chú ý là props của Member phải truyền đầy đủ sao cho tất cả 
+        //các component con của nó đều đầy đủ giá trị đối số là đc
+    };
+    ReactDOM.render(
+        <Member name={infoPerson1.name} info={infoPerson1.info} />,
+        document.getElementById('member')
+    );
+
+    document.getElementById('client').style.backgroundColor = "#f1eefd";//vẫn code javascript bth
+    //library ReactDOM có hàm render hiển thị với 1 là thẻ viết bằng JSX đã tạo ở trên - 1 component trở thành 1 thẻ 
+    //có dạng là <tên /> or <tên></tên>
+
+    //Pb: các thứ trong thẻ script đều viết đc javascript. Dùng type="text/label" báo hiệu có thể code đc react ở trong
+    //Tức là bên cạnh javascript bth, ta dùng thêm đc các hàm của react mà thôi. Thế thì JSX nằm ở đâu. Đáng lẽ là k có
+    //JSX nhưng nó có thể thay thế React trong vc tạo component nên cứ chỗ nào có biến/object là 1 component bắt đầu 
+    //bằng () thì thay bằng JSX đc. Trong JSX lại mở đầu bằng 1 cặp thẻ html chính đóng mở, bên trong thẻ đó là code XML
+    //thuần túy. Code đó k đc thêm bất cứ 1 cái gì kể cả comment vì XML k có comment.
+    </script>
+
+    <div id="person1"></div>
+    <div id="person2"></div>
+    <div id="personDefault"></div>
+    <script src="person.jsx" type="text/babel"></script>
+
+    <p id="index"></p>
+    <p id="newSyntax"></p>
+    <div id="button1"></div>
+    <script src="index.jsx" type="text/babel"></script>
+
+    <div id="random1"></div>
+    <script type="text/babel" src="API.jsx"></script>
+
+    <div id="oldcomponentLifeCycle"></div>
+    <script type="text/babel" src="OldComponentLifeCycle.jsx"></script> -->
+
+    <!-- <div id="newcomponentLifeCycle"></div>
+    <script type="text/babel" src="NewComponentLifeCycle.jsx"></script> -->
+
+    <div id="LifeCycleWithError"></div>
+    <script type="text/babel" src="LifeCycleWithError2.jsx"></script>
+
+    <!-- <div id="lifeCycleRight"></div>
+    <script type="text/babel" src="useLifeCycleRight.jsx"></script> -->
+
+    <!-- # Thao tác với form / Cản chuyển trang -->
+    <div id="eventButton"></div>
+    <div id="eventLink"></div>
+    <script type="text/babel">
+        const ActionButton = () => {
+            const handleClick = () => {
+                console.log('Button was clicked!');
+            }//khi sự kiện đi với function
+            return (
+                <button onClick={handleClick}>
+                    Click me
+                </button>
+            );
+        }
+        ReactDOM.render( <ActionButton />, document.getElementById('eventButton') );
+
+        const ActionLink = () => {
+            const handleClick = (e) => {
+                e.preventDefault();// cản chuyển trang
+                console.log('The link was clicked!');
+            };
+            return (
+                <a href="#" onClick={handleClick}>
+                    Click me!
+                </a>
+            );
+        };
+        ReactDOM.render( <ActionLink />, document.getElementById('eventLink') );
+    </script>
+
+    <div id="parentChildEvent"></div>
+    <script type="text/babel" src="parentChildEvent.jsx"></script>
+
+    <div id="event"></div>
+    <script type="text/babel" src="event.jsx"></script>
+
+    <div id="login"></div>
+    <script type="text/babel" src="login.jsx"></script>
+
+    <div id="arrayToList"></div>
+    <div id="NumberList"></div>
+    <script type="text/babel" src="arrayToList.jsx"></script>
+
+    <div id="listkeyEx"></div>
+    <script type="text/babel" src="listkeyEx.jsx"></script> -->
+
+    <div id="hieu"></div>
+    <script type="text/babel" src="learnJSX.jsx"></script>
+
+    <div>TRAINING</div>
+    <div id="training"></div>
+    <script type="text/babel" src="training.jsx"></script>
+
+    <div id="training2"></div>
+    <script type="text/babel" src="training2.jsx"></script>
+
+    <div id="fragment"></div>
+    <script type="text/babel" src="fragment.jsx"></script>
+
+</body>
+
+</html>

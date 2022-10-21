@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Hello React</title>
+  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+  <!-- # Basic / gọi onChange khác nhau trong React và JS -->
+
+  <!-- onchange chỉ phát ra khi gõ text vào xong lại click ra ngoài or ấn enter khác với onChange của jsx -->
+  <input type="text" onchange="onchangeFunction()" id="onchange1"><br>
+  <input type="text" onchange="onchangeFunction1(this)" id="onchange2"><br>
+  <input type="text" onchange="onchangeFunction1.call(this,event)" id="onchange2"><br>
+  <!-- js k cần bind hay call cx đc, vì bth cx đủ dùng r, chỉ có react nó hỏng this ms v thôi. Nếu thích call,bind 
+  trong js thì cứ tự nhiên như ở nhà nhé-->
+  <input type="text" onchange="onchangeFunction2(event)" id="onchange3"><br>
+  <!-- <input type="text" onchange="onchangeFunction2" id="onchange4"> -->
+  <!-- trong js bth gọi hàm mà k có () thì éo đc nhé, đấy là code của JSX truyền đối số mặc định -->
+  <!-- trong js thì truyền có ngoặc bth chứ k như trong react sự kiện có ngoặc là chỉ thực hiện 1 lần -->
+
+  <script type="text/javascript" src="test.js"></script>
+
+  <div id="test"></div>
+  <script type="text/babel" src="test.jsx"></script>
+  
+</body>
+
+</html>

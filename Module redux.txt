@@ -1,0 +1,262 @@
+# Module redux: tất tần tật về dùng redux cho đến h
+Tất cả các công cụ của chuẩn của redux đều tương thích với React18
+Ta chỉ cần dùng redux nếu: data là async, nếu data đó được tác động từ nhiều component xa nhau.
+
+Redux là flux đơn giản dựa trên kiến trúc ELM(ngôn ngữ lập trình hàm). Redux js là một thư viện Javascript giúp tạo ra thành một lớp quản lý trạng thái của ứng dụng. Redux là kết hợp hoàn hảo của React nhưng cx dùng đc với các framework khác của js. Với các lib khác của js thì vc quản lý khi ứng dụng trở nên lớn hơn rất phức tạp. Có 1 nguyên lý là data chỉ nên live trong 1 component. Chính vì v vc share data rất khó khăn nhất là các component ở xa nhau. Để share đc thì state phải live trong component cha và pass đến các component con như props. Thế nếu 2 component cực xa nhau chia sẻ thì dữ liệu phải tồn tại ở cha rất nhiều -> redux giải quyết vấn đề, nó có 1 store lưu trữ toàn bộ state của app. Mỗi component có thể access trực tiếp đến state thay vì phải gửi qua props như cũ.
+
+Hook k làm đc tất cả. VD ta ấn nút ở con và cha đổi màu thì dùng PP cũ truyền hàm đổi màu từ cha sang con, con ấn thì kích hoạt hàm ở cha mà thôi. Cho đến h cách duy nhất để làm điều này mà k truyền từ cha sang con là dùng redux và redux cx là 1 cách tối ưu để truyền dũ liệu giữa các sibling với nhau mà react k làm đc. Như v react hook chỉ là 1 cách viết đơn giản hơn cho react đỡ phức tạp, redux vẫn cần thiết và hầu như mọi app đã dùng react là có redux.
+
+Redux cũng dùng với các loại khác như Vue chứ k chỉ React. Với redux thuần, ta hoàn toàn tạo ra store chuẩn cho ứng dụng, còn react-redux chỉ là 1 công cụ cung cấp thêm các hook cho react thao tác với redux dễ hơn như useDispatch, useSelector và các hàm khác như connect,... Còn có redux-toolkit là bộ công cụ kết hợp thêm với react-redux để dùng redux dễ dàng tới mức tối ưu. Ta phải học cả 3 loại bao gồm redux thuần mới hiểu được bản chất => cả 3 đều tương thích React18
+
+Luồng redux cơ bản: thực hiện 1 hành động trên giao diện là view provider(1 view framework như react/angular) -> 1 đối tượng action được tạo ra lưu các thông tin cần thiết -> dispatch action đó tới store -> trong store có middleware và reducer, middleware sẽ thực hiện các nhiệm vụ gì đó như dispatch các action mới/báo lỗi/.. -> sau đó reducer sẽ xử lý action đó và cho ra từ state ban đầu cho ra 1 state mới copy -> cái state mới đó được lưu vào store để quản lý-> trả ra trạng thái mới cho view provider để ta nhìn thấy sự thay đổi trên màn hình nếu có và cập nhập trạng thái mới cho component bằng mapStateToProps chuyển từ state mới sang props của component.
+Store là duy nhất được tạo bằng hàm createStore gọi 1 lần.
+Nguyên lý: state của ứng dụng đc lưu giữ trên 1 object tree trong store duy nhất; state chỉ thay đổi khi phát ra 1 action mà làm thay đổi nó; thay đổi chỉ bằng pure function của reducer
+=> Dù redux bh có toolkit và hook để code đơn giản hơn nhưng thực tế, quy trình bên trong nó vẫn chỉ như redux thuần và làm được các tính năng mà redux thuần làm được
+
+-> Để cài react-redux
+C1 dùng cdn:     
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.2.0/redux.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-redux/8.0.2/react-redux.min.js"></script>
+C2 dùng trong dự án react thực tế: tạo dự án react bth
+npm i react-redux redux
+Dùng hàm nào thì import hàm đó ví dụ: import { useDispatch } from "react-redux";
+Khắc phục lỗi install: cannot be loaded because running scripts is disabled on this system -> chạy lệnh: 
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
+
+-> Dùng Redux thuần: props.dispatch, mapStateToProps, Redux.createStore, ReactRedux.connect, ReactRedux.Provider, Redux.bindActionCreators, Redux.applyMiddleware, mapDispatchToProps, store.dispatch, Redux.combineReducers, store.getState, Redux.compose, mergeProps
+Ngoài ra còn có thể tương tác với devtool nếu nó có trong trình duyệt với window.__REDUX_DEVTOOLS_EXTENSION__ 
+=> Các thứ liên quan đến redux bh đã chuyển qua dùng hook và redux-toolkit hoàn toàn, k còn dùng redux thuần nữa -> (bỏ)
+
+-> Dùng redux-logger
+Dùng để in ra các thứ hỗ trợ cho console.log(), nó cho phép xem các thứ xảy ra trong redux trên trình duyệt:
+npm install redux-logger => npm lỗi r bh toàn dùng yarn add
+import logger from 'redux-logger';
+=> nhét logger vào applyMiddleware của redux khi tạo store. Nên check môi trường dev mới dùng
+
+-> Dùng react-redux hook
+Phiên bản chuẩn bh là dùng redux toolkit để thao tác với reducer và react redux hook để dispatch action và select data. Các hàm của redux cũ gần như k còn được sử dụng, 1 số hàm cũ của react-redux như connect cũng k còn sử dụng
+
+--> Dùng useDispatch
+ 
+--> Dùng useSelector: có thể thêm shallowEqual của react-redux làm đối số 2 thì dù cùng giá trị nhưng khác tham chiếu thì đã rerender r, thực tế ta muốn hạn chế rerender nhất có thể nên để mặc định nó coi như ss ===
+
+
+
+# Tự tạo hàm useAsync
+-> Tự tạo và dùng trong component mà k cần thunk hay saga
+Cơ chế: hàm này đơn giản là có state lưu 3 trạng thái pending, error, data và 1 hàm call. Hàm call khi được gọi sẽ chia 3 TH, khi đang gọi là pending, khi gọi xong thì lấy data, nếu có lỗi thì lấy error 
+=> Gọn nhẹ có thể dùng để test trong nhiều TH k muốn cài đặt thunk hay saga phức tạp
+
+Nó mạnh ngang thunk nhưng saga thì chưa vì saga còn cho takeEvery, takeLeading, takeLastest,.. rất mạnh
+=> Nên nhớ các hàm useAsync, saga, thunk nó xử lý bất đồng bộ thôi, nếu dùng redux mà k cần fetch API mà update dữ liệu store global bình thường thì k cần
+
+
+
+# Module redux saga
+Redux saga là thư viện cung cấp việc xử lý side effect(ví dụ setTimeout, delay, call api tốn thời gian phải chờ đợi mà ta k kiểm soát đc, k định lượng được ví dụ đọc dữ liệu ổ cứng, call api lấy dữ liệu từ server), dùng như middleware bổ trợ cho việc xử lý action dễ hơn, cx dung khi lưu data vào local storage of browser
+Ta gắn nó vào store được thực thi trong phần middleware -> tức là dispatch action phát, reducers chưa kịp xử lý thì phải đi qua đây. Nó có các hàm bắt action xong làm gì trước khi đưa tiếp đến reducers. Tức là dữ liệu mới đc gửi đến chưa kịp xử lý để lấy đầu ra thì ta có thể: cho nó in ra 1 function xàm lờ như hello world or có thể xử lý trạng thái loading or kiểm tra nếu đc dispatch liên tục nhiều lần mà các lần trước chưa thực hiện xong thì thực hiện mỗi cái cuối hay chỉ thực hiện cái đầu hay đưa vào hàng đợi,... tùy ý implement bằng saga. Bên cạnh làm những thứ đó, nó còn có thể call api: 
+view -> dispatch actions -> middleware -> reducer -> state mới -> quay về view
+                                |
+                               API
+middleware nằm ngoài store nhưng gắn liền vào dispatcher là 1 phần của store. action đến middleware thực hiện bất đồng bộ đồng thời 2 hành động 1 phần đi vào dispatcher, 1 phần callapi. phần đi vào dispatcher sẽ đưa tới reducer đồng thời lấy state ở store -> kết hợp lại ra state mới -> gửi state mới đến view. phần callapi phải chờ 1 lát mới xong, sau đó cx đi vào dispatcher và thực hiện tương tự -> ta phải implement điều đó
+=> Như v chỉ cần chú ý 1 phần thực hiện call api r đưa đến reducer xử lý, thì lúc đó state của store đã được cập nhập 1 lần bởi action r.
+Để sử dụng: npm install redux-saga
+
+Dùng: takeLastest, call, put, all, takeEvery, delay, put, take, select, putResolve, race, fork, spawn
+
+
+
+# Module redux thunk
+Gần như y hệt useAsync, cái action bh nó k dispatch nữa mà chạy vào 1 hàm thunk, hàm này chia 3 cái dispatch ra bth
+
+
+
+# Module redux-toolkit
+Redux code nó bị dài dòng và k có 1 quy chuẩn thống nhất. Khi mà 1 người có thể viết redux như này, người kia lại viết kiểu khác thì khi làm chung sẽ rất khó VD actions k nhất thiết phải có type cũng như reducer có thể k sử dụng switch case mà dùng if else cũng được => k có 1 quy tắc nào cả mà chỉ cần code js. 
+Redux-Toolkit ra đời thực ra chỉ là 1 cách viết khác của redux giúp code nhanh gọn và tuân theo 1 chuẩn thống nhất toàn bộ dự án.
+
+Trong dự án bth: npm install @reduxjs/toolkit
+
+Chắc chắn phải dùng với hook react-redux rồi. Vẫn dùng các middleware như redux-logger bth
+
+-> Basic
+--> Chú ý dùng middleware trong redux toolkit, có hàm getDefaultMiddleware
+--> Quy trình: tạo slice có state ban đầu, tạo ra các actions, tạo các hàm bất đồng bộ nếu có, export các actions và selector để lấy data từ state, tạo store từ reducer và thêm các middleware, dùng useDispatch để bắn actions và useSelector để lấy data. Biến useSelector thay đổi thì component cũng render lại.
+=> Cụ thể các hàm:
+Cái gây actions dùng useDispatch
+Cái lấy data dùng useSelector
+Dùng createAsyncThunk để xử lý chức năng async
+Dùng createSlice để xử lý update và handle async
+Dùng createDraftSelector nếu lấy selectData có nhiều và phải xử lý trước khi lấy ra
+Dùng configureStore để tạo store
+
+-> (bỏ bản cũ) Dùng kết hợp với redux-thunk riêng:
+Ta tạo ra y hệt như logic bth với 3 hàm dispatch
+Logic tạo đơn giản: tạo store nhét reducer và middleware vào, nhét store vào Provider ở cấp cao nhất, createAction và createReducer xử lý action thì update state như nào, cho useSelector lấy state và useDispatch để bắn action
+
+-> Bản mới dùng slice với createAsyncThunk: là chuẩn nhất vì nó tích hợp sẵn thunk
+createSlice, createAsyncThunk, createDraftSafeSelector, configureStore
+=> Bản mới dùng createSlice thay cho cả 2 cái createAction và createReducer. Nó có nhiều điểm lợi VD nếu dùng createReducer thì phải return 1 object chứa state cũ nhưng nếu dùng reducer trong createSlice thì ta có thể làm dưới dạng function để xử lý gán trực tiếp, chỉ cần sửa cái nào đổi. Và cũng dùng thêm selector để chọn state cho tiện
+
+Thực ra vẫn có thể dùng gọi async với reducers mà k cần thunk và extraReducer
+=> refer tới "Projects / Setup / setup react mui web3 full"
+
+-> Dùng với redux-saga
+Code y hệt như saga bình thường mà thôi, chỉ có phần thêm middleware hơi khác tí
+=> Thường người ta dùng với thunk hơn. Vd ta cần người dùng có thể ấn 1 nút nhiều lần khi fetch API hay ấn 1 lần r button bị disable và fetch API, tùy ý muốn mà dùng saga hay thunk tương ứng.
+
+-> Dùng createSlice
+Redux thuần cho phép ta chia reducer thành nhiều reducer nhỏ hơn với hàm combineReducer để gộp thành 1 reducer chung của ứng dụng. Nhưng thông thường các reducer khi được chia ra nó sẽ quản lý từng phần riêng biệt của ứng dụng -> data reducer này k thể liên kết với data reducer khác. VD ta chia ứng dụng như sau:
+store
+   --> module1
+       --> reducer.js
+       --> actions.js
+       --> actionTypes.js
+   --> module2
+       --> reducer.js
+       --> actions.js
+       --> actionTypes.js
+  ...
+
+Để quản lý điều này dễ dàng, ta thường tạo ra 1 convention trong dự án đặt tên theo module.
+VD: 
+const context = 'module1'
+// action name must contains module prefix
+const 'ACTION_01' = `${context}_ACTION_01`
+=> Để khi 2 module đều có tên ACTION_01 thì phân biệt được action nào module nào
+=> redux toolkit hiện thực hóa điều này và gom mỗi module vào 1 slice tạo ra bằng hàm createSlice
+
+createSlice sẽ tạo ra 1 slice ngắn gọn chứa luôn reducer và action theo quy ước. VD: 1 module counter
+import { createSlice } from '@reduxjs/toolkit';
+
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState: { count: 0 },
+  reducers: {
+    increment: state => state.count += 1,
+    decrement: state => state.count -= 1
+  }
+})
+
+export const { increment, decrement } = counterSlice.actions
+export default counterSlice.reducer
+
+=> nó sinh ra 2 action có types là counter/increment và counter/decrement và @@INIT mặc định
+=> nó nhóm reducer và action lại trong 1 object và ta export ra để sử dụng duy nhất 2 thứ này ở chỗ khác mà thôi
+=> Mỗi module của ứng dụng nên là 1 slice riêng
+
+Khi gom vào 1 slice thì action và reducer chung 1 nhóm. Thế nếu reducer muốn bắt action chung nào đó của ứng dụng nhưng khác nhóm thì phải dùng đến extraReducers
+
+--> Dùng đối số 2 của createReducer hay extraReducers (bên trong createSlice) thì có 2 cú pháp: 
+1) { [<action> / <action>.type / <action>.toString()]: (state, action) => ({ <đổi state> }) }
+2) Cách 1 dùng thuần cho các TH cơ bản, nếu dùng thêm các tính năng khác thì phải dùng hàm:
+(builder) => {
+    builder
+        .addCase(<action>, (state, action) => ({ <đổi state> }))
+        .addMatcher(<hàm trả boolean>, (state, action) => { <đổi state> })
+        .addDefaultCase((state, action) => { <đổi state> })
+}
+-> reducers là các action thay đổi trực tiếp state của slice này và được tạo và bắn ra từ slice này. Action dùng nội bộ trong slice này(có 3 cách tạo action, đây là 1 cách)
+extraReducer là action ta tự tạo từ bên ngoài or có thể là action của slice khác. Action này có thể tạo ra bằng createAction or createAsyncThunk
+
+---> Vai trò hàm addMatcher:
+Có TH ta xử lý action nhiều action type cùng 1 hàm. VD:
+function reducer(state = initState, action) {
+    switch (action.type) {
+        case 'FETCH_DATA_FAIL':
+        case 'UPDATE_DATA_FAIL':
+        case: 'DELETE_DATA_FAIL:
+            return {
+                ...state,
+                errors: action.payload.errors,
+                loading: false
+            };
+        default:
+            return state;
+    }
+}
+=> thật ra TH khá hiếm vì như thế thì ta nên dispatch chung 1 action type mà thôi nhưng nếu muốn chia kiểu trên thì toolkit cho hàm builder.addMatcher giúp giải quyết vấn đề gọn(phải dùng builder k được dùng object):
+const isErrorAction = (action) => {
+    return action.type.endsWith('FAIL')
+}
+const reducer = createReducer(initState, (builder) => {
+    builder
+        .addMatcher(isErrorAction, (state, action) => {
+            state.errors = action.payload
+        })
+        .addDefaultCase((state, action) => {})
+})
+=> addMatcher có 1 là function nhận vào action được dispatch và trả ra kiểu boolean để check reducer cần lắng nghe action nào
+
+-> Dùng configureStore: thay thế hàm createStore của redux thuần
+Khi ta dùng: 
+export const store = configureStore({
+    reducer: {
+        formSlice: formreducer,
+    }
+})
+=> tức là nó đã chỉ định thêm các middleware mặc định trong redux-toolkit rồi, bao gồm cả redux-thunk(có sẵn trong kit)
+
+Khi ta dùng: 
+import customMiddleware from './customMiddleware'
+const store = configureStore({
+    reducer: rootReducer,
+    middleware: [customMiddleware],
+})
+=> tức là ta k dùng các middleware mặc định nx mà chỉ dùng customMiddleware
+
+Khi ta dùng: 
+import customMiddleware from './customMiddleware'
+const store = configureStore({
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(customMiddleware)
+})
+=> tức là ta vẫn dùng các middleware mặc định xong còn dùng thêm middleware khác nx. Ở đây là có cả redux-thunk lẫn customMiddleware luôn
+
+--> Có thể import store ở bất cứ đâu để dispatch action vì useDispatch của react-redux là 1 hook thì chỉ dùng được ở trong 1 component còn ở đây là ta đang ở bất cứ 1 file js nào
+=> refer tới "Projects / Setup / setup react mui web3 full"
+
+-> Dùng selector
+Trong redux toolkit có 2 hàm createDraftSafeSelector và createSelector. Thực chất createSelector được lấy từ thư viện reselect.
+createSelector giúp giải quyết vấn đề: giả sử redux có nhiều thứ cần lấy về ta xử lý khác nhau. Vd 1 trường user của data lấy về ta có thể dùng nó trong nhiều component và mỗi component lại lấy 1 kiểu riêng VD ô này thì lấy id của trường user, ô kia thì lấy age của user xong bên trong còn xử lý phức tạp nx. Thế thì mỗi khi user được update, tất cả công đoạn tính toán đều phải thực hiện lại. Hàm createSelector sẽ so sánh sự thay đổi nếu tham số cũ khác tham số mới thì mới thực hiện lại. Từ đó tốc độ tối ưu hơn.
+createDraftSafeSelector và createSelector có cú pháp y hệt nhau. Nhưng createDraftSafeSelector sẽ bắt sự thay đổi trực tiếp trong quá trình tốt hơn là createSelector. VD ở trong reducer mà ta dùng createSelector thì nó không đổi gì hết còn dùng createDraftSafeSelector thì nó đổi theo thời gian thực luôn
+import { createSelector } from 'reselect'; và createSelector này cũng có sẵn trong redux-toolkit
+
+Hàm selector ta cứ hiểu là kể cả input thay đổi nhưng nó xử lý xong ra data vẫn k đổi thì vẫn k render lại. Do đó nó tăng performance => chỉ dùng createDraftSafeSelector khi cần process dữ liệu. Các dữ liệu tiềm tàng sự thay đổi hay k chứ front-end vẫn có thể xử lý thêm data những thứ khác.
+Khi lấy data về ta sẽ check sự tồn tại nhưng nếu data chắc chắn tồn tại thì ta k cần check vì có những data bắt buộc phải có thì mới lấy được như v.
+
+=> refer tới "Tổng kết module JS / # Giá trị đặc biệt"
+
+=> refer tới "Projects / Leaderboard trava / Leaderboard Basic / armoury-slice"
+
+-> Other:
+Trong redux toolkit có hàm nanoid cho sinh số ngẫu nhiên luôn
+=> refer tới "Projects / Setup / setup react mui web3 full"
+
+
+
+# Tổng kết cách làm và cách lấy trong redux-toolkit
+TH1: hàm trong reducers của slice
+ slice: export const {<hàm>} = slice.actions;
+ component: import { <hàm> } from "...slice"; -> dp(<hàm>)
+TH2: thuộc tính của state, thg luôn có trong initialState
+ slice: export const selectSlice = (state) => state.slice;
+ component: const <att> = useSelector((state) => selectSlice(state).<att>);
+TH3: xử lý từ 1 thuộc tính của state
+ slice: tạo ra cái selectSlice như TH2 -> export const selectAtt = createDraftSafeSelector(state => selectSlice(state).<att>, (att) => { <xử lý các att.data > return { .. }});
+ component: let {data1, data2} = useSelector((state) => selectAtt(state));
+TH4: tương tự TH3 nhưng xử lý từ nhiều thuộc tính của state thì:
+ slice: export const selectAtt = createDraftSafeSelecto(selectSlice, (slice) => { <xử lý mọi thuộc tính của slice.data> return {}});
+TH5: các hàm fetch dữ liệu
+ slice: export const fetchData = createAsyncThunk("<tên>", async(data, thunkAPI) => { await <gọi hàm bất đồng bộ>; return res; }) -> trong extraReducers xử lý [fetchData.fulfilled/pending/rejected](state,action) {
+state.data = action.payload.data;}
+ component: import fetchData from "";
+=> TH5 có thể kết hợp Axios và Promise.all([thunkAPI.dispatch(function1(A)), thunkAPI.dispatch(function2(B))]);
+
+
+
+# Dùng thư viện reselect
+hàm createSelector của redux toolkit thực chất dùng cơ chế tương tự thư viện này => k cần dùng thư viện này, chỉ biết thôi
+Tương thích với React18:
+npm i reselect -> import { createSelector } from 'reselect';
+

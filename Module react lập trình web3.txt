@@ -1,0 +1,123 @@
+React lập trình web3
+
+
+
+# Legacy web3 basic
+=> refer tới "Web3 lib / Code / Web3 Advance / client"
+
+
+
+# Các loại request của ethereum thường dùng
+wallet_watchAsset -> thêm loại token mới vào ví
+eth_requestAccounts -> unlock ví và connect tk vơi website
+
+wallet_addEthereumChain -> thêm chain mới và gọi switch, nếu chain mới tồn tại rồi thì chỉ gọi switch
+wallet_switchEthereumChain -> đổi chain
+
+wallet_requestPermissions -> connect ví vào website
+wallet_getPermissions -> check xem đã connect hay chưa
+
+eth_getEncryptionPublicKey -> lấy encryption key
+eth_decrypt -> decrypt thứ được encrypt với encryption key
+
+eth_sign -> dùng eth sign
+
+personal_sign -> dùng personal sign
+personal_ecRecover -> recover lại address từ message của personal_sign
+
+eth_signTypedData -> Dùng Sign Typed Data
+eth_signTypedData_v3 -> Dùng Sign Typed Data v3
+eth_signTypedData_v4 -> Dùng Sign Typed Data v4
+
+
+
+# Thư viện
+-> Thư viện bignumber.js: tạo file lưu constant các loại BASE18, BASE8, BASE9 và dùng nó khi thao tác với số lớn được. Có thể chuyển đổi qua lại số nhỏ và số lớn
+
+-> Package ethereum-multicall: giúp tạo multicall mà ta kp tự deploy 1 contract multicall riêng nữa. Phải cài ethersjs và cài thêm browsify để dùng được require nó trong filejs
+
+=> refer tới "Projects / Setup / setup react mui web3 full" và "Dùng webpack"
+
+-> Dùng wagmi: thư viện cung ethereum hook, tương tác mọi thứ với web3 thông qua hook với "npm i wagmi"
+Dùng rainbowkit: thư viện giúp connect wallet, phải dùng kết hợp với wagmi với "npm i @rainbow-me/rainbowkit"
+=> 2 thư viện đều chỉ dùng với các blockchain họ nhà Ethereum, k tính BSC
+
+-> eth-cli: Thư viện giúp sinh cặp piv/pub key 
+npm i -g eth-cli -> Gõ vào terminal: eth address:random 
+=> Ta có thể tạo ứng dụng lộ pivkey luôn vì coi như sinh ra dùng 1 lần trong 1 dự án đó thôi
+
+
+
+## Pattern thiết kế
+
+
+
+# Pattern khi nào nên fetch lại API
+-> Pattern thường dùng là vào page dùng data nào thì fetch data đó, nếu data đó k thay đổi nhiều và lớn thì có thể check nếu null thì mới phải fetch lại. Còn khi update vùng data nào trên SM thì chỉ cần fetch lại phần đó sau khi update là đủ => chưa ổn
+
+Tương tác với SM contract k đơn giản như tương tác bth, ta có thể chia ra nhiều case khác nhau và cần làm thế nào để tối ưu mọi thứ với React, k fetch 1 data đã fetch:
+- Với lazy loading, ta có thể chắc chắn rằng khi vào page mà đụng đến data lần đầu tiên, data chắc chắn phải fetch lại.
+- Ta cũng chắc chắn rằng nếu người dùng đổi account hay đổi chain hay disconnect ta đều phải fetch lại data. Nhưng ta muốn tối ưu với mọi usecase, VD: ở account A -> vào trang X -> vào trang Y -> đổi account B thì Y sẽ fetch lại -> đổi account A thì Y lại fetch tiếp -> sang trang X -> X vẫn là data account A nên k fetch lại => điều này có thể hiện thực hóa bằng cách đặt biến address ở ngoài component trong file component đó => refer tới "Projects / Connect web3modal"
+- Lấy 2 rules trên làm tiêu chuẩn thì ta phải chấp nhận rằng data có thể bị stale. Tức 1 người vào trang web, 1 người khác đổi data, người ban đầu xem data bị cũ vì k fetch lại. Với các ứng dụng bth mà sự tương tác k cao thì có thể chấp nhận, nhưng với các ứng dụng cần thiết, sẽ phải subscribe event để data luôn update là mới nhất. Thực tế vc subscribe event rất phức tạp và chỉ nên dùng với 1 vài loại data cần thiết mà thôi, đừng subscribe tất cả
+- Để 2 điều đầu khả thi thì mỗi khi update data xong phải fetch lại data đó lưu vào redux luôn bất kể component hiện tại có dùng nó hay không
+
+
+
+# Pattern tạo web3 instance
+-> Phải tạo 2 loại instance là web3Reader và web3Sender. Người dùng chưa đk vào thì web3Reader sẽ lấy thông tin public về cho họ xem, người dùng connect ví rồi thì mới dùng web3Sender để tạo contract instance cho họ thực hiện transaction.
+
+Nên tạo ra file js riêng khởi tạo web3Reader và web3Sender export ra cho các file bên trong sử dụng.
+
+--> Với web3Reader, ta thg có 1 list rpc url global vì các mạng lớn như bsc, ethereum có nhiều người sử dụng nên có TH node mạng đó bị nghẽn or tắt nên phải có 1 list dự phòng. Trừ khi ta có tk trả phí, không thì nên dùng rpc url global. Như v trong 1 list đó khi người dùng lần đầu vào trang web, ta phải tạo ra instance bằng cách map ra list biến web3 và query thử 1 lệnh getBlockNumber xem cái nào trả ra nhanh nhất thì lấy với Promise.any
+
+--> Với web3Sender thì rpc phụ thuộc vào ví người dùng nhưng các ví trên di động như walletconnect, nó yêu cầu phải có 1 rpc url riêng chứ ví k cung sẵn thì cần chắc chắn có 1 rpc kbh tắt, cái stable rpc đó sẽ truyền vào cho wallet connect. Mỗi network dùng trong dự án sẽ có 1 rpc url riêng.
+Sau đó mỗi contract ta dùng 1 file riêng và import cái web3Sender và web3Reader vào cung ra các hàm cho người dùng gọi. Điều đặc biệt là khi người dùng đổi tài khoản hay đổi mạng thì ta k cần khởi tạo lại biến web3Sender và contract instance. Contract instance thì k cần lo vì nó tạo ra k phụ thuộc vào tk vì kiểu gì khi thực hiện trans cũng phải truyền vào from address nào. Còn web3Sender thì tự động theo cái provider truyền vào, khi đổi tk thì provider cũng đổi nên tự động theo tk mới luôn mà k cần lo. Chỉ cần xử lý khi disconnect thì web3Sender về null, connect thì khởi tạo lại giá trị cho web3Sender.
+
+=> refer tới "Projects / Connect web3modal"
+
+
+
+# Pattern tạo contract instance
+Có 2 kiểu tạo
+-> Khi contract instance được fix với 1 contract address duy nhất:
+Ta tạo ra 1 file riêng và export liên tục nhiều hàm getContractReader, getContractSender, các hàm của contract. Sau đó return 1 phát tất cả các hàm đó và return kèm thông tin về contract nữa
+-> Khi contract có nhiều address khác nhau. VD 1 vật phẩm có 3 type vàng bạc đồng và 3 type này ở 3 contract khác nhau, các hàm thì y hệt nhau nên ta muốn tái sử dụng chứ kp 3 type là 3 file contract instance:
+Ta tạo ra 1 file có 1 hàm duy nhất getContract, bên trong ta khởi tạo contract instance gắn với địa chỉ truyền vào hàm và return ra các hàm của contract đó. Mỗi khi cần dùng hàm của contract thì sẽ khởi tạo lại contract instance lưu vào 1 biến và cứ thế gọi trong scope đó thôi. Chỉ cần export hàm getContract là đủ
+
+=> refer tới "Projects / Connect web3modal"
+
+
+
+# Pattern xử lý trạng thái transaction
+Dùng event emitter để xử lý trạng thái trans vì hàm send trả về 1 event emitter có các sự kiện receipt, error, transactionHash, confirmation
+
+=> Thực tế người ta thg dùng async await với hàm send bth. Còn để xử lý trạng thái transaction, họ mới dùng đến event emitter(như trong trava) vì kp mọi trans đều cần xử lý trạng thái. 
+
+=> refer đến "Projects / ConnectWeb3Wallet": Ta tách ra file riêng có hàm handEmit để chỉ trans nào thực sự cần kiểm soát trạng thái mới sử dụng. Khi đó có thể có nhiều trans cùng thực hiện nên cần tạo ra 1 notification stack hiện theo dạng stack để biết trans nào đang thực hiện, thành công hay lỗi
+Dung 3 sự kiện receipt, error, transactionHash là đủ
+
+
+
+# Pattern thống kê
+Khi cần thống kê thì làm API từ server riêng, server này sẽ tự fetch API từ blockchain về và ta query vào đó, server có thể xử lý bằng nhiều cách: 
+- Nếu data k cần update thời gian thực thì cứ viết script tự động fetch sau 1 ktg cố định
+- Nếu data cần update theo thời gian thực thì viết subscribe sự kiện
+- Nếu đó là 1 lượng data lớn và ta cần lấy lại tất cả từ block đầu tiên đến block hiện tại và tiếp tục subscribe thì có thể dùng The Graph để tạo 1 server như thế nhưng nếu k gặp rào cản về centralized hay không thì có thể tự tạo 1 server tự query lại từ đầu và tiếp tục subscribe sự kiện tương tự cơ chế The Graph
+Còn khi cần lấy data hiển thị bình thường thì dùng web3 trực tiếp. Nếu thống kê mà data nhỏ và xử lý nhanh thì dùng web3 thuần vẫn ok, ngược lại thì mới dùng pattern bên trên
+
+Khi front end xử lý, thông thường server đã có dữ liệu khả dụng rồi thì fetch rất nhanh nên nếu cần query 1 ngày, 1 tháng, 1 năm thì ta nên làm kiểu ấn thì fetch lại. Tốc độ ngang với search filter ấy mà
+
+Khi thống kê về data của 1 user nào đó, thì cần dùng Sign Message để xác thực:
+Dù thông tin trên blockchain là công khai nhưng về vấn đề lưu dữ liệu và thống kê người ta vẫn dùng signmessage bởi vì kp protocol nào cũng công khai contract cho người dùng. Nếu thực sự có ai muốn theo dõi thông tin 1 người khác sẽ phải có kỹ năng lập trình cao và tự thống kê lại data rất phức tạp nên server của ta là tập trung và thống kê lại thì nên bảo mật cho người dùng như v
+
+
+
+# Pattern tạo pagination
+=> refer tới "React / # Tạo pagination"
+
+
+
+# Pattern loading fetch API
+=> refer tới "React / # Pattern fetch API redux loading"
+
+

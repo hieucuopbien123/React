@@ -1,0 +1,123 @@
+# Về file package.json
+
+-> npm(Node package manager) là công cụ quản lý các thư viện lập trình javascript cho NodeJS. Sau khi cài nodeJS r thì dùng các lệnh npm thoải mái để thao tác vs các thư viện JS.
+npm là 1 bộ quản lý package bằng lệnh npm của NodeJS. npx là lệnh có ở phiên bản mới của NodeJS chạy nhanh và tốt hơn npm. Chúng cài các dependencies của dự án vào file package.json và package-lock.json
+yarn là 1 phiên bản cải tiến của npm sử dụng file yarn.lock khắc phục lỗi version của npm khi cài cùng 1 module trên 2 máy khác nhau lại có phiên bản khác nhau gây bug, nó cx tiện lợi hơn ở nhiều thứ. Dùng chung file package.json và cài các dependencies vào folder node_modules, file yarn lock sẽ theo dõi phiên bản package trong node_modules.
+
+Nên nhớ riêng lệnh start thì dùng npm start còn các lệnh khác thì npm run <tên lệnh>
+
+--> Sử dụng yarn
+yarn add <tên gói> hoặc version cụ thể với: yarn add [package]@[version-or-tag] -> dùng cài đặt thêm dependencies và tự động thêm phiên bản tham chiếu vào package.json tương đương vói lệnh npm install <package>
+yarn upgrade <package> -> upgrade các gói lên phiên bản mới nhất theo rule trong package.json tương tự npm update và tạo lại yarn.lock
+yarn remove <package>
+
+3 cái --dev / --peer / -optional thêm vào cuối nếu specific với 3 loại dev dependencies, peer dependencies and optional dependencies.
+--save sẽ lưu vào dependencies chính
+
+=> Thực tế, các thư viện npm kp cái nào của front end cũng hỗ trợ React. Các thư viện animation hay ui nó có thể chỉ dùng cho html css thuần, nếu có người dùng nó trong React thì mới cần thêm vào React. Tuy nhiên trong 1 số trường hợp ta cố ép nó vào React như kiểu threejs ấy thì có thể nhét hết vào useEffect phần setup cũng ok nhưng kp lúc nào cũng làm được. 1 số thư viện có phiên bản riêng trên React để dùng nó dưới dạng component hay 1 số thư viện k thể dùng được trong React vì k có wrapper lib tương thích đi kèm. Các thư viện kiểu này dùng rất rắc rối vì có thể phải học thư viện gốc của nó thì mới hiểu tương tận với phiên bản React.
+
+--> Sửa package có sẵn:
+Để sửa đổi module npm, ta có thể fork repo đó về git của mình và sửa, sau đó sửa đổi file package.json thay số phiên bản bằng "git+<url repo>" => cách này k tốt vì các pakage to lại là con package khác rất phức tạp có thể k chạy. Trang https://gitpkg.vercel.app/ cho phép nhận link github ra câu lệnh npm, rất hay vì npm thực chất cũng chỉ là clone từ github về nhét vào node_modules
+Cách 2: ta sửa đổi trực tiếp trong node_modules r chạy: npx patch-package <package name> thì nó sẽ yêu cầu cài package patch và tạo ra thư mục patches chứa package ta đã sửa -> ta cứ dùng bth là ok r
+=> nếu ta xóa node_modules và cài lại thì có thể phải làm lại nên thêm lệnh: "postinstall": "npx patch-package" vào script để tự render theo thay đổi của ta khi install lại
+
+
+-> package.json của nodejs giống như file manifest của các dự án khác ấy, như 1 kho lưu trữ cấu hình. Thậm chí chỉ cần rỗng cũng được là {}
+
+--> Các config khác của package.json:
++ name k quá 214 ký tự chỉ chứa ký tự in thường và - _ => ta phải tuân theo vì khi được public lên npm thì url sinh ra cho package sẽ dự trên thuộc tính đó. Nên đặt là tên của public gigthub nếu publish nó lên nhưng ta thg k có ý định pulish lên npm nên đặt bth thôi
++ description là chuỗi mô tả dự án. Nó thg chỉ dùng khi cần tải thư viện lên npm thì description sẽ tóm tắt dự án dùng lĩnh vực nào. Với các trang web front end thì phải nêu đúng description tương đương với thẻ metadata description của index.html là phần chữ nhỏ của url trong search engine
++ author là tên 1 tác giả. Có 2 cách viết:
+{
+  "author": "John Doe <john.doe@whatever.com> (https://whatever.com)"
+}
+or:
+{
+  "author": {
+    "name": "John Doe",
+    "email": "john.doe@whatever.com",
+    "url": "https://whatever.com"
+  }
+}
+=> tên tổ chức chung chung cũng được kiểu "author": "trava.finance", ok
++) contributors: có thể có nhiều người đóng góp nhưng chỉ 1 tác giả. 2 cú pháp giống author nhưng dạng mảng:
+ "contributors": [
+    {"name":"Johan","url":"https://github.com/johanjordaan"},
+    {"name":"Christopher John Ryan","email":"chrisjohnryan@live.com","url":"https://github.com/ChrisJohnRyan"}
+  ]
+=> cả contributors và author đều chỉ dùng khi publish package trên npm thôi
++) private: để là true nếu kbh muốn ứng dụng bị public tại npm => các dự án blockchain cứ để true đi
++) bugs: đường dẫn đến trang issues của package, thường sẽ là trang issues trên github:
+"bugs": "https://github.com/whatever/package/issues"
++) homepage là đường dẫn xác định relative để load file static, k set nó bị lỗi trang trắng tinh khi mở index.html sau khi build đó
++) keywords là 1 mảng từ khóa xác định 1 gói thư viện hay module, phần mềm liên quan nên cũng thường dùng khi muốn publish lên npm thì mn có thể search nó. Với dự án front end cho 1 trang web thì các keyword quan trọng phải liệt kê vào tương tự thẻ metadata keyword của index.html
++) repository chứa type, url về kho lưu trữ. VD:
+"repository": {
+      "type": "git",
+      "url": "https://github.com/bnb/metaverse.git"
+}
+or "repository": "bitbucket:whatever/testing"
++) script là nơi thực thi các tệp js. VD 1 tình huống ta xây lõi ứng dụng chạy bằng app.js thì có thể:
+"scripts": {
+	"build": "node webpack --build",
+	"start": "node app.js",
+}=> thì người dùng có thể chạy qua lệnh start. Thông thường nó sẽ viết script gom hàng đống lệnh vào với nhau để chạy 1 lệnh là tự động hóa hết cơ.
++) engines là cái định nghĩa phiên bản nodejs mà ứng dụng đang hoạt động. Vd:
+"engines": {
+  "node": ">= 6.0.0",
+  "npm": ">= 3.0.0",
+  "yarn": "^0.13.0"
+}
++) browserslist là các trình duyệt và phiên bản của nó mà package hỗ trợ nó được tham chiếu bởi babel và autoprefixer và các tool khác sẽ thêm polyfills và các thứ cần thiết cho trình duyệt ta hướng tới:
+"browserslist": ["> 1%", "last 2 versions", "not ie <= 8"]
+là ta hô trợ 2 phiên bản chính cuối cùng của tất cả các trình duyệt với ít nhất 1% mức sử dụng ngoại trừ IE8 trở xuống.
+Bth phải specific cả development và production
+=> 1 có thể là default, 2 có thể là not IE 11, 3 có thể là maintained node versions. Vc cấu hình này phức tạp tốt nhất là đừng quan tâm.
+Các package khác sẽ tự sinh các cấu hình mới như eslintConfig hay babel
+
++) version: tuân theo ký hiệu đánh dấu phiên bản (semver-senmatic versioning) luôn có dạng số x.x.x với số đầu là phiên bản chính, số hai là phiên bản phụ và thứ ba là phiên bản vá lỗi.
+Có một ý nghĩa trong những con số này: một bản release chỉ sửa lỗi là một bản vá, một bản release giới thiệu những thay đổi backward-compatible là một bản phát hành nhỏ, một bản phát hành lớn có thể có những thay đổi lớn khiến những API cũ k còn tương thích nữa
+Đôi khi nó có thể đi kèm nhiều thứ như ^1.0.0-beta.52 => chưa tính phiên bản rc hay test alpha beta
+
+--> Về phiên bản:
+~ là cập nhật mọi bản vá lỗi luôn. VD: ~0.13.0 sẽ update các bản vá 0.13.1 nếu có nhưng k có 0.14.0
+^ sẽ cập nhật mọi bản vá lỗi và cập nhập phụ như 0.14.0, 0.13.2 ok hết => phổ biến nhất
+* cập nhật tất cả phiên bản
+> cập nhập phiên bản cao hơn ta chỉ định or >= là cao hơn or bằng. Tương tự < và <=
+x.x.x cập nhập duy nhất phiên bản này
+lastest luôn dùng phiên bản newest -> k nên vì cú pháp code cũ có thể break
+Có thể kết hợp toán tử như 1.0.0 || > = 1.1.0 < 1.2.0 để sử dụng 1.0.0 hoặc 1 bản phát hành từ 1.1.0 trở lên nhưng nhỏ hơn 1.2.0
+=> Họ thường dùng tốt nhất là ^ với version phù hợp nhất để các phiên bản mới ra lò thì api cũ k bị hỏng nhưng các bản vá lỗi vẫn được cập nhật
+
++) Thực chất main là entry point của package. Khi import package này vào 1 ứng dụng khác thì url trong main sẽ là nơi ứng dụng tìm kiếm các mô đun đã được export => éo bh dùng luôn vì cái này chỉ cho package
++) devDependencies là những module chỉ dùng vào mục đích phát triển sản phẩm. VD: nodemon, eslint, babel, chai, mocha, enzyme thường là các package để test or hỗ trợ trong quá trình chạy local test
+dependencies là những module chỉ dùng trong quá trình chạy sản phẩm thực tế. VD: express, react, redux, axios
+=> option --save-dev vào command thì luôn lưu package đó vào devDependencies còn k sẽ được xác định tự động, viết tắt là -D. Nếu ta chạy npm install --production thì thì các package trong devDependencies sẽ k được install
+
+=> nếu ta k public package lên npm thì ta k cần quan tâm nhiều về file này mà cứ sinh ra mặc định theo ứng dụng. Cùng lắm là dùng thêm vài option như homepage hay các thông tin metadata phục vụ SEO trong frontend mà thôi.
+
+-> Về require, import, module.export và export, dynamic import trong nodejs:
+Trong NodeJS có import export modules.export require dynamic import: k hề đơn giản, nó luôn có 2 type là module và commonjs, có thể xem type trong file package.json(kp lúc nào cũng hiện type), mặc định là commonjs. type commonjs là của chuẩn nodejs 1 dự án bth còn type module dùng để phát triển các gói module riêng bằng nodejs của ES6 ta chưa xét tới.
+
+Ở đây sinh ra 1 vấn đề, có phải mọi package của nodejs đều dùng được với cả 2 type
+=> Không, thực tế có những package chỉ dùng được ở React mà lại k dùng được ở NodeJS và ngược lại.
+
+Default, cặp import/export chỉ dùng khi type của dự án là module(xác định trong package.json) và import các package cũng là module; Cặp require/module.exports chỉ dùng khi type của dự án mặc định là commonjs chứ kp là module, các module package có sẵn là type commonjs và vc ta tự viết file với module.exports thì hoàn toàn require được nó để dùng trong các file khác.
+Thế type module là sao và ta đã từng dùng chưa. Thực tế đa phần package là type CommonJS như ban đầu và dùng require nhưng có 1 số package dùng type module vì type module là phiên bản mới ES6. Tưởng phiên bản mới là hay nhưng thực tế mọi người thích dùng require hơn. Có các package vừa có type module, vừa là commonjs ở các phiên bản khác nhau. VD: chalk ta cài bản 4.0 thì nó là type commonjs còn 5.0 mới hơn lại là type module. Do đó muốn dùng trong nodejs phải tải bản 4.0
+
+Tuy nhiên trong NodeJS type commonjs thì dynamic import bh đã có thể dùng trộn thoải mái dù type gì vẫn dùng được nên ta có thể cài chalk 5.0 và dùng dynamic import để dùng trong dự án nodejs nhưng nhược điểm là nó chỉ chơi trong promise.
+Thế type module ta từng dùng chưa? Rồi, ta dùng nó trong dự án React, nên nhớ React là 1 package của nodejs và dự án đó ta k hề dùng type module nhưng vẫn import bình thường(check trong packagejson sẽ thấy nó k có type nên mặc định là type commonjs). Nhưng thật ra cái này khác vì React được cấu trúc lại ở tầng dưới rất khác. Trong môi trường dev nó cho phép dùng import và export cho nhanh nhưng khi build ra code production thì toàn bộ code sẽ chạy qua các bộ compier như Babel và tự chuyển về require và module export mà thôi. Hay React có thể coi là type module khi ta dev bth.
+Khi đã hiểu bản chất và 3 TH dùng thì ok rồi. Nhưng thực tế trong Nodejs ta có thể dùng package đặc biệt như ESM cho phép dùng import, export ngay trong type commonjs nhưng tốt nhất đừng ham hố.
+
+Ta có thể tạo favicon.ico cho website xong replace nó vào thư mục public, trong file index.html ta link href đến nó trong thẻ head là web có biểu tượng
+
+-> Về package-lock.json:
+package-lock.json được tạo tự động từ bản npm ^5.0.0; Họ khuyên ta nên giữ lại file này và commit cả vào repo để đảm bảo tính tương tác các dependencies, k được xóa nó đi chỉ để chạy npm install và generate lại nó; package có quyền hạn cao hơn package-lock
+1 package nào cũng dùng nhiều package khác VD package A dùng package B ^2.3.0, nhưng về sau họ ra bản 2.3.1 thì do có ^ nên gói tự động tải 2.3.1 nhưng 2.3.1 lại hoạt động k đúng với ứng dụng nx. Để đảm bảo khi người ta pull cái repo package đó về thì phiên bản chuẩn y hệt như lúc ta tạo ra package đó thì phải nhét vào package-lock.json
+Trong package-lock.json nó sẽ hiển thị ra module trong package.json kèm theo 1 list các package khác được đi kèm với nó được fix version để đảm bảo với version đó của package đó thì các dependencies con phải luôn đúng phiên bản này. package-lock tạo ra 1 khối thống nhất rằng ở phiên bản này của package này, buộc các con của nó phải là phiên bản nào.
+
+Nhưng thực tế ngày xưa nhiều người tìm cách xóa package-lock.json vì nó có khả năng đè package.json, họ sửa phiên bản trong package.json và kỳ vọng npm i lại sẽ được nhưng package.json lại vẫn lưu phiên bản cũ nên k hoạt động. Do đó họ xóa package-lock.json đi cài lại thì lại được nên có thiện cảm xấu với cái lock. Nhưng rất may bh họ đã cho ra tính năng là package.json mới được đè package-lock.json nên lỗi này được fix. Bh ta có thể dùng thoải mái các package mà k còn lo xung đột phiên bản và dùng package-lock ổn
+
+Khi cài 1 package, nó luôn có các package con bên trong, nên khi npm install 1 phát là node_modules sinh ra hàng đống folder khác là vì nó sẽ tải hết tất cả các gói con bên trong nó về như v.
+Vc package A dùng package C và B, trong package B lại dùng C và 2 cái C có phiên bản khác nhau là chuyện quá bth. Nó sẽ tải cả 2 phiên bản về nhưng nếu trùng nhau thì nó chỉ tải 1 lần trong node_modules
+

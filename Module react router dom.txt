@@ -1,0 +1,240 @@
+Module react router dom:
+ReactJS là 1 thư viện của javascript thì React Router lại là 1 thư viện định tuyến của React bên thứ 3. Nó giữ cho giao diện ứng dụng đồng bộ với URL trên trình duyệt. Nó cho phép định tuyến luồng dữ liệu trong ứng dụng 1 cách rõ ràng. Kiểu đường dẫn url thế này thì tương đương với router(tuyến đường này) và giao diện nó sẽ thế này. 
+React chỉ là load các component qua lại nên luôn có 1 trang -> nhưng nhờ router mà web của ta có đường dẫn khác nhau khi các component thay đổi trên trang đó nhưng vẫn là Single Page Application nhưng người dùng tưởng là đang chuyển qua nh trang.
+Nếu k có thư viện này, ta phải thao tác với window.history của JS thuần để làm
+
+Thật ra nó có 3 package: react-router / react-router-dom / react-router-native. Cái đầu là thành phần core để sử dụng 2 cái còn lại. react-router-dom sử dụng khi xd web app, react-router-native dùng khi xd React Native(mobile) app. Trong 2 package sau có sẵn react-router rồi nên cần gì install nấy.
+
+react-router-dom có 2 phiên bản v5 và v6. Phiên bản v4 giống v5 kcj đáng nói
+v5 dễ dùng hơn v6 trong 1 vài trường hợp. Trong React18 vài thẻ của v5 k hoạt động tốt trong StrictMode như thẻ Link. v6 phiên bản mới nhất thì ok
+
+-> Cài đặt v5
+--> Dùng CDN:
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-router-dom/5.3.0/react-router-dom.min.js"></script>
+--> Dùng trong react với npm:
+npm i react-router-dom@5.3.0
+
+-> Cài đặt v6 bằng npm:
+npm i react-router-dom => import { BrowserRouter as Router } from 'react-router-dom';
+
+-> Dùng react-helmet:
+Thg dùng kèm ở mỗi router có metadata khác nhau
+=> refer tới "Projects / Setup / setup react mui web3 full"
+
+
+
+## v5
+# Basic
+Ta có thể enable or unenable 1 url nào đó có hiện component hay không 
+
+-> 3 thẻ tối thiểu phải có là Switch và Route và BrowserRouter
+--> <Switch> có sẵn giúp kiểm tra từ trên xuống path nào trùng thì render cái đó vì nó đảm bảo chỉ 1 thành phần bên trong Switch đc lấy
+--> <Route> xđ component nào hiện ra ứng vs path nào, path là đường dẫn thêm vào url. Ta nên để 1 cái path mặc định là / thì redirect tới trang nào thông qua <Redirect>
+Có thể render component trong Route thông qua các attribute: component, render, children.
+--> HashRouter và BrowserRouter chỉ đc chứa 1 thẻ bên trong
+<BrowserRouter> phổ biến hơn, nó sử dụng History API trong HTML5 để theo dõi lịch sử bộ định tuyến, còn <HashRouter> sử dụng hash của URL(window.location.hash) để ghi nhớ mọi thứ, nó thg dùng cho các trình duyệt cũ. Hai kiểu này còn khác nhau về kiểu url mà nó tạo ra khi bắt dầu gọi vào thành phần bên trong. Với brower thì nó tạo / như bth còn hash thì là #/
+
+Có sự khác biệt rất lớn là BrowserRouter nó cho thấy trang Route path k tồn tại khi ta vào trang đó bằng cách gõ url trực tiếp nhưng HashRouter có tồn tại bất cứ lúc nào. Cho nên BrowerRouter nó chỉ cho phép refer đến 1 trang con khi đi từ trang cha theo đúng nguyên tắc -> refresh lại trang là thấy k còn nx => chưa biết thực tế ta mà dùng với hosting có như v không nhưng chốt là cứ dùng BrowserRouter mà thôi
+
+-> Các thẻ link
+<NavLink> và <Link> giống nhau nhưng NavLink tốt hơn vì hỗ trợ thuộc tính activeClassName là kiểu style cho thẻ này khi url ta đang ấn là ở thẻ này. Thẻ này có vai trò đổi giá trị url và bảo Switch render. 2 thẻ này ngoài đổi url bình thường còn đổi theo tên search, hash #, state. 
+Do đó NavLink thường dùng cho navigation bar chuyển trực tiếp trang này còn Link dùng khi mở ra 1 tab mới
+
+activeClassName của NavLink nhận 1 string là tên class luôn
+
+
+
+# Lấy match ở component con
+match là 1 field trong props đặc biệt cho phép truy cập vào các thông tin mà router cung cấp. Nó chỉ xuất hiện khi trong Route dùng component={<Con/>}
+.params truy cập vào các đối số của sau đg path
+
+Gán biến số vào attribute path để component Con lấy ra được kiểu: path="/posts/:id" thì Con lấy được id
+
+Khi dùng path trong Link để chuyển sang nest routing khác, ta có thể dùng kiểu `${props.match.url}/<>` thay vì gõ chay fix
+
+
+
+## v6
+# Basic
+Tương thích nhất với React18. Nhẹ hơn v5 50% bundle size.
+
+-> Bỏ useRouterMatch của v5 thành các hook khác nhau: useLocation, useParams, <Outlet/>, useMatch, useResolvedPath
+
+Mất cái này sẽ được cái khác. v6 cung sẵn hook useSearchParams là 1 hook cực kỳ mạnh giúp manage search params trong đường dẫn url mà phiên bản v5 phải code tay rất  mệt
+
+-> Thế Switch bằng Routes
+Routes sẽ chọn cái Route đúng nhất chứ k check từ trên xuống dưới như Switch thì khi gặp cái hợp lý nó sẽ dừng luôn thì những component phía sau có thể có cái hợp hơn cần render lại k được render
+Đổi buộc dùng trường element
+K còn exact mà có thêm * nếu muốn route bất kỳ. Loại bỏ RegExp giúp kích thước bundle giảm và Route dễ đọc hơn. VD "users/*" hay "users/files-*"
+Dùng path trong Route tự hiểu là đi tiếp từ path cha hiện tại nên không cần useRouteMatch để lấy match.url truyền vào trường path nữa
+
+--> Có thể tạo: nested route, default route, index route, dynamic route
+---> Dùng cả nested route => Điều đb là route bth thì k sao nhưng nested route sẽ nối liên tiếp nhau tự động chèn / giữa 2 cái path mà ta kp viết lại cả url
+
+---> Có thể dùng route để thông báo lỗi về route k tồn tại or tạo ra 1 page default với * kiểu:
+<Routes>
+  <Route path='/' element={<Dashboard />} />
+  <Route path='*' element={<NotFound />} />
+</Routes>
+
+---> Dynamic route là khi ta dùng /:id chẳng hạn thì có thể bắt thêm vô số loại url, và component bắt lấy nó bằng useParams ok
+Nhưng ta cũng có thể tạo dynamic route với 1 vài route cố định nếu muốn. VD:
+<Routes>
+  <Route path='/courses' element={<Courses />} />
+  <Route path='/courses/:courseId' element={<CourseDetail />} />
+  <Route path='/courses/add-course' element={<AddCourse />} />
+  <Route path='/courses/edit-course' element={<EditCourse />} />
+</Routes>
+Cũng có multiple dynamic route:
+<Routes>
+  <Route path='/courses' element={<Courses />} />
+  <Route path='/courses/:courseType/' element={<CourseType />} />
+  <Route path='/courses/:courseType/:courseId' element={<CourseDetail />} />
+</Routes>
+
+-> useNavigate thế useHistory
+useNavigate của 1 component k hoạt động nếu component đó chưa render xong
+
+Thay thế push, replace:
+history.push('/home');
+history.push('/home', {state: state});
+history.replace('/home');
+=> sang v6 thì:
+navigate('/home');
+navigate('/home', {state: state});
+navigate('/home', {replace: true});
+=> Khi dùng replace, nó k lưu lại vào lịch sử trình duyệt. VD: vào trang A, replace trang B, k ấn quay back lại trang A được nữa. Khác với push có lưu lịch sử
+
+
+-> <Navigate/> thế <Redirect/> 
+Từ khóa replace của Navigate cũng ok
+Có thể dùng Navigate để chuyển trang khi có điều kiện về authentication
+
+-> Có thể thêm phân quyền cơ bản
+Khi dùng logic trong Route, nó sẽ tính toán luôn sau lần chạy đầu tiên để biết render ra component nào, nếu component này k render lại thì nó k tính toán lại, nên k dùng logic như v để xử lý authentication mà nên hiển thị 1 component và cho component đó tự xử lý logic bên trong sẽ ok hơn. Nhưng như v lại k ổn vì useNavigate k hoạt động nếu component chứa nó chưa render xong nên phải tách 1 component CheckAuthentication riêng cho render ra 1 component rách riêng khác
+
+-> Dùng CustomLink
+
+-> Trap: Chú ý là component A lồng component B thì component A vẫn luôn render trên màn hình nếu component B có được render trên màn hình. Trừ khi sibling thì có thể A k được render thôi. VD A là Switch lồng B lazy load được render là 1 Route, ta cứ tưởng A k được render vì thấy mỗi B và nó chuyển trang rồi nhưng thực tế nếu biến phụ thuộc của A đổi thì A cũng render lại ở đây chứ k chỉ B. Và lúc đó thì useEffect hook [] của B cũng k chạy lại dù A render lại vì chỉ chạy 1 lần. 
+=> refer tới "Projects / BattleHand / file index.js của BattleHand bao ListRoom.jsx và đổi tk thì BattleHand chạy [accountAddress] nhưng ListRoom k chạy []"
+
+
+
+# Dùng lib history
+-> createBrowserHistory của nó cung hàm listen khi url thay đổi. Trong react v5 có sẵn hàm làm điều này
+
+-> Lắng nghe sự thay đổi của url: Dùng để tạo ra 1 Router bắt sự thay đổi của url bất cứ lúc nào
+Trong react-router-dom v5 thì ta có thể dùng hook useHistory có sẵn, và có thể push vào để thêm entry vào history stack. 
+Trong react-router-dom v6 thì k còn useHistory, để tạo ra Router có thể lắng nghe url đổi ta dùng package history createBrowserHistory để lấy ra 1 object có khả năng listen, get, set để tạo ra 1 loại router có chức năng listen thay đổi của url
+
+--> 2 phiên bản:
+Cách 1: Dùng low-level <Router> của react-router truyền vào history của lib history, hoạt động cả với v5 và v6
+Cách 2: Với v5, dùng connected-react-router
+=> Từ h ta k động đến react-router-dom v5 nữa vì từ phiên bản mới nhất của react là react18 thì xuất hiện vài lỗi khi kết hợp với router v5, k chuyển trang được, phải bỏ StrictMode. Chốt dùng react-router-dom v6 với react18 dùng perfect
+=> Bỏ package connected-react-router
+
+Thực chất cơ chế rất đơn giản là: url thay đổi thì 1 component global phải bắt được (dùng cách 1 với lib history) thì thay đổi state của component customhook global or cập nhập redux state nếu chơi 1 slice riêng lưu url
+
+---> Cơ chế đồng bộ redux state với router v6:
+Đồng bộ này tức là cái redux của ứng dụng sẽ có 1 cái reducers lưu trữ data về url hiện tại của ứng dụng. Ta có thể lấy bất cứ lúc nào, nếu phần này của redux thay đổi thì url phải tự đổi cũng như url đổi thì redux state lưu data của url cũng thay đổi theo. Khi đó các phần của ứng dụng dùng cái redux state đó cũng thay đổi theo.
+
+---> Cách khác là: trong trava mấy anh làm 1 cái router listen riêng và dùng dưới dạng hook chứ k cần lưu vào redux. Làm 1 cái hook global riêng và nơi lưu chính là thanh url. Quá trình đồng bộ url và biến số queryString:
+1 cái router listen lắng nghe url thay đổi thì set vào queryString, queryString mà thay đổi thì cũng gán vào url qua hàm push của history.
+Các ứng dụng để bắt thay đổi của url thì bắt queryString đổi thì component nào phụ thuộc vào sẽ render lại. Các components có thể get data từ url. Set data cho url thông qua vc set cho queryString. Để tránh tất cả cùng render lại thì dự án lúc này nên dùng lazy loading
+
+Đây kp là đồng bộ với redux nhưng cx là 1 cách để 1 trong 2 cái url hoặc biến số queryString thay đổi thì cái còn lại phải thay đổi. Vc đồng bộ với state cũng tương tự là các thú của url được đồng bộ vào redux sao cho state và url 1 trong 2 cái đổi thì cái còn lại phải đổi theo. Ta kb có package nào hỗ trợ vc đồng bộ này k cho react-router-dom v6, nếu có thì nên sử dụng, nếu k thì buộc dùng cách này làm tương tự cho v6
+
+
+
+# Custom Router
+Trong v5 có thể làm dễ dàng với hàm có sẵn nhưng sang v6 phải dùng thêm lib history với cơ chế dài hơn. Thường dùng trong các tính năng search hay gì đổi url của trang web và các component muốn bắt sự thay đổi để hiển thị khác nhau or gửi query thay đổi đến server
+
+
+
+# Thẻ link
+<Link/> v6 tương tự v5 k có active
+
+<NavLink/> v6 mặc định class khi active sẽ teen là "active" luôn, ta có thể custom tên class khi active với className nhận hàm số với params là isActive:
+className={({ isActive }) => (isActive ? "navLink activeLink" : "navLink")}
+Trong style cũng có isActive: 
+style={{ isActive } => ({
+  color: isActive ? '#fff' : '',
+  backgroundColor: isActive ? '#0d6efd' : ''
+})}
+=> Thật ra hàm số nhận object nhiều params liên quan đến navlink có thể lấy tất cả
+
+
+
+# Dùng lazy loading
+Phải dùng đến: React.lazy, React.Suspense
+
+Cơ chế đơn giản: tách component ra file riêng -> nơi nào cần dùng thì import bằng React.lazy -> Hiển thị component như bth nhưng bao ngoài nó bằng React.Suspense. Chỉ khi nào nó thực sự cần hiển thị ra thì file đó mới được chạy
+
+-> Router + Suspense + lazy
+Router thì như react-router bình thường k có gì đáng nói. Chỉ có điều thay vì cứ <Route></Route> hàng đống bên trong thì ta gom vào 1 object import từ 1 file khác là file config rồi dùng map để in nó ra rồi dùng map, còn cơ chế y hêt. Suspense được dùng để bao các components bên trong. Nếu các component này đã load xong thì sẽ hiển thị, còn k thì sẽ hiển thị mọi thứ trong fallback, kể cả components kia có fetch API mât tg.
+Thế thì nó khác gì cho với trước, điểm khác biệt là nó kết hợp được với React.lazy => đây là 1 cách để code-splitting tức chỉ tải các tài nguyên cần thiết cho trang web dùng ở thời điểm hiện tại làm tăng hiệu suất. lazy sẽ gọi bên trong suspense VD:
+const Events = React.lazy(() => import('./Events'));
+function ArtistComponent() {
+  return (
+    <div className="event-list">
+      <Events />
+    </div>
+  );
+} thì ta chỉ muốn tải components Events khi cần render ArtistComponent. V thì chỉ cần gom nó vào 1 cục Suspense và gọi lazy nó là xong. Tức là:
+const Events = React.lazy(() => import('./Events'));
+function ArtistComponent() {
+  return (
+    <div className="event-list">
+      <Suspense fallback={<div>Loading...</div>}>
+        <Events />
+      </Suspense>
+    </div>
+  );
+}
+Ngày xưa có thư viện react-loadable để làm điều này nhưng h viết được luôn code lõi của React với nó
+
+=> Combo đầy đủ còn có clsx + animate.css để tạo animation khi mount vào cơ
+=> refer tới "Projects / Leaderboard trava / Leaderboard basic"
+
+--> Suspense còn dùng để thực hiện Concurrent mode:
+Pattern: wrap bên ngoài component Suspense, bên trong throw ra 1 promise là hàm fetch data, hàm này được viết ở ngoài component. Nó chỉ giúp cho việc fetch data lần đầu tiên mà thôi, k có dependencies.
+
+
+
+# Route Objects
+Học cho vui chứ chả bh sử dụng. Nó dùng khi ta k muốn dùng component jsx mà dùng dạng JS object. Dùng useRoutes
+import { useRoutes } from 'react-router-dom';
+export default function App() {
+  let routes = [
+    { path: '/', element: <Dashboard /> },
+    {
+      path: '/products',
+      element: <Products />,
+      children: [
+        { index: true, element: <BestSeller /> },
+        { path: 'laptop', element: <Laptop /> },
+        { path: 'desktop', element: <Desktop /> }
+      ]
+    },
+    { path: '*', element: <NoMatch /> }
+  ]
+  let element = useRoutes(routes)
+  return (<>{element}</>)
+};
+
+
+
+# Other:
+-> Khi dùng NodeJS làm webserver kiểu SSR thì là 1 dạng khác klq ở đây vì kp dự án React
+- K dùng CDN react-router vì nó có thể k chuẩn trong dự án
+
+-> Tổng kết:
+Package react-router-dom v6: có Route, Routes, BrowserRouter, NavLink, Link, Redirect, Navigate, Outlet như bth. Bên trong package này còn có react-router mà ta import từ đây để lấy ra các hook như useParams, useNavigate, useLocation. Thật ra react-router cũng chỉ là các viết gọn hơn của react-router-dom là 1
+
+Package react-react-dom v5: có BrowserRouter, Redirect, Route, Switch, NavLink. Các hook như useHistory, useParams cũng dùng trực tiếp trong react-router-dom của nó. Và browserHistory, memoryHistory
+=> tức là package react-router-dom v5 hay v6 thì import cũng như nhau chỉ là nó thay đổi code 1 số chỗ và thêm vài cái mới thôi.
+
+Package connected-react-router có: ConnectedRouter, routerMiddleware, connectRouter. Kết hợp với createBrowserHistory của package history => là 1 Redux binding for React Router v4 and v5 => k dùng
+Package history phục vụ dùng react-router-dom, nó chạy với react-router-dom v6. Còn connected-react-router phục vụ cho v4 và v5. Ta dùng hàm createBrowserHistory
+
+

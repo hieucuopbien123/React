@@ -1,0 +1,68 @@
+Các tool k dùng:
+
+webpack-bundle-analyzer: tool show trực quan phần nào của ứng dụng chiếm nhiều dung lượng nhất
+
+react-proto: khai báo props và type, xem component, định nghĩa stateful hay stateless, phóng to thu nhỏ, xuất prototype vào 1 project có sẵn,.. => nch là kiểm soát props
+
+Package @welldone-software/why-did-you-render: check component nếu được rerender nhiều lần, dùng nó để kiểm soát sao cho chỉ còn render 1 lần để tăng performance nếu code react chưa tốt
+
+react-testing-library: viết test cho component react
+
+React Sight: extension giúp hiển thị compoent react sơ đồ cây, chơi cả redux, router các thứ => k khả dụng trên edge
+
+storybook: package giúp tách từng component, hiển thị dạng phân cấp giúp dễ theo dõi component => Từng component phải add vào storybook rất mất tg
+
+react-cosmos: package vai trò tương tự như story book => đm vào cứ quay quay éo chạy được
+
+react-diff-viewer: package tạo component hiển thị sự khác biệt các dòng code. Nó chỉ dùng cho React v16
+
+enzyme: package giúp test react
+
+ReactIDE: mẹ cái tool ide cũ vl rồi, cài lỗi hoài
+
+ReactStyleguide: tool tạo component độc lập tự có docs và các thứ tùy chỉnh => đm cài React18 phải config cho nó webpack rất mất tg
+
+React-Proto: tool tạo mẫu thiết kế cho React, cũ rồi, bh họ dùng figma cơ
+
+
+
+## Các tool hay dùng:
+# Dùng bitcloud
+Bitcloud là 1 nền tảng chia sẻ component rất mạnh. Các component từ nhiều thư viện khác nhau có thể import rời rạc bằng cách search nó trên gg thêm từ khóa "bit cloud" để lấy. Nó có hầu hết các component cần dùng
+
+-> Dùng bit dev để dùng các component có sẵn
+
+Trong bit có các thư viện UI có sẵn để trích từng component ra như: Grommet, Senmatic UI React, React Material UI, Primereact, React Bootstrap
+=> Khi search và ấn vào từng mục thư viện, ta có thể search in this scope từng component của thư viện đó và cài để dùng. Nhưng trước đó phải cài bit trong dự án chứ k import trực tiếp được. Kết quả nó import dưới dạng file cả dự án component vào và ta có thể chỉnh sửa tùy ý
+
+=> K tốt vì nhiều component k sử dụng được trong React18.
+
+-> Dùng bit dev để share component giữa các project với nhau
+URL tut: https://javascript.plainenglish.io/how-i-share-react-components-between-projects-3896d853cbee
+
+Nên dùng bit import thay cho npm i
+
+Sau khi lấy components về rồi copy vào src/components để dùng vì k thể ref ra ngoài dự án
+
+
+
+# Proton Native
+url: https://github.com/kusti8/proton-native
+Tool giúp code React nhưng sinh ra ứng dụng desktop. Khác với Electron(1 tool tương tự), Proton Native khiến cho ứng dụng thực sự là native vì được compiled sang native platform code chứ k còn là web-based chronium. Cùng syntax với React Native nhưng là cho desktop.
+
+
+
+# Devtool browser
+=> Mở tab components -> settings -> highlight updates
+Tool này giúp tìm các components render thừa
+
+
+
+# Dùng ReactAdmin
+B2B là ứng dụng business to business, ứng dụng kiểu này thường có các tính năng chung như 1 trang admin để quản trị.
+React Admin giúp ta tạo ra template dùng cho B2B apps, nó cung sẵn các component hỗ trợ tạo trang admin cho ta bằng React và Material Design hiện đại
+Trong docs có mọi thứ rất rõ. Template trông thô sơ nhưng mấy trang example custom nhìn rất ảo
+
+
+
+

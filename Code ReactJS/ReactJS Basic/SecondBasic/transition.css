@@ -1,0 +1,58 @@
+/* # Dùng các thư viện chức năng / Dùng react-transition-group  */
+
+.my-msg {
+    color: blue;
+}
+
+.my-msg-entering {
+    color: blue;
+    font-size: 150%;
+    transition-duration: 1s;
+}
+
+.my-msg-entered {
+    font-size: 150%;
+    color: red;
+}
+
+.my-msg-exiting {
+    font-size: 100%;
+    color: black;
+    transition-duration: 1s;
+}
+
+.my-highlight  {
+color: red;
+}
+
+.my-msg {
+    color: blue;
+    margin-left: 300px;
+    opacity: 0;
+}
+
+.my-msg-entering {
+    color: blue;
+    margin-left: 0px;
+    opacity: 1;
+    transition-duration: 1s;
+}
+
+.my-msg-entered {
+    opacity: 1;
+    margin-left: 0px;
+    color: red;
+}
+
+.my-msg-exiting {
+    opacity: 0;
+    font-size: 100%;
+    margin-left: 300px;
+    /* chú ý chỉnh kiểu margin thì các thẻ bên phải nó bị ảnh hưởng đấy, nên để nó luôn block tag */
+    color: black;
+    transition-duration: 1s;
+}
+
+.my-highlight  {
+color: red;
+}

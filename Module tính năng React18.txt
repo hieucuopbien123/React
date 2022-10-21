@@ -1,0 +1,122 @@
+Tính năng React18:
+
+
+
+# SSR và CSR
+-> Thời kỳ đầu của phát triển web thì server-side rendering được sử dụng phổ biến. Cho đến nay, nó vẫn được dùng phổ biến và chưa bị thay thế hoàn toàn. Nhưng càng ngày thì web phải làm càng nhiều vai trò, mỗi trang web nó như hẳn 1 ứng dụng phức tạp như xử lý ảnh, soạn thảo văn bản hơn là 1 trang web thông tin bth. Dần dần SSR tỏ ra k hiệu quả.
+SSR: Khi có request, server đã xử lý sẵn file html thuần để gửi cho browser sau khi đi qua 1 loạt các script của trang web -> browser chỉ cần render trang html đó để người dùng nhìn thấy và ngấm ngầm tải tiếp JS về. Lúc này người dùng nhìn thấy trang web tĩnh và k thể tương tác. VD họ ấn các button nhưng trả có tác dụng gì -> sau khi tải hết JS về, nó execute React xong thì website mới có thể tương tác
+Đặc điểm SSR: tốc độ tải trang web gần như tức thời, ấn phát có luôn chứ kp đợi lâu. Nhưng bù lại, trang web phải xử lý lại hoàn toàn và load lại từ đầu gửi request đến server nếu có 1 thay đổi nhỏ trong nội dung. Do SSR thì mọi thứ được xử lý ở server nên tốn tài nguyên và gây chậm trễ khi xử lý các request khác. 
+Tất cả các gánh nặng của việc lấy nội dung động gửi tới trình duyệt đều ở phía server nên gọi là SSR.
+VD: cách ta dùng NodeJS để dùng res.write("code html") gửi cho client chính là SSR vì client nhận trực tiếp html thuần gửi từ server là SSR
+
+-> Hiện nay, máy tính cá nhân ngày càng mạnh nên có thể xử lý phần đó thay cho server bằng cách dùng CSR nhờ các framework JS ra đời. 
+CSR: Browser gửi request thì 1 con CDN (or server kiểu nginx, apache) có thể gửi lại html chứa link tới file js-> browser tải html và JS -> browser execute JS, gửi request API lấy data đủ để hiển thị mọi cho lần đầu tiên -> server xử lý và gửi data cho client -> browser hiển thị tất cả cho người dùng
+Đặc điểm CSR: lượng dữ liệu load về lần đầu khá nặng nhưng bù lại các lần sau sẽ xử lý cực nhanh do nó đã có hết trên client, khi có thay đổi thì client chỉ request phần thay đổi cho server và render lại component thay đổi mà thôi. Trong suốt quá trình, người dùng chỉ thấy thanh loading, họ chỉ thấy trang web hoàn chỉnh ở bước cuối
+VD: ta code hết html ở trong dự án react thì đó là dùng CSR
+
+-> So sánh:
+Nói chung thì SSR là server gửi lại file html đã được render sẵn, CSR thì browser nhận được 1 page trống chỉ có link tới file JS và phải xử lý tiếp
+Điểm khác biệt là: 
+- Ở lần load đầu tiên, server xử lý sẵn html nên SSR nó render trang tĩnh ngay lập tức để người dùng kp chờ loading nên cảm tưởng tốc độ nhanh hơn còn CSR trong cả quá trình, người dùng chỉ nhìn thấy thanh loading(front end phải xử lý điều này, nếu k sẽ là blank page), cho đến mãi bước cuối khi browser xử lý xong và page có thể nhìn thấy và tương tác được. Bù lại thì tốc độ các lần tương tác sau thì CSR nhanh hơn do script được load hết trong CSR rồi. 
+Sau khi load hết CSR, nếu ta k tương tác thay đổi database thì web CSR có thể dùng trực tiếp mà k cần mạng luôn vì mọi thứ load hết ở trình duyệt rồi, còn SSR cứ mỗi router chuyển trang đều phải load lại cả web. 
+=> Tuy nhiên đa phần các web CSR đều chơi kiểu lazy loading tức chỉ tải các thứ cần thiết cho trang đó nên khi chuyển trang mà trang đó được visit lần đầu tiên thì vẫn có 1 khoảng load tiếp data từ server nhưng rất ngắn(nhanh hơn 1 chu kỳ của SSR vì nó có sẵn html rồi, chỉ request tiếp data). CSR có thể k nhanh hơn SSR khi load JS script ở các lần sau vì thực tế trong server hay browser đều sử dụng caching nên SSR cũng được tăng tốc do các script được lấy từ cache thay vì làm lại đầy đủ 1 chu kỳ request tới server như bth, xem ở tab network. Bên cạnh đó tuy tương tác lâu hơn nhưng SSR với mỗi lần tương tác đều cho html tĩnh ngay lập tức chỉ có lần tương tác kế là chưa được ngay thôi nên thực chất tốc độ 2 cái k thua gì nhau. Điều này cũng là vấn đề khiến SSR và CSR k thể thay thế hoàn toàn cho nhau
+- Khi dùng CSR thì phần code các element đều có từ JS nên khi vào nó thấy mỗi đoạn script đến file chứ k có nội dung. Cụ thể trong SEO, crawler của search engine k tiếp xúc được với nội dung web. Vì là single page app nên khi chuyển trang thì các thẻ metadata k thay đổi khiến cho web càng khó SEO. Còn SSR thì do server gửi về tĩnh để show ra nên toàn bộ html sẽ gửi thẳng về client chứ kp script tới JS hết như CSR nên tốt cho SEO hơn. Nhưng google đã giải quyết vấn đề này của search engine bằng cách cho phép các crawler sử dụng code JS, kèm với các framework JS ngày càng phát triển đã khắc phục hết các vấn đề trên. VD dùng react-helmet để đổi các thẻ metadata khi chuyển trang, dùng các tool của react để khiến code html có thể nhìn thấy toàn bộ (khi CTRL+U) trong trang web.
+- SSR giúp trang web được chia sẻ qua mạng XH thông qua src của thẻ iframe, nếu dùng CRS thì k nhúng được như v
+=> Đa phần các website hiện giờ thường sử dụng CSR để giảm tải phía server và tránh load lại cả trang web làm giảm UI vì nó đã khắc phục hầu hết mọi nhược điểm, chỉ có mỗi load trang lần đầu là chưa thôi. Nhưng với các trang web mà có tương tác ít, quảng cáo thương mại hay cần SEO nhanh thì có thể dùng SSR để load vào web cực nhanh và cũng tùy các yêu cầu của dự án nữa.
+
+-> Các framework JS
+Các framework JS: ReactJS, VueJS, MeteorJS, EmberJS, AngularJS, PolymerJS, SvelteJS đều hỗ trợ CSR và nó thường dùng cho CSR. Tuy nhiên nó vẫn hỗ trợ tạo web SSR. Khi đó server lo nhiệm vụ chính còn các framework này gọi mỗi hàm render ra thôi
+
+=> refer tới "Gatsby / Hiểu về Gatsby"
+
+
+
+# Render React ở phía server
+Tùy vào yêu cầu khách hàng, google đôi khi thực thi code JS và có thể đánh chỉ mục cho nội dung tổng quan của trang web nhưng kp lúc nào cũng v nên ta cần phải học cả render react phía server tùy yêu cầu khách hàng. Đa phần yêu cầu render phía server đều là vì SEO là chính, nó cũng giúp tương thích với các dịch vụ như Facebook, Twitter,..
+
+Ở phiên bản cũ, để dùng SSR ta phải tạo 1 server và cho server đó xử lý url kiểu gặp url nào thì gửi lại file React nào, để làm được phải gọi ReactDOMServer.renderToString ở trong file server. Còn phía front end sau khi nhận được thì gọi hàm ReactDOM.render để show ra cho người dùng. Nhưng dữ liệu fetch API sẽ k hiện ra trong source của trang web vì server gửi lại file html tĩnh k có fetchAPI mà front end về sau mới làm. Để fix họ dùng lib react-transmit, lib này cho phép ta fetch API xong rồi mới gửi lại file html.
+Ở các phiên bản mới là React17 React18 thì cũng dùng SSR được với cơ chế 2 bước tương tự: dùng 1 server riêng để xử lý url gửi lại file React, phía front end chỉ cần render file React đó ra. Chú ý nếu có fetch API thì fetch trước r front end mới gửi lại
+
+Thông thường khi có nhu cầu tạo 1 website SSR, ta sẽ k dùng React mà dùng các framework JS chuyên về SSR như NextJS, Razzle, Remix, NuxtJS(SSR framework for Vue), Angular Universal, SvelteKit(open-source framework based on Svelte), Gatsby,... SSR k dùng cho server yếu vì nó rất tốn tài nguyên server. 
+=> Ta k nên dùng React thuần để làm dự án SSR mà nên dùng các framework có sẵn. Ta cũng có thể chuyển dự án React từ CSR thành SSR nhưng làm v k dễ, chưa kể phải xài bộ CRA với router dom(dùng static router), fetchAPI, redux mà dùng phía server thì khá phức tạp. Với phiên bản React16 thì có thể ổn nhưng sang React17 18 thì người ta ít dùng cho SSR lắm. 
+
+-> Tutorial SSR với bộ CRA React17 dùng redux toolkit, react router dom, fetch API với axios: https://www.youtube.com/watch?v=YTOk8_T6-Wg
+Hiểu hàm hydrate và render: https://blog.saeloun.com/2021/12/16/hydration.html#:~:text=React%20hydration%20is%20a%20technique,our%20components%20rendered%20as%20HTML.
+Bản chất của hydration: https://viblo.asia/p/server-side-rendering-voi-hydration-lang-phi-tai-nguyen-nhu-the-nao-Ljy5VR3k5ra
+=> K học vì chưa cần dùng và dài vl
+
+
+
+# 1 số hàm React phục vụ SSR
+ReactDOMServer.renderToString(<codeJSX>); sẽ biến tất cả component react thành thẻ html dưới dạng string, từ đó ta có thể nhét vào res.write("") gửi cho client
+ReactDOM.hydrate(<>); hàm khá giống render nhưng dùng ở phía client khi dùng SSR. Dùng render cũng được nhưng sẽ báo warning. Cụ thể khi dùng hydrate thì React sẽ bảo toàn cấu hình dom(đã được server xử lý) và chỉ gắn thêm các event handler. Còn render sẽ thay đổi component đó nếu có sự khác biệt về DOM => Kiểu gì thì hàm render cũng là cốt lõi biến component thành html tag bth. hydrate hay còn gọi là tưới nước hay làm tươi cho trang web, vì trang web tĩnh phải làm tươi thì mới khiến nó trở nên động và tương tác được
+
+=> Từ trước đến h ta toàn thao tác với ReactDOM của client, thực chất React có riêng ReactDOMServer chuyên dùng cho SSR, khi nào dùng thì quay lại đây học.
+
+
+
+# React 18 Feature
+-> Sử dụng createRoot thay cho hàm render ở file index.js:
+createRoot là hàm enable concurrent feature của React18, nếu k dùng thì ứng dụng sẽ làm vc y như React17. 
+Tương tự hàm hydrateRoot thay thế cho hàm hydrate dùng cho SSR
+
+-> Automatic Batching:
+VD ta đổi state của 1 component 2 lần thì nó render lại 2 lần, với React18 nó gom 2 cái thay đổi lại và render theo cái cuối thôi. Thật ra bản 17 cũng có batch events, nhưng với React18, mọi thứ được improve tốt hơn. VD:
+// Before: only React events were batched
+setTimeout(() => {
+  setSize((oldSize) => oldSize + 1);
+  setOpen((oldOpen) => !oldOpen);
+  // React will render twice, once for each state update (no batching)
+}, 1000);
+
+// After: updates inside of timeouts, promises,
+// native event handlers or any other event are batched
+setTimeout(() => {
+  setSize((oldSize) => oldSize + 1);
+  setOpen((oldOpen) => !oldOpen);
+  // React will only re-render once at the end (that is batching)
+}, 1000);
+
+Tuy nhiên đề phòng người dùng k muốn batching, nó sinh ra hàm flushSync để xem có update DOM hay k. VD:
+import { flushSync } from "react-dom"; // Note: we are importing from react-dom, not react
+function handleSubmit() {
+  flushSync(() => {
+    setSize((oldSize) => oldSize + 1);
+  });
+  // React has updated the DOM by now
+  flushSync(() => {
+    setOpen((oldOpen) => !oldOpen);
+  });
+  // React has updated the DOM by now
+}
+
+-> hook mới là useTransition:
+VD: thanh search, khi ta gõ cụm từ AB thì React nó sẽ xử lý lần lượt setSearchInput("A") và lấy result A, setSearchInput("AB") và lấy result cho AB hiện ra. Nhưng nếu cụm từ đó dài vl sẽ giảm performance cho các việc render k cần thiết. startTransition chia làm 2 loại:
+urgent updates: như setSearchInput để update nội dung thanh search input
+transition updates: non-urgent như hiển thị kết quả.
+
+=> Để urgent updates như bth, transition updates thì nhét vào trong hàm truyền vào startTransition. Câu lệnh non-urgent được viết trong startTransition sẽ ưu tiên thực hiện thấp hơn. Tức nếu có 1 câu lệnh tương tự thì câu lệnh cũ sẽ bị dừng luôn và ưu tiên làm tiếp luôn với câu lệnh mới. 
+Còn có isPending nữa
+
+-> Cải tiến Suspense có thể dùng cho React ở phía server. Vốn ở React17, Suspense vẫn hỗ trợ kết hợp với React.lazy
+
+-> Các hook mới đều dùng được ở cả SSR và CSR:
+useId sinh số Id. Trong redux tool kit cũng có hàm nanoid sinh id ngẫu nhiên
+useTransition 
+useDeferredValue tương tự useTransition, nó gán 1 value vào 1 biến số khác, biến số này chỉ được cập nhập sau 1 khoảng tg thì đảm bảo giải quyết vấn đề delay. Trong React17 cũng có hook này ở bản thử nghiêm
+useSyncExternalStore dùng độc và subscribe vào external data source tương thích với concurrent feature hiện tại. Nó dùng cho lib authors chứ ứng dụng bth k dùng
+useInsertionEffect giống useEffect nhưng được gọi đồng bộ với mục đích thêm style cho DOM trước khi nó đọc layout với useLayoutEffect. Nó k access vào ref và k update state được. Nó cũng chỉ dùng cho lib authors mà thôi
+
+Bên cạnh đó còn vài đặc điểm như cho phép render undefined, bỏ các older browser, cải thiện bộ nhớ,...
+
+
+
+# Virtual DOM in React
+Cơ chế của React là chỉ render lại các phần cần thiết. Trong actual DOM của html css thuần, nó k có cách nào xđ được element nào thực sự thay đổi để render lại mà khi làm 1 cái gì đó, nó luôn load lại cả cây DOM.
+Do đó React dùng virtual dom là 1 bản giống hệt DOM thật nhưng nó cheap hơn vì k phải render ra screen. Dùng React, ta có thể thao tác với virtual dom và nó tự xác định các phần thay đổi để chỉ render lại component đó thôi. Khi ta log thẻ jsx ra type Symbol react.element lồng các con liên tiếp thì chính là virtual DOM đó. 
+
+Cơ chế: mỗi lần render UI, virtual dom sẽ được tạo và lưu trong memory, nếu có update thì React sẽ tự tạo 1 cây virtual dom mới, virtual dom k render lên screen nên tạo rất dễ. Sau đó React compare 2 cây DOM xem khác nhau chỗ nào và tiến hành update phần node đó trên actual dom.
+Khi thực hiện thuật toán tìm điểm khác biệt, react so sánh 2 snapshot của root element, giống nhau thì tiếp tục so sánh dần xuống con để xác định node cần. Nếu root khác nhau(hiếm xảy ra) thì React sẽ xóa old DOM và build 1 new DOM tree luôn.
+
+
+ 

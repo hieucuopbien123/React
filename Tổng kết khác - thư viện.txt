@@ -1,0 +1,105 @@
+Các package phục vụ React còn được sử dụng(tương thích với React18): K tính các package hệ thống như babel webpack, hay các package tool như ngrok eslint husky or redux,... Chỉ các thư viện hỗ trợ tạo component UI
+
+react-transition-group => thư viện giúp làm việc với css transition
+
+react-bootstrap bootstrap => bộ thư viện UI
+
+react-router-dom => giúp định tuyến
+
+@mui/material => thư viện UI
+
+uuid => thư viện sinh id ngẫu nhiên dù React18 có useId nhưng k mạnh bằng
+
+react-calendar => thư viện hiển thị cuộn lịch và customize
+
+react-cssfx-loading => thư viện tạo thanh loading được xây từ css thuần
+
+react-modal => hiển thị 1 cái modal dialog
+
+senmatic-ui-react senmaticui-css => thư viện UI
+
+react-awesome-reveal => tạo animation basic, có thể custom với css
+
+react-burger-menu => tạo animation cho thanh menu dọc thg khi màn hình nhỏ
+
+react-slick slick-carousel => tạo carousel slider
+
+react-player => thư viện custom play video rất mạnh, support đủ thể loại video từ nhiều nguồn nổi tiếng
+
+screenfull => dùng full màn hình
+
+react-beautiful-dnd: tạo list draggable
+
+react-trend: vẽ đường line
+
+react-md-spinner: tạo spinner basic
+
+react-avatar-edit: edit ảnh làm avatar. Có 1 thư viện tương tự là react-avatar-editor nhưng k hoạt động tốt
+
+react-paginate: tạo component phân trang
+
+react-grid-layout: tạo grid draggable items
+
+react-rainbow-component: thư viện UI
+
+reactflow: thư viện tạo flow chart rất mạnh
+
+react-dnd: drag drop rất mạnh trong React
+
+react-select: tạo đủ kiểu component input cho React
+
+react-markdown: thư viện giúp render từ kiểu markdown ra văn bản đẹp
+
+react-color: chuyên cung cấp đến 13 kiểu color picker
+
+react-hook-form: tạo form, là thư viện mạnh hơn formik vì nó tối ưu hóa render
+
+formik: thư viện xử lý form
+
+recharts: thư viện vẽ biểu đồ trông khá tĩnh và đơn giản
+
+react-content-loader: thư viện tạo component loading animated skeleton
+
+react-window: thư viện giúp hiển thị 1 phần dữ liệu cực lớn
+
+react-icons: thư viện tổng hợp mọi icon miễn phí từ tất cả các nguồn
+
+react-autosuggest: tạo autosuggest khi gõ input, chỉ được với input text
+
+react-datepicker: chuyên tạo date picker
+
+highcharts-react-official highcharts: tạo graph đẹp
+
+
+
+Các thư viện chỉ dùng được cho phiên bản React17, k hỗ trợ React18:
+react-reveal => thư viện animation cực kỳ mạnh, hiệu ứng tương tự như việc tạo slide thuyết trình. Ta k custom sâu vào bên trong được. Mọi thứ có hết ở: https://www.react-reveal.com/examples/ => nếu dùng animation nên nghĩ tới nó đầu tiên với React17, tốt hơn cả Spring này nọ
+
+google-map-react => thư viện giúp hiển thị map, có thể điều khiển hiển thị gói trong 1 container, có thể nhập vào tọa độ để đánh dấu pin point trên google map. Nó có điểm lợi là dùng google map API và dù k load được google map api nó vẫn có thể hiện map bth. Người dùng có thể tương tác và custom mọi thứ với map. Nó chỉ hoạt động tốt với React17, với React18 phải bỏ StrictMode.
+
+react-vis => tạo data visualization biểu đồ, có nhiều loại biểu đồ mang tính học thuật cao mà highchart k có, nó chỉ tương thích với React17
+
+
+
+Các thư viện khác phía front end nhưng bỏ: Các thư viện này đa phần k còn hỗ trợ React18, có nhiều thư viện rất mạnh nhưng vẫn chưa có bản thay thế
+
+react-anime => thư viện tạo animation với ưu điểm package cực kỳ nhẹ, nó có thể tạo nhiều animation hay thậm chí là hiệu ứng scroll parallax. K hỗ trợ React 18, nó xuất phát từ anime.js dùng cho dự án html css thuần. Hiện cũng có nhiều thư viện animation mạnh hơn nếu dùng với version cũ
+
+react-draggable-slider => thư viện tạo slider drag được bằng chuột, nhưng chỉ hoạt động với React16 nên bỏ
+
+react-photo-gallery => thư viện hiển thị nhiều photo rất đẹp nhưng chỉ tương thích react16
+
+react-credit-cards => tạo component hiển thị như thẻ ngân hàng, cũng chỉ tương thích react16
+
+react-dates => tạo date picker chỉ tương thích react16
+
+react-notification-system => tạo các loại card thông báo, chỉ tương thích React16
+
+dvaJS => là 1 lib làm vc với các ứng dụng react, nó cung cấp 1 plugin là dva-loading. Thừa thãi
+redux-waiters => cx là 1 middleware nx. Nó lấy ý tưởng từ dva-loading, react-wait, redux-thunk, redux-act để tạo nên 1 thư viện giúp kiểm soát trạng thái 1 action đang load hay đã thực hiện xong mà kp code đi code lại cái logic kiểm tra đó nh lần. Có thể dùng kết hợp với redux-thunk. Thừa thãi
+
+react-hot-loader => load component theo thời gian thực, chỉ dùng được với React17 nhưng h cũng chả cần nx
+
+fontfaceobserver => thư viện giúp load font chữ check có khả dụng k => điều này là k cần thiết
+
+

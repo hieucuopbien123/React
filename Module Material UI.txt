@@ -1,0 +1,169 @@
+Material UI: 
+-> MUI version 4 tương thích với React17, version 5 tương thích với React18 nhưng version 4 có nhiều thứ dùng tiện hơn version 5. Nên dùng đúng phiên bản thay vì dùng tham số --legacy-peer-deps or --force. 
+Đa số các package tương thích version 18 vẫn cái cho version 17 được
+
+-> Material ui là thư viện các react component tích hợp thêm Google's Material Design. Giao diện mới lạ khác với giao diện phổ biến là bootstrap. Nó là thư viện đc đánh giá là hay nhất hiện giờ của react về giao diện.
+Material Design là hình thức phát triển hơn của Flat Design(thiết kế phẳng). Bằng những gam màu nổi bật với đường nét đơn giản, chúng mang tới cảm giác 3D như có hiệu ứng nổi lên trên giao diện. Thiết kế này còn bao gồm những chuyển động tự nhiên, như khi các nút, menu hiện trên màn hình chẳng hạn. Ví dụ 1 bức ảnh màu xanh và 1 bức ảnh gradient từ xanh nhạt đến xanh đậm tạo ra sự khác biệt hoàn toàn. 
+
+-> Cài:
+--> v4:
+npm i @material-ui/core @material-ui/icons
+import { Box } from '@material-ui/core';
+--> v5:
+=> npm i @mui/material @emotion/react @emotion/styled @mui/icons-material
+import { Box } from "@mui/material";
+
+
+
+## v4
+
+
+
+# Basic
+
+
+
+# Thao tác với className style:
+-> Dùng makeStyles({<object>}); có thể tạo ra hàm trả ra object các style mà ta dùng với className
+
+--> Dùng CSS Selector trong makeStyles. Thực tế các css selector dùng html tag thuần cần phải test thử trong browser vì MUI có thể lồng thêm các thẻ khác bên trong không thể biết được
+a:{
+  "&:hover": {<>}
+} => khi thẻ className dùng a được hover.
+a:{
+  "& td": {<>}
+} => thẻ tag td nằm trong thẻ className dùng a ở mọi cấp. 
+Chú ý các tên thẻ trong selector là của HTML thuần chứ kp component của MUI. Thực chất dùng & chính là trỏ đến thẻ hiện tại bao nó luôn, đây chỉ như css selector bình thường, chỉ là style viết bên trong 1 thẻ luôn
+a:{
+  "& .a.b": {<>}
+} => thẻ class b nằm ngay trong thẻ class a và 2 thẻ này ở con mọi cấp của thẻ className dùng a => éo phải hình như là phải có cả class a và b ấy chứ
+a:{
+  "& > *": {<>}
+} => mọi thẻ là con trực tiếp của thẻ có className dùng a
+"@global":{
+  "*": {<>},
+  "#root": {<>},
+  html: {<>},
+  "li > div:nth-of-type(1)": {<>},
+} => set global style(cấp style thấp nhất) cho mọi thẻ; set global style cho thẻ có id là root là cha của mọi component trong React(trong thẻ body); set global style cho thẻ html; set global style cho mọi thẻ div là con đầu tiên trực tiếp của thẻ li html thuần.
+TH này ta dùng trực tiếp mọi tag html thuần, nếu dùng class hay id hay gì khác thì phải dùng trong "", thường dùng @global cho CSS Reset.
+
+className dùng tên trong makeStyles trong MUI khi render ra HTML thì tên class nó bị đổi thành các tên rất lạ, đôi khi ta mở browser để nhìn bên trong nhưng khi tạo bản dev và bản production thì nó lại khác nhau. Nói chung là khi ta cần refer đến thẻ con bằng tên class đôi khi nó bị sai. Ta có thể dùng css selector cho tên của class viết bằng MUI trong code với dấu $. Vd:
+test: {
+  "& $abc": {<>}
+},
+abc: { },
+=> thẻ mang className abc là thẻ con mọi cấp của thẻ mang class test, tên test và abc là viết trực tiếp như này trong makeStyles chứ kp tên class sau khi chuyển sang html css thuần. Dù class abc k có style gì ta vẫn phải tạo nó trong makeStyles thì mới dùng được nó trong selector
+
+=> Có thể kết hợp nhiều loại selector để chọn các thứ rất phức tạp.
+
+
+
+# Dùng các hàm style của v4
+=> refer tới "Thao tác với className style"  "Setup dự án"
+
+-> 5 case:
+--> Hàm số bên trong gọi makeStyles, tham số của makeStyles là hàm trả ra style tạo từ createStyles nhận vào object các style. Dùng nó như 1 thẻ JSX dùng ở đầu mọi thẻ để các thẻ bên dưới dùng được các style đó. Thường dùng để set cho các thuộc tính global => có thể truyền trực tiếp object style thay vì dùng createStyles
+
+--> Dùng createTheme nhận vào palette chỉnh màu, breakpoints chỉnh responsive, ngoài ra còn có overrides định nghĩa lại attribute của các thẻ có sẵn của MUI, thường dùng đổi cho toàn bộ dự án. Dùng ThemeProvider với nó bao mọi thẻ
+
+--> Lưu lại giá trị của makeStyles là useStyles bên trong truyền 1 hàm (theme) => ({object các class}) để dùng các class đó trong từng thẻ của ta, các class này có thể override các class có sẵn của MUI, ta có thể search các class này trong API or browser để ghi đè với selector "& .MUIclass1 .MUIclass2"; {...} tác động mọi thẻ con
+
+--> withStyles(theme => ({ object các thuộc tính thay đổi cho thẻ}))(<thẻ nào>); lưu lại để tái sử dụng thẻ của MUI nhưng bị custom đi theo ý ta. Dùng như này khi đổi thẻ nhưng dùng trong case này thôi chứ kp toàn bộ dự án
+
+Ta có thể ghi đè thuộc tính bằng thẻ style nhưng có những thuộc tính ở trong class buộc phải tạo 1 component mới với withStyles mới chỉnh được. 
+
+--> Dùng style hay sx tùy loại thẻ trực tiếp trên thẻ để đổi các thuộc tính của thẻ. Nó override được các class có sẵn trong MUI của thẻ.
+
+
+
+# Setup dự án
+-> Dùng createTheme để tạo theme cung cho ThemeProvider qua attribute theme
+
+
+
+# Thao tác với các component options
+-> Dùng Checkbox, Switch, RadioButton
+Dùng thêm inputProps để thêm các attribute html chuẩn cho thẻ
+
+-> Có thể dùng nó trong control của FormControlLabel để dùng thêm chuẩn label cho nó(ấn label là refer tới nó)
+
+
+
+# Dùng màu của MUI
+import { orange, green } from '@material-ui/core/colors'; => dùng green[400] với số 400 chỉ mức độ đậm nhạt thay thế ở mọi chỗ cần dùng đến màu
+
+
+
+# Các component khác
+AppBar, ToolBar 
+
+-> Dùng Paper
+Thg dùng khi ta cần hiện nó trong 1 cái khung lớn
+
+-> Dùng Grid
+Có Grid container và Grid item
+Component giúp chia grid hỗ trợ responsive với: xs, sm, md, lg, xl
+
+-> Dùng Typography 
+Có trường variant để lấy thẻ mọi cỡ chữ
+
+-> Dùng Box
+Component giống div
+
+-> Dùng Button
+Chắc chắn dùng trường variant xđ style cho Button 
+
+Có ButtonGroup để gom các Button lại thành nhóm
+
+-> Dùng input text TextField
+Trường variant thg dùng để style
+Chú ý phân biệt placeholder với label là 2 cái khác nhau có thể dùng trong TextField
+
+-> Dùng Hidden: component giúp ẩn 1 component khác nếu kích thước màn hình thỏa mãn điều kiện
+Drawer, Divider, List
+
+=> refer tới "Projects / Leaderboard trava / Leaderboard Basic / TravaArmoury / ArmouryRegistry / FilterDrawer"
+
+
+
+# Dùng icon
+MUI có đủ loại icon có thể import trực tiếp vào dùng: import { SaveIcon } from '@material-ui/icons';
+
+-> IconButton giúp bấm icon như button dùng bao cái component icon
+
+
+
+## v5
+
+
+
+# Basic
+-> Dùng styled:
+Có thể dùng "" or dạng object bình thường
+Có thể dùng để đổi 1 thẻ thành 1 thẻ tên khác mang style khác or tạo ra thẻ wrapper khai báo style class cho mọi thẻ bị nó bao
+
+-> Dùng alpha tạo độ mờ cho màu
+
+-> Dùng mọi component cơ bản: Box, Typography, Tooltip, Button, Dialog, ListItem, ListItemText, Paper, Container, List, ListItem, IconButton
+
+-> Dùng icon: Chỉ import từng cái default chứ k được import toàn bộ url với {} thì nó quét cả thư viện siêu lớn sẽ bị lag
+
+-> useMediaquery trong MUI có sẵn cái này để lấy breakpoint màn hình mà k cần tự viết hay dùng thêm thư viện ngoài
+
+=> refer tới "Projects / Setup / setup react mui web3 full"
+
+
+
+# Các package đi kèm 
+-> react-material-ui-carousel: tạo carousel 
+
+-> notistack: hiển thị notification bằng hook
+Nên tạo hẳn 1 file snackbar-utils để chỉ cần import type ra dùng thôi. Nó dùng được với cả 2 phiên bản:
+muiv5: npm i notistack
+materialui v4: npm i notistack@latest-mui-v4
+
+--> Setup dự án React với mui v4
+=> refer tới "Projects / Setup / setup react mui web3 full"
+
+

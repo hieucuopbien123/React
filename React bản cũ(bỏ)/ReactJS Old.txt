@@ -1,0 +1,21 @@
+-> Component Life Cycle(no error handling):
+ReactDOM.render() --> <tên class>.defaultProps = {}
+   ^                               |
+   |                               v
+   |                       this.state = {}
+   |                               |
+   |                               v                         
+   |               static getDerivedStateFromProps(nextprops, prevstate){return({})} --> shouldComponentUpdate(nextProps, nextState){}
+   |                               |                 ^                                                |
+   |                               v                 |                                                v
+   |                            render()             |                                             render()
+   |                               |                 |                                                |
+   |                               v                 |                                                v
+   |                   componentDidMount(){} --> this.setState({})                     getSnapshotBeforeUpdate(prevProps, prevState){}
+   |                               |                 ^                                                |
+   |                               v                 |                                                v
+componentWillUnmount()         <xử lý>---------------  ---------------------<---- componentDidUpdate(prevProps, prevState, snapshot){}
+   ^                                |
+   |                                v
+   ---------------   ReactDOM.unmountComponentAtNode(element)
+

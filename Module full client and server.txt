@@ -1,0 +1,34 @@
+# Full client and server:
+
+
+-> Expressjs là một framework được xây dựng trên nền tảng của Nodejs cho web hoặc mobile. Khi làm việc với React, chúng ta sẽ thường có nhu cầu liên kết dữ liệu như MySQL, MongoDB, ..., tuy nhiên bản thân React là một Javascript, chỉ thao tác ở phía client, việc liên kết xử lý dữ liệu là không thể, VD reload lại trang là mất hết. Để giải quyết vấn đề này, chúng ta sẽ liên kết dữ liệu với React thông qua API với 1 expressjs server.
+
+Setup server trống:
+npm init => sinh file package.json chứa thông tin dự án chưa có dependencies gì hết
+npm install --save express -> sinh file package-lock.json và cái luôn express
+Cài xong express ta sẽ có express server, để sử dụng ta tạo file app.js và tạo 1 API trong nó r tạo 1 client với create-react-app cùng folder với server đó
+
+Để liên kết ta cần chạy 2 cái npm 1 lúc song song nhau cho client và server, cần dùng package là concurrently:
+npm install --save concurrently => nhớ cài trong folder chứa cả client và server, cái gì install trong thư mục lớn đó sẽ dùng đc cả với client và server
+=> VD: Cần lấy dữ liệu JSON gửi cho client React, nhưng run 2 cái cùng lúc gửi nhận qua cổng nhưng chúng nó đâu có hiểu gửi nhận xử lý như thế nào-> ta phải sử dụng http request với các phương thức GET/POST/DELETE-> thử dùng với thư viện Axios:
+npm install --save axios => axios hoạt động ở hầu hết các trình duyệt hiện đại, dùng đc ở cả fontend (browser) và server(NodeJS) dùng để liên kết 2 cái lại
+Chú ý: cái file package.json phần script chính là các lệnh npm. Ta dùng: npm run <tên script>
+Ta dùng package concurrently thì sẽ có lệnh: concurrently "tên lệnh 1" "tên lệnh 2" => sẽ run 2 lệnh song song trong phần script ta dùng tương tự để gom vào 1 lệnh, cái \" là để có " thôi.
+Ta dùng proxy để chạy app trên port xác định khi kết nối song song với server bằng cách chỉnh proxy trong package.json của client
+"proxy": "http://localhost:<cổng server>" => dùng proxy nó lấy dữ liệu server ở cổng 4000 nhưng vẫn chạy ở cổng 3000. Thực tế proxy có thể dùng address bất cứ server nào, khi đó mọi request sẽ mặc định có base url đó và ta dùng gọn hơn
+
+=> run lệnh concurrently chạy cả client và server phát là xong.
+
+-> npm run --prefix <path> => là cách run npm ở directory khác nhau thì thêm option prefix => trong dự án này là ta đang npm start ở thư mục client nên phải là: npm run start --prefix client. Bằng cách này ta có thể tạo nhiều thư mục client làm các thứ khác nhau xong run cái nào tùy ý
+
+-> Phân biệt vai trò backend frontend
+Như v là chạy đc server và client kết nối vào cổng đó của server để lấy dữ liệu với giao thức GET. Tuy nhiên thường thì cơ sở dữ liệu sẽ đc lưu trong 1 database server chứ chả ai gửi mấy cái hello world hay text cố định mãi. Tức là ta coi máy của ta là 1 NodeJS server, trong máy ta lại có 1 SQL server database server nx, ta sẽ kết nối 2 cái lại với nhau để lấy dữ liệu từ database dùng trong NodeJS server, xong gửi dữ liệu đó cho client.
+=> Như v ta cần phân biệt, code MySQL là các lệnh để thao tác với database; code fontend là code html, javascript react bình thường; code backend là code trên server ví dụ nodejs server để lấy dữ liệu từ database, xử lý và gửi lên fontend cho người dùng.
+Nói rõ hơn vai trò của code backend. Ví dụ: ban đầu ta có 1 database SQL, ta dùng nó trong nodejs với code backend, lấy dữ liệu ra và thực hiện lắng nghe -> người dùng truy cập vào web thì sẽ là client gửi request cho server về trang web, server nhận yêu cầu xử lý thông tin của SQL và gửi lại cho client, fontend của client (code html, javascript, react,..) sẽ nhận dữ liệu đó và thực hiện hiển thị lên màn hình. Người dùng thao tác với 1 thứ nào đó thì các sự kiện của javascript sẽ thực hiện hiển thị y như những gì ta mong muốn, nhưng nếu thực hiện thứ gì mà làm thay đổi dữ liệu trong sql, ví dụ thêm 1 bình luận -> nó sẽ lại gửi request cho server -> code backend trên server sẽ phải xử lý request đó là cập nhập thông tin lưu vào sql server -> lần sau khi truy cập vào trang web, nó lại lấy từ server đó nên thấy dữ liệu thay đổi. Và để ng dùng truy cập vào đc như v thì database server và nodeJS server lúc nào cx phải trong TT sẵn sàng hoạt động.
+
+-> Restful API là 1 tiêu chuẩn trong việc thiết kế API cho các ứng dụng web: Là 1 trong các kiểu thiết kế api sử dụng phổ biến ngày nay. 
+Ta hiểu API đã biết là 1 thứ giúp ứng dụng này tương tác với 1 ứng dụng hay thành phần khác. Còn REST là quy định cách sử dụng các HTTP method và định dạng URL. Đó là khái niệm ta hiểu trong việc thiết kế web tức restful API đơn giản là 1 tiêu chuẩn tạo ra các thứ giúp client giao tiếp với server. 
+Các hoạt động cơ bản trên web sẽ dựa vào các giao thức http riêng: 
+GET(SELECT)/POST(CREATE)/PUT(UPDATE)/DELETE -> CRUD. Ngoài ra còn có HEAD, PATCH, CONNECT, TRACE, OPTIONS. Restful API cũng quy định hàng loại mã code trả ra lỗi or thành công ví dụ 200 là thành công, 404 là k tìm thấy resource. 
+=> Bất cứ 1 ngôn ngữ nào cũng có thể dùng để thiết kế 1 restful api. Cái axios và express ta dùng để trao đổi dữ liệu giữa client và server thông qua giao thức get và post chính là sử dụng restful api đó
+

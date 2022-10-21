@@ -1,0 +1,65 @@
+/* Dùng react-transition-group  */
+
+.example-enter {
+    opacity: 0.1;
+    background:  #f9e79f;
+}
+/* tức là 1 thẻ được gán class này để hiện thị ra thì thời gian hiển thị mất 300ms mới có đc toàn bộ, đi từ opacity 
+//hiện tại cho đến khi opacity = 0.1 Nếu chưa hiện gì cả thì tức đi từ opac = 0 đến 0.1 */
+
+.example-enter .example-enter-active {
+    opacity: 1;
+    background:  #eafaf1 ;
+    transition: opacity 300ms ease-in;
+}
+
+.example-enter-done {
+    opacity: 1;
+    background:  #eafaf1 ;
+    transition: opacity 300ms ease-in;
+}
+
+.example-exit {
+    opacity: 1;
+    transition: opacity 900ms ease-in;
+    background:  #fdebd0 ;
+}
+
+.example-exit .example-exit-active {
+    /* opacity: 0.5; */
+    background:  white ;
+}
+
+.example-exit-done {
+    opacity: 1;
+    background:  white;
+}
+
+.appear {
+    opacity: 0;
+}
+
+.appearDone{
+    opacity: 0.5;
+}
+
+.appearActive{
+    opacity: 1;
+    transition: opacity 5000ms ease-in;
+}
+/* lần appear đầu tiên opacity từ 0->1 mất 500ms */
+.my-div {
+    border: 1px solid blue;
+    width: 350px;
+    height: 150px;
+    padding: 5px;
+}
+
+.my-message {
+    font-style: italic;
+    color: blue;
+}
+
+.my-highlight  {
+    color: red;
+}
