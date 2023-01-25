@@ -166,7 +166,7 @@ style={{ isActive } => ({
 
 
 # Dùng lazy loading
-Phải dùng đến: React.lazy, React.Suspense
+Phải dùng đến: React.lazy, React.Suspense => 2 cái này là của React thuần
 
 Cơ chế đơn giản: tách component ra file riêng -> nơi nào cần dùng thì import bằng React.lazy -> Hiển thị component như bth nhưng bao ngoài nó bằng React.Suspense. Chỉ khi nào nó thực sự cần hiển thị ra thì file đó mới được chạy
 

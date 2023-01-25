@@ -56,6 +56,8 @@ Tool giúp code React nhưng sinh ra ứng dụng desktop. Khác với Electron(
 => Mở tab components -> settings -> highlight updates
 Tool này giúp tìm các components render thừa
 
+Có thể dùng tool này để đổi state của component trực tiếp
+
 
 
 # Dùng ReactAdmin

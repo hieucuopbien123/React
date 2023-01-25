@@ -38,7 +38,17 @@ Phiên bản chuẩn bh là dùng redux toolkit để thao tác với reducer v�
 
 --> Dùng useDispatch
  
---> Dùng useSelector: có thể thêm shallowEqual của react-redux làm đối số 2 thì dù cùng giá trị nhưng khác tham chiếu thì đã rerender r, thực tế ta muốn hạn chế rerender nhất có thể nên để mặc định nó coi như ss ===
+--> Dùng useSelector: có thể thêm shallowEqual của react-redux làm đối số 2 thì dù cùng giá trị nhưng khác tham chiếu vẫn k rerender, thông thường ta dùng mặc định nó coi như ss ===
+
+Tức là thông thường ta muốn rerender ít nhất có thể khi data k thay đổi thì dùng thêm shallowEqual sẽ tốt hơn. VD:
+const result = useSelector((state) => {
+  return { a: state.foo.bar, b: state.baz.boo }
+})
+=> Nếu dùng bth thì mỗi lần chạy nó sẽ coi như tạo ra 1 object mới và rerender dẫn đến render vô tận vì nó thấy reference khác nhau(useSelector sẽ giữ nguyên biến và chạy bên trong). Nhưng nếu ta thêm shallowEqual, nó chỉ ss nông giá trị và k rerender.
+=> Thực tế ta chỉ dùng useSelector với state lấy từ redux chứ kbh tạo 1 object mới như này nên dùng bth và dùng shallowEqual đều như nhau.
+
+Nên dùng ?. mọi lúc VD 1 component fetch data và fetch xong thì bên trong nó useSelector render ra. Nhưng chạy lần đầu chưa có gì mà ta select lấy trường của object k tồn tại gây lỗi. Vc dùng ?. sẽ ngăn điều đó, kết hợp ?: khi render để đảm bảo chuẩn
+=> refer tới "Projects / Tinkerbellgarden"
 
 
 
@@ -97,6 +107,13 @@ Logic tạo đơn giản: tạo store nhét reducer và middleware vào, nhét s
 -> Bản mới dùng slice với createAsyncThunk: là chuẩn nhất vì nó tích hợp sẵn thunk
 createSlice, createAsyncThunk, createDraftSafeSelector, configureStore
 => Bản mới dùng createSlice thay cho cả 2 cái createAction và createReducer. Nó có nhiều điểm lợi VD nếu dùng createReducer thì phải return 1 object chứa state cũ nhưng nếu dùng reducer trong createSlice thì ta có thể làm dưới dạng function để xử lý gán trực tiếp, chỉ cần sửa cái nào đổi. Và cũng dùng thêm selector để chọn state cho tiện
+
+--> Khi fetch API với createAsyncThunk mà return trực tiếp response luôn sẽ bị lỗi non-serialize. Bởi vì redux nó k tự gán các object lấy trực tiếp từ server. Ta phải return data tách từ response ra mới được
+
+--> Bắt lỗi khi dùng createAsyncThunk: unwrap và rejectWithValue
+=> refer tới "Projects / Tinkerbellgarden"
+
+Cái extraReducer có 2 loại fulfilled và rejected mục đích dùng để update data state trong slice là chính.
 
 Thực ra vẫn có thể dùng gọi async với reducers mà k cần thunk và extraReducer
 => refer tới "Projects / Setup / setup react mui web3 full"
@@ -213,6 +230,11 @@ const store = configureStore({
 })
 => tức là ta vẫn dùng các middleware mặc định xong còn dùng thêm middleware khác nx. Ở đây là có cả redux-thunk lẫn customMiddleware luôn
 
+--> Dùng middleware tránh lỗi non-serialize
+middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false}),
+=> giúp tránh lỗi non-serialize xàm lol của redux toolkit
+=> refer tới "Projects / Tinkerbellgarden"
+
 --> Có thể import store ở bất cứ đâu để dispatch action vì useDispatch của react-redux là 1 hook thì chỉ dùng được ở trong 1 component còn ở đây là ta đang ở bất cứ 1 file js nào
 => refer tới "Projects / Setup / setup react mui web3 full"
 
@@ -221,6 +243,8 @@ Trong redux toolkit có 2 hàm createDraftSafeSelector và createSelector. Thự
 createSelector giúp giải quyết vấn đề: giả sử redux có nhiều thứ cần lấy về ta xử lý khác nhau. Vd 1 trường user của data lấy về ta có thể dùng nó trong nhiều component và mỗi component lại lấy 1 kiểu riêng VD ô này thì lấy id của trường user, ô kia thì lấy age của user xong bên trong còn xử lý phức tạp nx. Thế thì mỗi khi user được update, tất cả công đoạn tính toán đều phải thực hiện lại. Hàm createSelector sẽ so sánh sự thay đổi nếu tham số cũ khác tham số mới thì mới thực hiện lại. Từ đó tốc độ tối ưu hơn.
 createDraftSafeSelector và createSelector có cú pháp y hệt nhau. Nhưng createDraftSafeSelector sẽ bắt sự thay đổi trực tiếp trong quá trình tốt hơn là createSelector. VD ở trong reducer mà ta dùng createSelector thì nó không đổi gì hết còn dùng createDraftSafeSelector thì nó đổi theo thời gian thực luôn
 import { createSelector } from 'reselect'; và createSelector này cũng có sẵn trong redux-toolkit
+
+Trong createDraftSaftSelector nó là readonly, muốn edit giá trị để return ra biến mới phải tạo biến temp mới
 
 Hàm selector ta cứ hiểu là kể cả input thay đổi nhưng nó xử lý xong ra data vẫn k đổi thì vẫn k render lại. Do đó nó tăng performance => chỉ dùng createDraftSafeSelector khi cần process dữ liệu. Các dữ liệu tiềm tàng sự thay đổi hay k chứ front-end vẫn có thể xử lý thêm data những thứ khác.
 Khi lấy data về ta sẽ check sự tồn tại nhưng nếu data chắc chắn tồn tại thì ta k cần check vì có những data bắt buộc phải có thì mới lấy được như v.

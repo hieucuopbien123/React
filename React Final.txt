@@ -1,0 +1,74 @@
+-> Phân biệt:
+Import là thêm 1 module bất đồng bộ, còn require là thêm theo thứ tự
+Load script defer và async khác nhau
+
+
+
+-> Cách tối ưu hóa 1 ứng dụng React:
+--> Code splitting: có 2 PP hiện thực hóa
+Khi load trang web thì browser phải tải các file js html css của trang đó về. Với html bình thường sẽ import nap từng file module, thư viện. Với React nó tự bundle lại thành các file bundle.js rất gọn và gửi tới trình duyệt. Kỹ thuật code splitting được sử dụng ở đây là việc tách ứng dụng thành 2 phần: chỉ load phần bundle cần thiết để khởi động và các phần khác được load sau khi ứng dụng đã được chạy.
+Chú ý vite nhanh hơn React ở ngay bước bundle khi nó chia ra làm 2 phần xử lý riêng. Còn code splitting ở đây là hỗ trợ chung của React. 
+=> Vấn đề xuất hiện khi dự án lớn làm các file bundle to ra, tới 40-50 MB mà mỗi lần vào web trước khi chạy đều phải load cả cục đó sẽ rất lâu, phải load xong rồi mới thực hiện làm tươi nhét vào root của html của React. 
+1) Dynamic import: 
+1 file chỉ được import khi cần dùng đến chức năng bên trong, import ra 1 Promise để gọi hàm.
+Tính chất có thể test với HTML thuần: 
+- File html script tới file a.js, bên trong import bình thường tới file b.js => mở trình duyệt vào web, nó load cả 2 file a và b. Nếu file a dynamic import file b thì mở trình duyệt nó chỉ load file a, khi gọi hàm cần dùng đến hàm file b thông qua dynamic import, trình duyệt mới request tải tiếp file b.js => xem trong tab network
+- Trình duyệt tự tối ưu tải file chỉ 1 lần. VD n lần dynamic import sẽ chỉ load 1 lần file js đó. VD vừa import bth, vừa dynamic import thì nó import bth xong khi load web sẽ k import lại ở bất cứ lần nào khác.
+
+Ở trong React cũng tương tự nhưng React sẽ code split file bundle. Bth nó optimize tất cả module thành các file bundle.js nhưng khi dùng dynamic import, các phần đó được React tách riêng ra k cho vào file bundle chung (được load khi tải web lần đầu) và các file js đó chỉ load khi cần dùng đến. Nó hoạt động cả với CSR và SSR
+
+2) Lazy loading:
+Cơ chế y hệt như trên nhưng sẽ là các file component của từng page. Component đó cũng chỉ đang nói tới file jsx mà cũng được babel compile ra js và webpack nhét vào bundle, nhưng h nó tách riêng để code splitting chứ cũng k cho vào file bundle chung (được load khi tải web lần đầu)
+
+=> Thực tế, tối ưu bằng code spliting chỉ đạt hiệu quả nếu ta split được các file lớn nên lazy loading được dùng rất nhiều do 1 page có thể load cần rất nhiều file js. Còn dynamic import ít dùng hơn, thg dùng khi cần import cả 1 thư viện lớn chẳng hạn nhưng sẽ rất phiền nếu bất cứ khi nào gọi hàm thư viện đó cũng phải viết dynamic import. 
+
+--> Tối ưu bằng các hook useCallback, useMemo
+
+--> Virtualize long list: khi có list data lớn ta nên chia ra fetch từng phần nhỏ chứ k fetch 1 lúc tất cả. Có 2 thư viện hay dùng hỗ trợ là react-window và react-virtualized
+
+--> Khi dùng với class component nên dùng React.PureComponent: 
+Vì React.Component có hàm shouldComponentUpdate luôn trả ra true, tức là component luôn render lại khi có mọi sự thay đổi, dẫn đến 1 số lúc render thừa. Ta có thể fix lại băng cách check nextState.data và this.state.data mà trùng nhau thì k cần render lại làm gì.
+Và điều này là mặc định có sẵn luôn trong React.PureComponent, nó tự động ss nông state trước và sau, dùng nó thì ta sẽ kp viết gì khác thêm.
+
+--> Dùng reselect selector:
+Thực chất ta luôn thực hiện điều này khi dùng redux toolkit. 
+useSelector của react-redux giúp lấy data từ redux store kèm với việc tiền xử lý data trước khi sử dụng. Nhưng nó sẽ luôn được chạy khi component render lại, mỗi lần chạy nó so sánh === để check data có thay đổi k. Bình thường thì k đáng kể nhưng nếu truyền vào hàm xử lý data mà logic phức tạp thì mỗi lần rerender sẽ thực hiện hàm selector tốn tg. 
+Fix bằng cách dùng createSelector của thư viện reselect rồi chỉ cần useSelector nó là được. Thư viện này có tác dụng so sánh data và nếu giống nhau, nó sẽ trả về giá trị trước đó làm cho reference y hệt. Mà useSelector ss === thấy y hệt sẽ k cần chạy lại logic trong hàm nữa => Nó lợi hơn ở công đoạn giúp bỏ qua logic trong hàm useSelector phức tạp.
+
+--> Tối ưu hóa bằng immutable: 
+Tính bất biến của dữ liệu giúp chương trình dễ dự đoán và ít lỗi, 1 số TH còn giúp tăng hiệu suất nên luôn được khuyến khích viết code theo hướng đó.
+Các thư viện như redux có sẵn điều đó, nếu cần đổi giá trị của immutable object thì dùng immer, immutable
+=> ref tới "Tổng kết module JS / # Immutability code"
+
+--> Virtualize long list: khi hiển thị 1 list dài, chỉ fetch khi cần hiển thị ra, kiểu scroll tới đâu fetch tới đó. Nó cũng giống như kiểu chỉ refetch khi stale vậy.
+
+
+
+-> Sort array trong react
+Array có thể là read only thì mọi thao tác cần thay đổi array phải copy nó rồi mới được thực hiện. Cách copy nhanh nhất là: array.slice().<thao tác thoải mái>
+
+
+
+-> Dùng debounce throttle
+--> Dùng throttle: Giới hạn số lần gọi hàm trong 1 ktg. VD ta có thể set là "Bất cứ 10s liên tiếp nào cũng k có quá 100 lần gọi hàm này"
+VD: khi đổi kích thước màn hình or scroll thì chạy hàm gì đó nhưng các sự kiện đó thg được tự trigger quá nhiều, dùng throttle đảm bảo nó vẫn chạy như v nhưng trigger ít hơn, giảm lag
+VD: thg dung trong game khi người dùng ấn bắn chiêu nhanh đến mấy thì vẫn bắn 1s 1 phát đạn chẳng hạn
+
+--> Dùng debounce: Event chỉ được gọi 1 lần sau 1 ktg cố định kể từ khi lần trigger mới nhất. Tức trigger liên tục 1 event quá nhanh sẽ chỉ gọi 1 lần ở cuối
+VD: tính năng search gõ liên tục sẽ chỉ tự thực hiện search sau khi gõ xong
+
+=> Có thể implement bằng JS thuần, dùng thư viện lodash, underscore.
+VD dùng lodash chỉ đơn giản là thay hàm bình thường thành _.debounce(hàm đó mà thôi)
+$("body").on('scroll', _.throttle(function() {
+  // lại code logic vào đây
+}, 100));
+
+$("body").on('scroll', _.debounce(function() {
+  // lại code logic vào đây
+}, 100));
+
+=> ref tới "Projects / MoveWorld"
+
+Trong react phải cho hàm vào useCallback or useRef vì nếu không thì mỗi lần render sẽ khai báo ra 1 hàm mới thì tất cả sẽ được gọi.
+
+

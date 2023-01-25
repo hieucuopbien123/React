@@ -103,6 +103,8 @@ CSV là kiểu file chuyên biểu diễn data. Trong DMaML nó thg dùng biểu
 Ta có thể chỉnh rotation cho title
 Highchart cũng có cách dùng responsive cũng như loading riêng. Loading ta phải dùng theo nó chứ k được dùng loading của ta k sẽ lỗi
 
+Data truyền cho chart phải được sort theo trình tự trục ngang?
+
 
 
 # Thư viện react-rainbow-component
@@ -153,8 +155,32 @@ npm i cross-env -> trong các câu lệnh script của package.json ta có thể
 => cross-env thường dùng khi cần dùng giá trị biến khác nhau giữa các môi trường, mỗi lệnh chạy truyền giá trị khác nhau. Chỉ nên truyền max 2-3 biến thôi
 
 -> Có sẵn
-Trong React có sẵn biến môi trường bằng cách khởi tạo có tiền tố REACT_APP_<tên biến> trong file .env -> dùng trực tiếp với process.env
+Trong React create-react-app có sẵn biến môi trường bằng cách khởi tạo có tiền tố REACT_APP_<tên biến> trong file .env -> dùng trực tiếp với process.env
 => 1 dự án React bth chỉ cần dùng cách này với cross-env là đủ
+
+Trong React tạo bằng vite dùng biến môi trương vói VITE_<tên biến> -> dùng trực tiếp import.meta.env.VITE_<tên biến>
+
+-> Nếu dùng với webpack: webpack là build tool chính mà các dự án ReactJS đều dùng như create-react-app hay react-boilerpalte hay khi ta muốn build 1 manual project. webpack có thể làm nhiều thứ và bao gồm cả đọc biến MT từ file .env => npm i dotenv-webpack --save-dev => import dùng nó trong webpack config
+// webpack.config.js
+const Dotenv = require('dotenv-webpack');
+module.exports = {
+  ...
+  plugins: [
+    new Dotenv({
+        path: './some.other.env' // default is .env
+    })
+  ]
+  ...
+};
+=> r dùng bth process.env.KEY_NAME trong dự án. 
+
+-> Thêm:
+.env
+.env.production
+.env.staging
+vào .gitignore để bỏ qua
+các file .env.production và .env.staging là thứ giúp tường minh về file name kiểu tạo ra file .env cho từng môi trường khác nhau => Thực tế, ta đổi nd file .env tùy MT khác nhau or nếu nhiều biến thì tạo file JS chạy if else cho từng môi trường. Lấy loại môi trường chỉ 1 key duy nhất từ .env mà thôi
+=> refer tới "Project" mọi dự án của trava
 
 -> Dùng dotenv
 Tạo .env và khai báo các biến thoải mái
@@ -170,7 +196,7 @@ CommonJS: gọi require("dotenv").config() sớm nhất có thể
 
 
 # Dùng các thư viện chức năng
--> Dùng react-intl: thư viện giúp format số và chữ
+-> Dùng react-intl: thư viện giúp format số và chữ => refer tới "Projects / Tinkerbellgarden"
 
 -> animate.css: thư viện animation nhanh dưới dạng css
 
@@ -192,6 +218,10 @@ TextCopyButton.propTypes = {
     ...IconButton.propTypes,
     //other props
 } rồi truyền vào IconButton bên trong TextCopyButton là {...rest} sau khi tách ra các thành phần: const { text, tooltipTitle, ...rest } = props;
+
+--> Phân biệt PropTypes.node và PropTypes.any:
+PropTypes.node có thể là bất cứ value nào có thể render được trên screen như số, chữ
+PropTypes.any có thể là bất cứ thứ gì
 
 -> react-device-detect: thư viện giúp lấy loại device hiện tại
 
@@ -256,8 +286,54 @@ Dùng kết hợp với keyframes của @emotions/react để custom animation, 
 -> react-hook-form: xử lý form, tương tự formik. Nó còn có tool generate code luôn.
 
 -> Dùng formik: thư viện xử lý form
+=> refer tới "Tổng kết dùng formik"
+
+-> react-qr-reader: thư viện giúp quay camera QR
+
+Cái QRScan của react-qr-reader dùng phiên bản cũ nhưng nó auto bật cam khi được render nên ta phải check 1 biến boolean isOpen để khi nào false sẽ k render nó ra thì k bật cam
+=> refer tới "Projects / Tinkerbellgarden"
+
+-> react-animation-on-scroll: animation xuất hiện chỉ khi scroll tới
+=> refer tới "Projects / Tinkerbellgarden"
+
+-> x-react-flipclock: tạo FlipClock => bị lỗi nên giờ hạn chế dùng khi cần thời gian hiển thị cực chuẩn
+=> refer tới "Project / Ticket"
+-> @pqina/flip: thư viện tạo Flip Clock chuẩn thay thế hoàn toàn cho x-react-flipclock
+=> refer tới "Projects / Ticket"
+
+-> react-spring: tạo custom animation dưới dạng react hook
+=> refer tới "Projects / Tinkerbellgarden"
+
+
+
+# Tổng kết dùng formik
+Có rất nhiều cách dùng. Khi có 1 form với các trường truyền vào:
+--> C1: Dùng useFormik
+Khởi tạo initialValues, validate, onSubmit. 
+Hàm validate được gọi mỗi khi data của formik được update. Trong hàm này có thể check đk và return ra biến errors, biến này có thể truy xuất với formik.errors, có thể return ra 1 object ứng với lỗi từng trường để làm error helper text. Còn có formik.touched để truy cập xem trường nào đã từng được thao tác lần đầu chưa. VD ta set cả onBlur và onChange thì mỗi khi change hoặc click vào r ra ngoài hoặc submit cái field chứa trường đó thì formik.touched.<trường đó> sẽ trả về true. Thg kết hợp với formik.errors, chưa set gì thì cả 2 trường đều là undefined. VD: Để làm kiểu ấn vào trường a r ấn ra ngoài, bth nó sẽ chạy vào validate và set errors cho cả 2 trường a và b vì chưa nhập gì cả, nhưng ta chỉ muốn error trường b thôi thì thêm formik.touched cho b để đảm bảo 1 input chỉ báo lỗi nếu đã tương tác với nó r và giá trị bị sai.
+Có thể truy xuất giá trị bất cứ đâu với formik.values, còn formik.isValid trả ra true nếu hàm validate return ra object rỗng, thực tế giá trị này rất hay ở chỗ nó formik.isValid ban đầu vào nó luôn trả ra true nếu ta chưa set gì cả, từ đó lợi dụng để ban đầu vào thì button enabled, khi ấn vào mới hiện ra các trường required cần dùng
+Trong các hàm validate hay hàm định nghĩa trong onSubmit có thể nhận values tự động
+Để update có hàm formik.setFieldValue("<field>", <value>) hoặc trong onChange có thể dùng formik.handleChange nhận vào biến e là input có trường đó tự động gọi e.target.value, thực tế ta có thể custom event bằng cách truyền vào {target: {name: "<tên trường>", value: <giá trị>}} => cũng nên bắt cả onBlur={formik.handleBlur} => mọi hàm khi gọi từ formik như change với blue đều chạy vào validate kiểm tra lỗi hết
+Submit form với formik.submitForm(e) và reset form với formik.resetForm()
+=> Có 1 vài điều đặc biệt về formik là: Nó xử lý render tối ưu khi giá trị thay đổi chứ k render lại cả form; Các hàm như setFieldValues hay handleChange trong formik tự là hàm bất đồng bộ, tức ta có thể chủ động thêm async await nếu muốn chờ nó đi xuống rồi mới làm gì đó nhưng làm v k tốt vì giai đoạn nhập có thể bị lag.
+
+=> Vấn đề lỗi: Giá trị khi ta gọi hàm handleChange chẳng hạn thì nó sẽ update bất đồng bộ nên ở phía dưới ta sẽ k thể sử dụng ngay formik.values mà chỉ có thể thao tác với e.target.value; Dù nó thực hiện bất đồng bộ nhưng nếu 1 trường được update 2 lần liên tiếp, ta sẽ k cần lo giá trị trước được update sau giá trị sau gây TH update sai mà cùng 1 trường nó sẽ tự động kết thúc cái cũ để set cái mới.
+Từ đó dẫn đến usecase gây lỗi: 
+Nếu ta muốn set giá trị trường a, sau đó trường b trong formik cũng tự thay đổi phụ thuộc vào a, ngược lại trường a cũng tự thay đổi phụ thuộc vào trường b. Do chỉ làm 1 lần nên k thể dùng useEffect cho 2 cái để tránh quay vòng vô tận. Nếu mỗi khi gõ giá trị a vào thì formik.handleChange(e) cho biến a rồi bên dưới cập nhập b phụ thuộc vào a thì ok. Tức là giá trị của a và b nhập vào luôn chuẩn và cũng nhanh vì bất đồng bộ, nhưng error bị sai. VD trong validate ta check a k có thì báo lỗi a, b k có thì báo lỗi b là "Required". Đổi a, đổi b ngay, a chạy qua validate thấy ok nhưng giá trị chưa update, b chạy qua validate lúc này lại thấy a chưa update nên báo lỗi lưu vào formik.errors.a, b có rồi nên thôi, về sau nó update xong a cũng k gọi lại validate nên kết thúc thì trường a và b được field nhưng formik.errors.a vẫn báo lỗi dù ng dùng nhập đúng. Để fix nếu gặp TH nhập bị phụ thuộc như này thì:
+1) Dùng async await nhưng có thể sẽ lag
+2) Dùng debounce, cập nhập giá trị sau khoảng 500ms chẳng hạn vì tưng đó là đủ để trường được update
+
+=> refer tới "Projects / Tinkerbellgarden" "Projects / Trade"
+
+=> Kiến trúc thg dùng để thực hiện nó: 
+Formik luôn lưu giá trị dạng chuẩn. VD: dãy số 1234.12 là 1 số float mà người dùng muốn truyền. Khi gọi hàm submit có thể phải xử lý số float này để truyền tới server nếu cần. VD: làm tròn thành 1234 r truyền 
+Thẻ input lưu giá trị chuẩn show ra cho người dùng thấy. VD format thành 1,234.12 r nhét vào input
+Tức là người dùng gọi onChange sẽ chạy 1 hàm update vào formik, đồng thời format vào 1 biến khác truyền vào trường value để hiển thị, customize mọi thứ, k nhất thiết phải truyền formik.values vào trường value của thẻ
+
 --> C1: Dùng Formik + FastField truyền vào component input + trường name trùng tên với trường giá trị => formik đã làm giúp ta onChange các thứ rồi. Trừ TH nhập input mà k bắn ra event mà bắn ra giá trị VD khi custom thì phải dùng form.setFieldValue, còn không thì field.onChange dùng event là có tự động
---> C2: Làm tất cả mọi thứ như bth nhưng dùng useFormik để pass mọi thứ cho các component input là xong
+Có Formik, FastField, Form, ErrorMessage. 
+
+=> Cách này vẫn mang các điểm lợi của formik như render độc lập nhưng ít dùng hơn.
 
 
 
@@ -270,26 +346,120 @@ Dùng kết hợp với keyframes của @emotions/react để custom animation, 
 
 
 # Pattern fetch API redux loading
--> Component chính useEffect gọi hàm fetch API với [] => có thể dùng pattern với Suspense throw promise để tối ưu fetch hơn nữa
-Hàm fetch API trong createAsyncThunk gọi Promise.all mọi hàm fetch data cần dùng khi truy thấy component ở lần đầu tiên với axios
-Slice xử lý hàm đó 3 trạng thái gán cho biến fetchingStatus: pending là FETCHING, fulfilled thì check nếu không FAIL thì SUCESS và gán data. Với từng hàm con thì gán fetchingStatus là FAIL nếu thất bại và reset lại state, fullfilled thì gán data.
-Trong component chính check nếu fetchingStatus INITIAL or FETCHING thì loading, FAIL thì hiện trang báo lỗi, thành công thi hiển thị mọi thứ
-=> Tức ta tái sử dụng các hàm fetch con bằng cách gọi promise all nó trong hàm fetch tổng, về sau nếu làm cái gì gọi hàm fetch con mà bị lỗi thì component lớn bên ngoài vẫn hiện trang báo lỗi. Còn loading thì chỉ cần nếu centralized server với lượng data lớn mới cần
+Có nhiều vấn đề, nhiều pattern có thể dùng
 
-Khi từng component nhỏ bên trong ta fetch API đơn lẻ từ server tập trung thì tốc độ rất nhanh, k cần xử lý loading mà cho lag hiện ra luôn. Còn component fetch data từ web3 hoặc fetch API từ server nhưng lượng data lớn có thể gây lag lâu thì dùng loading
-1 quy trình thông thường là tạo hàm async ở trong redux xử lý 3 TT và gọi trong component action và hiển thị ra ở component show. Trong đó component action và show đều check nếu pending bằng true thì action k cho thực hiện và show sẽ hiện loading. Có data sẽ trở về bth
+-> 1 component lớn bao ngoài gọi dùng useEffect gọi hàm fetch API với [], component lớn này sẽ gọi Promise.all, bên trong gọi các hàm fetch data cần cho con chỉ khi render component lần đầu tiên với axios. 
+Thường thì bên trong thao tác gì cần update con thì ta có thể gọi fetch lại các hàm con sau khi thực hiện xong, ở đây chỉ đơn giản là tái sử dụng gọi các hàm con trong Promise all; 
+Thường dùng với fetchingStatus redux và loading cho cả trang ở case này
+=> Có thể dùng pattern với Suspense throw promise để tối ưu fetch hơn nữa.
+=> Kiểu trên thg dùng fetch data có quan hệ trong nhiều component dùng nó, vì nếu chỉ 1 component con dùng độc lập thì nên fetch trong con thôi
 
+Component lớn cũng cần xử lý xác thực tài khoản localStorage cũng như các thứ cần dùng mặc định khi vào trang web mà cần lấy từ database
+
+=> refer tới "Projects / Tinkerbellgarden"
 => refer tới "Projects / Leaderboard trava / Leaderboard Basic / TravaArmoury"
 
--> TH trên dùng global redux loading, trong nhiều TH khác, VD như khi component hiển thị chỉ trong phạm vi 1 component ta có thể dùng biến useState loading trong component đó chứ kp loading cho cả trang. Component đó có thể có các con ok vì chỉ cần truyền biến loading vào props cho các con, thường thì case này sẽ dùng skeleton chứ k dùng spinner
+-> Với các component dùng data độc lập có thể fetch ngay trong useEffect của từng component riêng lẻ trong trang.
+
+-> Với các component page k quá lớn, có thể dùng useState loading và truyền biến loading vào các component con
+
+-> Với các component page lớn hoặc fetching data mà nhiều component xa nhau dùng loading, ta nên dùng fetchingStatus trong redux để tất cả cùng lấy. Nhưng kiểu này phải dùng khi component thực sự lớn vì chỉ nên có 1 fetchingStatus trong toàn bộ slice, chỉ dùng khi fetch 1 phần lớn data của slice mà thôi.
+
+Slice xử lý hàm thunk 3 trạng thái gán cho biến fetchingStatus: pending là FETCHING, fulfilled thì check nếu không FAIL thì SUCESS và gán data. Với từng hàm con thì gán fetchingStatus là FAIL nếu thất bại và reset lại state, fullfilled thì gán data.
+Trong component chính check nếu fetchingStatus INITIAL or FETCHING thì loading, FAIL thì hiện trang báo lỗi, thành công thi hiển thị mọi thứ.
+
+Cái fetchingStatus là FAIL thực ra thg chỉ dùng khi fetch lần đầu tiên. VD cái fetching lần đầu tiên mà lỗi là ta bắt fetchingStatus là FAIL và in ra thông báo lỗi cho người dùng(lưu trong redux) để tránh trang web nó trắng tinh hay đỏ lòm. Còn các thao tác khác mà có lỗi thì mới bắt và hiển thị notification như enqueueSnackbar ra
+
+-> Thường thì dùng skeleton or loading spinner ở vùng data cần fetch trong các TH bình thường. 
+Nếu data fetch nhanh, kể cả web3 mà độ delay k cao thì cách code nhanh nhất là cứ hiển thị giá trị mặc định, khi nào fetch xong thì tự nhảy thành giá trị mới chuẩn luôn là xong.
+Khi dùng skeleton nên tạo ra 1 class wrapper trung gian fetch data và check nếu có thì hiển thị, k thì hiển thị skeleton or loading.
 => refer tới "Projects / Trava Auction"
 
--> Pattern thường dùng là vào page dùng data nào thì fetch data đó, nếu data đó k thay đổi nhiều và lớn thì có thể check nếu null thì mới phải fetch lại or đúng hơn là stale mới fetch lại
+Chỉ dùng loading cho cả trang khi các phần data là cần thiết liên quan đến nhau như case Promise all, fetch 1 lượng lớn data cho cả trang và số data này ảnh hưởng đến các chức năng trong trang. Lượng lớn data như v dùng skeleton sẽ phải loading rất skeleton rất lâu nếu dùng.
 
--> Pattern trên có thể k đúng với 1 số component có sẵn vc hiển thị loading
+Còn 1 case nữa là hiện error cho người dùng. Thường thì ta xử lý hết case fetch kbh để có error, nhưng nếu có TH cần báo error thì:
+fetchingStatus trong redux có trạng thái FAIL sẽ bắt và in cả trang lỗi
+useState loading thg chỉ xem có load hay không, còn data lỗi không tồn tại thì in ra giá trị mặc định kiểu N/A or ""
+
+-> Khi từng component nhỏ bên trong ta fetch API đơn lẻ từ server tập trung thì tốc độ rất nhanh, k cần xử lý loading mà có thể cho lag hiện ra luôn(chỉ khi test tốc độ nhanh thực). Còn component fetch data từ web3 hoặc fetch API từ server nhưng lượng data lớn có thể gây lag lâu thì dùng loading như bth.
+
+-> Hiển thị data mới sau khi gọi hàm update có 2 cách:
+Fetch lại data 
+Update thủ công trong redux
+=> Cách nào cũng được nhưng cách 2 ưu tiên hơn trong đa số TH. Nếu data update ở nhiều biến, nhiều slice, hoặc update theo cách rất phức tạp, hoặc data đó động và được thay đổi với tần suất lớn thì nên dùng cách 1 để đảm bảo data chuẩn.
+
+--> Gọi update ở component A nhưng component B bị ảnh hưởng: Bth ta vẫn fetch data dùng trong chính component A, cần xử lý data component B. Đi ưu tiên từ trên xuống. 
+Trước tiên cần xác định component B có thực sự cần update data để người dùng sử dụng không vì nh TH điều này không cần thiết, VD thống kê số liệu lớn là k cần thiết phải update. Nếu thực sự cần udpate:
+
+Lưu ý: Pattern thường dùng là vào page dùng data nào thì fetch data đó. Nhưng nếu data đó lớn, fetch rất lâu thì có thể check nếu null thì mới phải fetch lại or đúng hơn là chỉ fetch lại khi data bị stale. Có thể tạo ra các biến bên ngoài component để check cho việc này. 
+
+---> Với server client bình thường có tốc độ cao. Ta có thể k cần xử lý gì thêm vì hàm update thực hiện nhanh và component khi vào cũng fetch lại nên đảm bảo data hiển thị k stale.
+
+Tuy nhiên vẫn có nhiều case khiến data trong B bị stale và có nhiều cách xử lý:
+- Khi component B ở rất gần và fetch của nó nhanh hơn update 1 chút nên chưa update xong người dùng chuyển sang luôn và nó fetch data về, fetch xong thì mới chạy xong hàm update => Ta gọi luôn hàm fetch cho B ở cuối hàm update để đảm bảo data là chuẩn. Cần giới hạn phạm vi và dùng data fetch k bị trùng vì nếu nhiều component dùng data bị nó ảnh hưởng thì sau này dự án phát triển k thể bao hết các case được.
+- Khi component B fetch data lâu nên ta check if null mới fetch, bh cần fetch lại: 
+Nếu B ở xa thì => có thể dùng hàm forceUpdate với biến needToUpdate ở ngoài component để check thêm trong useEffect. Biến needToFetch cũng có thể dùng là biến redux của từng slice ok.
+Nếu B ở gần mà check if null và fetch lâu thì từ phía component B cần update mà check stale thì rất khó nên phải làm từ phía A => Ta vẫn gọi hàm update bth nhưng cuối hàm đó ở ngoài loading thì thêm 1 cục try catch riêng fetch lại data cho component B. Nếu hàm fetch data đó có fetchingStatus thì component B nhảy bộp phát sang loading, nếu k thì nó nhảy cóc phát luôn => điều này là hoàn toàn perfect về trải nghiệm người dùng. Nhưng nếu update như v vẫn cần đặt giới hạn và hạn chế trùng biến trong redux khi dùng để đảm bảo khi dự án mở rộng, k có thêm biến phụ thuộc vào các biến đã cho vì k thể update bao hết được.
+
+=> refer tới "Projects / Tinkerbellgarden" cái fetch report ở staff và admin ấy
+
+---> Với vc lấy data từ blockchain ta mặc định là lâu:
+Khi dùng web3 người dùng sẽ phải ký trans, đồng nghĩa lúc hiện ra metamask, họ được quyền đi tới bất cứ đâu. Do đó cách forceUpdate + needToUpdate có thể k khả thi trong đa số các TH. 
+
+=> Các cách trên là đủ để cân hầu hết các TH.
+=> refer tới "Projects / Ticket"
+
+-> Pattern trên có thể k đúng với 1 số component có sẵn vc hiển thị loading, khi đó ta nên dùng theo các component đó
 => refer tới "Projects / Leaderboard trava / Leaderboard HighChart"
 
-=> Ncl 5 vđ: dùng loading có sẵn của component, pagination fetch tất cả 1 lúc khi dùng web3 vì k cho filter search, dùng useState loading skeleton/spinner khi chỉ dùng trong phạm vi component kp cả page, lag hiện ra luôn hay có loading với các thứ nhỏ, data lớn + ít đổi thì phải stale mới fetch lại
+=> Ncl 5 vđ: dùng loading có sẵn của component, pagination fetch tất cả 1 lúc khi dùng web3 vì k cho filter search, dùng useState loading skeleton/spinner khi chỉ dùng trong phạm vi component kp cả page, lag hiện ra luôn hay có loading với các thứ nhỏ, data lớn + ít đổi thì phải stale mới fetch lại => rất nh vấn đề
+
+-> Cách đặt đk loading
+Ta set loading true r false trước và sau khi fetch data. Các kiểu condition thg dùng là:
+- Dùng if else bình thường check biến loading thì return luôn chặn ở trước kiểu nếu đang load thì hiện 1 component mới hoàn toàn thay thế component này luôn thì ok. 
+- Dùng toán tử 3 ngôi:
+{loading ? <component loader icon> : <component gốc>} => tương tự khi chỉ muốn làm với 1 vài component bên trong thì từng phần ta cũng dùng toán tử 3 ngôi.
+
+Đôi khi ta muốn làm kiểu component gốc nếu k có data sẽ hiển thị kiểu làm mặc định, thì k cần biến loading làm gì nhưng chỉ khi fetch nhanh thôi
+
+--> TH lỗi: occho kbh làm nv
+<in component gốc bình thường>
+{loading && <loader comp>}
+=> Kiểu ta muốn component gốc khi k có data sẽ rỗng k có gì thì hiển thị loading, khi có data rồi mới tắt loading đi. Làm như trên k tốt vì độ trễ giữa việc data trong redux update và setLoading là false sẽ làm data hiện ra kèm thanh loading. 
+Nếu fix kiểu:
+{loading && <in component gốc bình thường>}
+{loading && <loader comp>}
+=> vẫn k tốt vì data lấy về k hiện ra ngay mà chờ loading
+Cách fix ổn là: 
+<in component gốc bình thường>
+{<check trực tiếp comp gốc k có data> && <loader comp>}
+=> Nhưng chung quy lại đừng bh để rơi vào TH xàm này mà dùng 2 cách đầu thôi
+
+-> Khi nào nên fetch: 
+--> Với data fetch tốc độ cao thì mỗi lần vào đều fetch lại đi 
+--> Với các data lớn mà vc fetch lại nh lần làm ảnh hưởng performace => chỉ nên fetch data khi data chưa có or bị stale
+
+=> refer tới "Projects / Tinkerbellgarden"
+=> refer tới "Projects / Ticket"
+
+-> Khi dùng tab
+Thực tế trong react, Vd ta có 1 tablist và render component A, ta chuyển tab khác cho render component B, sau đó lại chuyển về component A thì component A lúc chuyển đã bị xóa hết mọi useEffect và useState, mọi biến đều bị xóa trừ các biến global trong redux mà nó dùng. Mỗi lần component đó được render là quy trình lại chạy lại như v
+Thực tế điều này y hệt như việc chuyển page, chuyển router sẽ fetch lại nhưng do là tab nên nó có thể được chuyển nhiều lần và nhanh. Ta cứ perform y hệt như chuyển page thôi nhưng sẽ k loading lại tất cả mà chỉ spinner phần cần fetch. Nếu vc fetch data qua lại từng tab lâu thì có thể fetch ngay từ global lưu vào redux để đỡ fetch lại
+=> refer tới "Projects / Tinkerbellgarden"
+
+-> Với các data quá hot, có nhiều người dùng thì ta nên tìm cách fetch liên tục thay vì update thủ công lên redux. VD người dùng thao tác với 1 data mà nó bị người khác làm trước r thì ta sẽ in ra lỗi, nhưng với các data được thay đổi liên tục rất hay bị như v vì hàng ngon người khác sẽ tranh nhau vồ, khi đó hàm báo lỗi có thể cũng cần phải fetch lại. 
+Dù vc đổi trực tiếp redux cho tăng trải nghiệm người dùng về tốc độ nhưng cần chú trọng về nhiều thú khác như dữ liệu đồng bộ các thứ hơn là chỉ chăm chăm vào tốc độ vì khi hoạt động sai thì phải refresh lại page thì càng làm chậm hơn.
+=> refer tói "Projects / Tinkerbellgarden"
+
+Thực tế PP để update data luôn là mới nhất là phải subscribe sự kiện mà điều này quá phức tạp và gây lag cho 1 ứng dụng nhỏ. 
+
+Tuy nhiên data fetch lại có thể gây chậm. VD ta edit or delete 1 data trong mảng data fetch về từ server thì nó cứ đơ hoài mãi k xong. Thực tế để đảm bảo dữ liệu đồng bộ 100% thì mỗi lần DELETE, ta sẽ GET lại dữ liệu để update dữ liệu trong redux và các component lấy từ đó in ra cho nhanh. Nhưng nếu mỗi lần fetch 1 lượng dữ liệu lớn đặc biệt là khi có thêm ảnh từ 1 middleware khác hay file nhạc hay logic phức tạp hay bất cứ file gì lớn đều làm request chạy rất chậm. Khiến cho hàm delete có thể chạy mãi k xong giảm hiệu suất người dùng. 
+Thực tế GET lại cần thiết trong các ứng dụng cần tương tác với nhiều người và độ chính xác cao như ứng dụng blockchain. VD A delete thì máy của B cũng thấy item A vừa delete biến mất mỗi khi B thao tác với bất cứ 1 cái gì về state của data. Nhưng các ứng dụng bán hàng hay gì khác thì điều này là k cần thiết vì họ đâu cần tương tác với nhau với 1 lượng dữ liệu được thay đổi liên tục đâu. Khi đó A delete x mà B thao tác với x thì B báo lỗi thì B refresh lại trang sẽ mất x là xong và thao tác tiếp như bth. Do tần suất thay đổi data k nhiều nên như v là ok. 
+=> Tùy ứng dụng mà cần áp dụng phương pháp thích hợp
+
+-> Hiển thị lỗi
+Với vc sửa đổi data mà bị lỗi, ta cứ catch error hiển thị thông báo như bth.
+Với vc fetch API GET data mà bị lỗi. Ta chắc chắn k muốn hiển thị màn hình đỏ lòm or lag trắng tinh mà hiển thị page lỗi chuẩn => refer tới "Project / Tinkerbellgarden"
 
 
 
@@ -298,13 +468,21 @@ Ta cần search và filter data theo các trường và các component chỉnh s
 
 Cách làm naive luôn là để 1 component cha chứa hết các trường và truyền cho con. Nếu các trường đó dùng ở nhiều component như v nên để global
 
--> Mỗi lần ấn là fetch: tốc độ fetch nhanh nên k cần xử lý loading, có thể gây lag ở màn hình hiển thị nhưng thao tác của người dùng thì phải k lag
+-> Mỗi lần ấn là fetch: tốc độ fetch nhanh nên k cần xử lý loading, có thể gây lag ở màn hình hiển thị nhưng thao tác của người dùng thì phải k lag. Ta vẫn có thể xử lý chút loading nếu k muốn người dùng tương tác với data quá or quá lag.
 Ta viết redux chứa object config và hàm update biến config
 Hàm createAsyncThunk fetch API dựa vào params truyền vào 
 Component chỉnh sửa sẽ dispatch update vào redux luôn
 Component hiển thị dùng useEffect [config] gọi hàm thunk fetch lại, lấy data từ redux hiển thị ra. Khi gọi hàm fetch lại phải truyền cả config vào thunk từ đầu
 
+Biến config sẽ lưu vào redux, với mảng thì dùng [], với các trường k ảnh hưởng đến số lượng kết quả thì để mặc định, VD: sortBy thì dùng sẵn mặc định là "desc" chẳng hạn
+Giá trị trong initialState là giá trị mặc định bên ngoài lấy được ban đầu. Giá trị mặc định gán trong hàm fetch là giá trị mặc định khi fetch API k gán. 
+
 => refer tới "Projects / Leaderboard trava / Leaderboard Basic / TravaArmoury / ArmouryRegistry"
+=> refer tới "# Request API"
+
+-> fetch tất cả data về rồi lọc gì thì thêm vào url params để tạo custom hook sẽ xử lý lọc và cung ra đúng phần data cần lấy dựa vào các tham số trong url.
+Kiểu này cho tốc độ vô cùng nhanh và hoàn toàn k cần loading gì cả. Nếu dùng server riêng thì nên làm mỗi lần ấn là fetch, còn nếu nó bị lag lâu VD dùng web3 get data lượng lớn về thì nên fetch tất cả r lọc
+=> Nên nhớ url lúc này chỉ là 1 nơi lưu config thôi, đổi url nhưng k gọi request gì cả
 
 
 
@@ -345,6 +523,8 @@ Khi viết các thẻ lồng nhau, để đảm bảo quy tắc trên ta phải 
 Cho thẻ con responsive theo kích thước màn hình, đặc biệt là dùng quan hệ relative cho width với thẻ cha để đảm bảo k dôi ra ngoài cho đến iPhoneSE
 Nếu thẻ con nhất quyết dôi ra ngoài và k thể co nhỏ thì cứ để nó lớn như v, set cho nó 1 cái max-width đến cái mốc nó k thể fit được với màn hình nữa thì wrapper bên ngoài vẫn fit màn hình và hiện scrollbar ngang cho con bên trong. Các element position có bị scroll hay không thì tùy mà dùng position absolute
 
+Chú ý component A mà bao component B xong component B làm gì để component A render lại thì rõ ràng nếu A render lại mà bao gồm B trong đó thì logic xử lý hàm đó ta nên để ở component A.
+
 
 
 # Pattern force reload lại component dù chỉ đổi biến phụ thuộc localStorage
@@ -362,9 +542,11 @@ Có thể dùng makeStyle của MUIv4, styled của MUIv5, css selector thuần 
 
 # Các pattern có sẵn của React
 -> Component A chứa component B, cả 2 cùng useEffect dependencies đến biến x, nếu biến x đổi thì useEffect của cha sẽ thực hiện trước r đến dần các useEffect của con.
-Nếu component A useEffect mà thực hiện chuyển trang khác nên component con k hiện ra nữa thì k chạy useEffect của con nữa.
+Nếu component A useEffect mà thực hiện chuyển trang khác nên component con k hiện ra nữa thì k chạy useEffect của con nữa. 
 
 => refer tới "Projects / BattleHand / index.js của BattleHand"
+
+-> Khi 1 component rerender, nó khởi tạo giá trị mới nhưng là lấy từ vòng trước và cứ thế update lên chứ k quay về mặc định hay gì. Về mặt lý thuyết, khi đã gọi hàm update data thì hàm đó ở vòng cũ sẽ k còn chạy, k có bất cứ cái setTimeout hay useEffect nào mà khi vòng mới chạy, hàm của vòng cũ vẫn chạy cả. Khi đó có thể ta sai ở 1 biến phụ thuộc global, phải đổi sang biến useState xem.
 
 
 
@@ -391,9 +573,132 @@ const [a, setA] = useState(0); thì ta có thể dùng kiểu setA((prev) => { <
 
 
 
+## Các thứ khác đã có ở HTML CSS JS nhưng khác
+
+
+
+# Dùng scroll
+-> Ấn phát là nhảy page scroll tới vị trí nào
+Thêm id cho thẻ muốn nhảy tới -> href đến nó từ thẻ khác
+Với dự án React, đôi khi phải làm thêm 1 việc là thêm thuộc tính scrollBehavior: "smooth" vào thẻ html, với MUI thì có thể thêm trong GlobalStyle(buộc phải là thẻ html mới được) vì các dự án có thể làm mất thuộc tính này của thẻ html. 
+=> refer tới "Projects / Tinkerbellgarden"
+
+
+
+# Hiển thị ảnh
+Mấy cái bức ảnh có hình thù hay hiệu ứng phức tạp thay vì code thuần hãy tạo bằng design chuẩn kích thước r đưa vào sẽ ok hơn. Còn mấy cái màu mè dễ làm hay animation thì dùng css ok. Thỉnh thoảng mới phải dùng gif vì design nó cũng mệt 
+
+Thẻ image nằm trong 1 khối div mà muốn ra giữa thì phải dùng display: block; margin: 0 auto; cho nó vì image là thẻ inline k tính margin này nọ.
+
+-> Thực tế khi ta cho phép người dùng input ảnh để hiển thị, ta k thể expect được ảnh đó có kích thước hay hình dạng như thế nào vì họ có thể cho bức ảnh tỉ lệ vô cùng kệch cỡm
+Do đó có thể chủ động cho họ cut ảnh kiểu avatar
+Hoặc chủ động kéo dãn or cut và lấy center theo tỉ lệ khung fix sẵn sao cho cả khung luôn có ảnh. 
+=> K nên cho kiểu ảnh fit vừa trong khung và sai tỉ lệ nhưng k cut mà lấy chiều dài hơn khiến khung bị trống 1 phần, ban đầu ta tưởng thế là ngon nhưng list ảnh trông sẽ chả ra làm sao cả. 
+=> refer tới "Projects / Tinkerbellgarden" làm cách sai
+
+Để ảnh fix và fit trong 1 cục thì
+<Box style={{width: "300px", height: "300px"}}>
+  <img width="100%" />
+</Box>
+=> K sợ bị méo ảnh và luôn là 300px dọc và ngang dù ta có chỉnh bất cứ phần tử bao ngoài hay co màn hình như nào
+=> Muốn ảnh ép về fit thì height cũng 100% là được và ảnh có thể méo khác ban đầu
+
+Để ảnh biến đổi responsive theo 1 cục thì
+<Grid item xs={12} md={6}>
+  <img width="100%" src={}/>
+</Grid>
+=> ảnh sẽ luôn fit vào Grid vì Grid responsive thì ảnh luôn chiếm đúng vùng ko gian đó
+
+Bản chất là: ảnh nếu nhỏ thì ta để kích thước fix width bằng bao nhiêu trực tiếp trên ảnh. Ảnh mà lớn thì ảnh hưởng khi responsive thì phải cho width nó bằng 100% sẽ luôn fit với thẻ ngoài và chỉnh kích thước thẻ Box bao cái ảnh đó responsive theo bên ngoài, thg là v
+
+-> Đó là TH người dùng input ảnh để hiển thị, nếu ta chủ động hiển thị data của web dạng hiển thị ảnh thì hãy design cho cùng kích thước hết rồi cho tỉ lệ khung luôn trùng với tỉ lệ ảnh là xong.
+K nên để fix cứng kích thước vì còn responsive.
+=> refer tới "Projects / Ticket"
+
+
+
+# Animation trong React
+Animation cơ bản: Animation dựa vào css cơ bản có thể làm kiểu hover thì hiện như nào với css transition, 1 vài attribute sẽ k hoạt động với nó. Các thư viện UI cũng có animation sẵn ở vài component như MUI
+
+Dùng các thẻ HTML có sẵn animation như: marquee
+
+Animation dùng keyframe: có thể perform các animation phức tạp hơn, infinity animation. 
+
+Các thư viện hỗ trợ dùng animation trong 1 vài case cụ thể như: react-burger-menu, react-text-transition, react-snowfall, animate.css, react-animation-on-scroll, @pqina/flip, x-react-flipclock
+
+Animation tạo bằng JS có thể perform dựa vào sự kiện phức tạp hơn css thuần: setTimeout, onMouseEnter, setInterval
+
+Các thư viện hỗ trợ tạo custom animation: react-spring, react-awesome-reveal, react-transition-group, MUI có các component chuyên cho animation có sẵn 
+
+Nâng cao hơn nữa thì có threeJS là thư viện animation 3D cho react 
+
+-> Animation bằng sự kiện:
+Ta dùng if else transition in React gán style, style cũ sẽ tự mất khi style mới được sử dụng
+
+
+
+# Dùng background
+Có nhiều TH thao tác với background: Background ở top page ngay dưới header, Background trong 1 thẻ Box hay trong 1 cái khung nào đó, Background full toàn màn hình luôn cả bức ảnh. Điều kiện đương nhiên là phóng to thu nhỏ ảnh khớp kích thước chèn vào đúng vị trí khung(thg ng ta sẽ design cho ảnh khá chuẩn về tỉ lệ kích thước trước).
+
+-> Trước tiên khi tạo dự án có Header và Footer, ta muốn content của page dù bé đến thế nào thì header cũng nằm ở trên cùng và footer cũng nằm ở dưới cùng. Khi đó ta cần 1 thẻ Box ở trong được set minHeight="calc(100vh - height header - height footer)"
+Cái minHeight ta phải chuẩn tới từng pixel để tránh sai, lúc đó nếu ta muốn có khoảng cách 1 chút ở top, bottom thì phải dùng padding cho thẻ đó chứ k được dùng margin tránh sai 1 số TH. VD 1 thẻ position relative mà có margin thì thẻ position absolute bên trong nó sẽ tính từ phần content bao cả padding chứ k tính từ mốc margin
+
+Ta k nên bao phần content bên trong bằng 1 container mà nên để từng page chủ động làm nó để từng trang đều có thể custom. Vì nhiều lúc cần lùi vào full màn hình nhưng vì cái Container chung đó mà k làm được. Để có full màn hình ở phần đầu có thể dùng position absolute + width 100% + top left 0 ok nhưng nếu ở 1 phần random giữa page mà có bức ảnh full màn thì k làm được.
+
+-> TH1: ta muốn có 1 background image ngay dưới header nhưng làm sao để nó full width màn hình và kéo dài 1 đoạn ở bên dưới, bên trong chứa content trong 1 phạm vi container căn 2 bên.
+Ngay dưới header, ta dùng 1 thẻ relative bao 1 thẻ img absolute full width với height tùy loại nhưng cần chú ý height mà set relative thì phải xem TH điện thoại xoay ngang có height rất nhỏ liệu ổn k. Nhiều lúc phần text quá lớn và xoay ngang điện thoại nó tràn ra ngoài ảnh, có thể chắc chắn hơn bằng cách thêm minHeight cho ảnh và phần Box ít nhất cũng luôn bao đủ content bên trong. 
+Cách này cũng dùng khi image trong 1 khung nào đó thì cx bao khung đó bằng 1 cục relative. Chú ý cả zIndex nữa.
+
+--> Có 2 cách viết:
+1 là 1 cục <img></img> là ảnh background ok và viết content bên dưới và cần đảm bảo kích thước text bằng kích thước ảnh => ít dùng làm background ở ngay dưới Header vì khó căn chỉnh.
+2 là cục <Box className={"background"}> content </Box> dùng background image và viết phần content bên trong
+=> Cả 2 đều dùng position absolute. Để đảm bảo height ảnh bằng height phần text ở mọi kích thước màn hình, ta phải dùng 1 thẻ div có kích thước bằng với background ở bên dưới. 
+=> Ta cũng thường bao phần text bằng 1 Box lớn kích thước bằng ảnh rồi chỉnh flex các thứ content bên trong or chỉnh padding cho nó được căn 2 bên or padding top bottom cho nó.
+
+--> Để có background ở vị trí bất kỳ phần giữa chứ k nhất thiết phải dưới Header mà ta muốn full màn hình thì cũng làm tương tự nhưng chỉ khi nó k bị bao bởi 1 Container từ trước cản nó full màn hình
+
+-> TH2: background chiếm toàn màn hình 
+Ở phần body content có minHeight="calc(100vh - height header - height footer)" ta cho nó relative xong bao toàn bộ content page đó bằng <Box className={"background"}></Box> absolute có top right left bottom: 0 rồi viết content bên trong là xong
+=> Đó chỉ là gợi ý vì trong thực tế, ta cứ nghĩ trước cách dùng phù hợp là backgroundImg hay thẻ img có position absolute trong 1 thẻ relative rồi dùng mà thôi. Dễ nên k cần tính trước.
+
+=> refer tới "Project / HeuristicFarming"
+=> refer tới "Project / Tinkerbellgarden / frontend full code"
+
+
+
+# Dùng immutable
+ImmutableJS là thư viện của facebook. Khi dùng nó, 1 giá trị được tạo ra sẽ k bị thay đổi như biến hằng số v. VD ta update state của redux, ta luôn tạo ra state mới r gán chứ k chỉnh sửa state cũ, đó là cơ chế redux làm sẵn rồi, nhưng ta có thể chủ động tạo ra điều đó bằng thư viện này. Ta vẫn có thể copy và chỉnh sửa biến mới nhưng sẽ thành 2 giá trị khác nhau. 
+Nó cũng cung cấp hàm equals so sánh bằng nhau về giá trị. VD so sánh 2 object tạo ra bởi immutable có bằng nhau về giá trị hay k
+
+
+
+# Synthetic Event
+React lắng nghe events tạo ra bởi user. Khi bắt được, React sẽ wrap native browser events vào 1 cái warpper có interface, bên trong cung các method như preventDefault() để sử dụng. 
+Nguyên nhận dùng wrapper chung bởi vì cùng 1 event với browser khác nhau sẽ có tên khác nhau. Do đó nó wrapper kiểu gom lại thành 1 thứ duy nhất, khi sinh sự kiện, nó sẽ trigger event thực của real dom tùy loại browser => Tức là ta k trigger real DOM event mà là ReactJS custom event(gọi là Synthetic Event). VD onClick, onBlur, onChange là các sự kiện của synthetic event chứ kp real dom event. Cái wrapper kia gọi là SyntheticEvent object
+
+Nhờ đó dễ dàng tạo ra cross browser app. Nó cũng giúp tăng performance vì Synthetic Event được pooled(gom lại) và resused accross multiple native events(chắc là kiểu 2 sự kiện cùng bị event đó bắt thì tái sử dụng vì thực hiện 2 lần luôn mà k cần tạo mới r thêm vào vì nó có sẵn trong pool từ sự kiện trước) 
+Mỗi hành động tương tác đều có 1 event pool chứa set of events bắt được nó. Pool này chứa cả system events lẫn events ta định nghĩa. Event pool của 1 action được khởi tạo khi action được tạo ra và được xóa khi action bị xóa. Khi đó nó lấy từ pool ra dần dần thực hiện xử lý các thứ. 
+
+URL các tính năng của Synthetic Events của React: https://reactjs.org/docs/events.html
+
+-> Các hàm khác của event thg dùng
+event.preventDefault() sẽ cản browsers default behavior nhưng k cản nó bubbling up the DOM. Ngược lại thì hàm stopPropagation() sẽ cản trở event tiếp tục bubble up và thực hiện tiếp các hàm khác
+
+persist(): mặc định React tự set null cái event luôn trong pool ngay sau khi thực hiện để đảm bảo Synthetic Events đã được pooled sẽ luôn consistent (kiểu đã thực hiện xong r mà có event trùng được trigger thì k tái sử dụng nữa vì nó bị null). Sau khi nó tự động null, ta sẽ k thể truy cập vào event.currentTarget => dùng event.persist() sẽ cản được vc nulltified như v. Ta tưởng là vô dụng vì ra khỏi hàm chả dùng nữa thì sao phải cản nulltify. Thực tế 
+=> Hàm này k còn được sử dụng vì phiên bản mới SyntheticEvent k còn được pooled nữa
+
+
+
+
 # Kinh nghiệm
 -> Kể cả ảnh 3D hay các hiệu ứng kinh hoàng cũng chỉ là ảnh mà thôi, tùy thuộc vào team design figma. Tương tự nếu tạo được video có thể chèn vào kiểu hiệu ứng động. Có thể edit 1 bức ảnh thô bằng CSS nhưng rất nặng. 
 VD: Border của Box là hình xiên kèm gradient rất ảo thực chất là 1 bức ảnh svg tạo bằng backgroundImage mà thôi, lại dựa vào figma để tạo ra hình đó. Những người master figma có thể tạo ra những hình rất ảo giúp cho dev rất nhiều tạo ra giao diện cực kỳ dị bằng svg. Lưu lại figma của trava có ích cho sau này khi cần các hình đó
 
 -> Truyền params là _ khi k dùng đến
+
+-> Ta có thể custom mọi thứ khi tự tạo riêng ra. VD ta muốn tạo 1 table nhưng custom header theo 1 kiểu rất lạ, nếu dùng chuẩn có thể k làm được nhưng nếu tách 1 thẻ div riêng custom cái header độc lập với bảng thì ok chú
+
+-> Bảo mật phía front-end k có ý nghĩa khi mà API phía server vẫn còn. VD ta chỉ cho phép admin edit mk khi cung vào mk cũ kèm token, nhưng giao diện là thế, backend cũng phải xử lý điều đó nx ms an toàn chứ, k nó bỏ qua giao diện gửi thẳng backend luôn
+=> refer tới "Projects / Tinkerbellgarden"
+
 

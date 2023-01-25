@@ -21,3 +21,6 @@ Có thể custom:
 --> Cách fix 2: Tự config webpack thêm các polyfills cần thiết vào kèm với react-app-rewired
 => refer tới "Projects / Setup / setup react mui web3 full"
 
+-> Dùng dotenv-webpack
+=> refer tới "# Dùng biến môi trường"
+

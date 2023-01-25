@@ -10,14 +10,14 @@ Có thể đăng nhập bằng các tài khoản của các trang nổi tiếng 
 Có thể đăng nhập bằng cổng thông tin, điều này phổ biến trong các doanh nghiệp có cổng portal nội bộ cho nhân viên với nhiều trang web liên quan. Ta phải quản lý đăng nhập 1 lần là vào được tất cả các trang web chứ kp mỗi trang là 1 lần đăng nhập, đăng nhập bằng user và password. 
 => Giải pháp này đăng nhập 1 lần mà vào được nhiều trang gọi là single sign-on (SSO)
 
---> Giải pháp SSO này khá hay vì 1 set các website liên quan nhau thì chỉ phải đăng nhập 1 lần tăng trải nghiệm người dùng, đồng thời chỉ cần quản lý authentication của người dùng trong 1 single database chứ kp mỗi web 1 database. VD ta làm trong dự án SE, nếu ta tách riêng authentication ra 1 phần riêng và có nhiều website dùng nó thì cũng tạo thủ công SSO.
+--> Giải pháp SSO này khá hay vì 1 set các website liên quan nhau thì chỉ phải đăng nhập 1 lần tăng trải nghiệm người dùng, đồng thời chỉ cần quản lý authentication của người dùng trong 1 single database chứ kp mỗi web 1 database. VD ta làm trong dự án SE, nếu ta tách riêng authentication ra 1 phần riêng và có nhiều website dùng nó thì cũng là tạo thủ công SSO.
 Khi đó, trong database chính của website k cần phải là password mà chỉ cần lưu ủy quyền or nhận dạng từ 1 nguồn đáng tin cậy khác. Người dùng nhập vào username và password như nào kệ họ miễn là khi gửi tới 1 nguồn khác nó trả về 1 cái credential, mọi thao tác check cái credential đúng là ok. Nguồn đó có thể là third party (third party tạo credential và cũng cung hàm giúp check credential) or ta tạo ra thủ công (bằng jsonwebtoken chẳng hạn) trên 1 database và server riêng ok. Có 3 protocol hỗ trợ SSO phổ biến nhất.
 
 -> Phân biệt 3 loại authencation protocol:
---> OpenId Connect: là chuẩn authenticaction được quảng bá bởi tổ chức phi lợi nhận OpenID Foundation. Có hơn 1 tỷ tk OpenID được dùng trên internet và các công ty như Google, WordPress, Yahoo, Paypal sử dụng. 
+--> OpenId Connect: là chuẩn authentication được quảng bá bởi tổ chức phi lợi nhận OpenID Foundation. Có hơn 1 tỷ tk OpenID được dùng trên internet và các công ty như Google, WordPress, Yahoo, Paypal sử dụng. 
 VD Google là 1 OpenID identity provider, cung cho 1 người nào đó. Khi đó người này có thể dùng tk này để đăng nhập bất cứ website nào chấp nhận xác thực bằng OpenID như Youtube, Okta,..
 
-Ta có thể dùng firebase tạo OpenID connect với google được rất tiện lợi.
+Ta có thể dùng firebase tạo OpenID connect với google cho website được rất tiện lợi.
 Khi dùng xác thực với kiểu google thì cũng có nhiều cách như nhập email và gửi mã xác thực tới mail or ấn vào link trong mail để đăng nhập đều ok
 Có thể kết hợp cả bên thứ 3, cả tài khoản mật khẩu đều ok. Có thể chia người bình thường dùng đăng nhập với google, nhân viên thì đăng nhập riêng bằng tk mk.
 Còn Facebook trước đây dùng OpenID nhưng nay đã chuyển qua Facebook Connect

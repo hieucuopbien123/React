@@ -32,6 +32,8 @@ settings:{
 },
 -> vào package.json thêm script sử dụng eslint như ý ta. VD: "lint": "eslint src --ext .ts,.tsx" là sử dụng eslint với các file ts và tsx trong thư mục src -> npm run <script> thì ở đây là npm run lint để chạy lệnh đó -> edit file .eslintrc.js để thêm các rules
 
+Khi dùng eslint với React thì nó sẽ ép phải có import React from "react"; 
+
 --> Custom lệnh script
 VD:
 {
@@ -427,13 +429,13 @@ module.exports = {
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
       "git add ."
-    ]
+    ],
     "*.{ts,js,jsx,ts,tsx,json,yml,md}": [
       "prettier --write",
       "git add ."
     ]
   },
--> npx husky install -> px husky add .husky/pre-commit "yarn lint-staged" -> npx husky add .husky/commit-msg "" -> sửa commit-msg của husky từ undefined thành: npx --no-install commitlint --edit "$1"
+-> npx husky install -> npx husky add .husky/pre-commit "yarn lint-staged" -> npx husky add .husky/commit-msg "" -> sửa commit-msg của husky từ undefined thành: npx --no-install commitlint --edit "$1"
 => Dùng thêm format on save nếu k sợ lag với prettier extension
 
 -> Tool stylelint + stylelint-config-recommended => tool này là k cần thiết trong các dự án mà k chú trọng cho style css, nếu dự án dùng các thư viện UI thì càng k cần viết file css luôn

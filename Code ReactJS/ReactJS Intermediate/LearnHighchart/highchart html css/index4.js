@@ -61,7 +61,7 @@ Highcharts.stockChart/chart("", {
         crosshairs: true
     },
 
-    // Cusstom phần credit
+    // Custom phần credit
     credits:{
         enabled: false
         text: 'My Custom Credit',

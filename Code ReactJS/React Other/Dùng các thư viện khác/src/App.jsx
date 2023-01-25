@@ -24,6 +24,9 @@ function App() {
 
   console.log(version);
 
+  // # Dùng biến môi trường
+  console.log(import.meta.env.VITE_TEST); // 123
+
   const handleClickFullscreen = () => {
     // Ta k thể cho tự vào là full screen ngay được mà phải ấn nút
     if(screenfull.isEnabled){

@@ -3,7 +3,7 @@
 
 ReactJS là cho phát triển các ứng dụng web, còn React Navtice cũng đc facebook công bố sau khi React ra đời giúp phát triển các ứng dụng mobile.
 
-Cơ chế nó tạo 1 virtual DOM thông qua react xác định các component bị thay đổi trong virtual DOM và chỉ đổi nó trong DOM thật để show ra.
+Cơ chế nó tạo 1 virtual DOM thông qua react xác định các component bị thay đổi trong virtual DOM và chỉ đổi nó trong DOM thật để show ra. Thư viện react-dom lo việc đó
 
 
 -> JSX là javascript syntax xml. 1 cách khác viết cấu trúc xml trong javascript. Khi dùng trình biên dịch sẽ chuyển từ JSX syntax sang JS bằng babel -> dùng trong trang web bằng cách script cdn tới trang: https://unpkg.com/@babel/standalone@7.12.4/babel.js -> khi dùng code JSX ta dùng type script là "text/babel" thì babel có thể compile file của ta.

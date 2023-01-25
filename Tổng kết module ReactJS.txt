@@ -138,7 +138,15 @@ thì ta chỉ có thể set được font-weight: 200, 300, 400, 600 -> các sty
 -> Dùng list buộc phải có key. Ta nên có 1 id duy nhất cho mỗi phần tử, còn dùng index chỉ là TH cơ bản k phải thao tác xóa hay thay đổi các thứ nếu k có thể lỗi
 key cho element phải được dùng trong phạm vi có mảng và tạo ra element đó. VD component đó tách thành 1 hàm riêng thì kp gọi key ở trong hàm đó mà phải gọi lúc có mảng gọi hàm map chẳng hạn ấy.
 
--> Khi tạo list ta dùng key nhưng từng item của list lại tách thành component riêng thì trong component đó k dùng được props.key vì key dùng cho list cho mục đích riêng, k dùng tiếp được như 1 thuộc tính ở từng items
+-> K nên dùng index làm key
+VD: Component A có 1 list component B là gọi map từ mảng data lấy trong redux có 10 phần tử. Trong mỗi component B ta có thể edit các thứ trong item đó và nên nhớ component A có list component B mà key lại dùng là index. Chuyện gì xảy ra nếu ta xóa đi phần tử thứ 8 trong redux.
+Khi dùng index làm key, phần tử 9 giờ mang key là 8, phần tử 10 h mang key là 9. Đó là điểm khác biệt với vc dùng key là id unique cho mỗi phần tử thì khi thao tác xóa key mới k đổi. Khi dùng index làm key thì mỗi lần xóa or thêm mới sẽ rerender lại cả list làm giảm performance, còn dùng key unique thì nó chỉ rerender lại đúng phần tử cần thôi.
+Thêm vào đó 1 số TH có thể gây lỗi. Vì thực tế khi dùng index làm key như trên thì thực chất nó gán data phần tử 8 thành 9, data phần tử 9 thành 10 rồi xóa phần tử 10. Ta vẫn ở trang đó nên component k bị unmount nhưng vẫn rerender lại. Nên nhớ khi đó các biến state hay use hook gì đó k được tạo lại mà dùng gán tiếp nên đôi khi gây lỗi thôi.
+=> Chỉ dùng được index làm key nếu data là static or k thể thêm và xóa, số lượng luôn cố định (mới đảm bảo mỗi cái là duy nhất). Còn lại thì nên dùng id unique
+
+=> Phân biệt, rerender thì nó k chạy lại các const và các hook. Nhưng nếu component bị unmount do k được render nx và mount lại thì như mới và phải chạy lại hàm từ đầu. Component chỉ unmount khi bị biến mất bởi code JS chứ bởi code CSS thì nó vẫn load component đó chỉ là k hiển thị thôi 
+
+-> Khi tạo list ta dùng key nhưng từng item của list lại tách thành component riêng thì trong component đó k dùng được props.key vì key dùng cho list k thể dùn tiếp trong component Item vì nó kp 1 thuộc tính
 
 
 
@@ -288,14 +296,17 @@ Nếu ta gọi hàm set nhưng truyền lại đúng biến cũ thì React đủ
 
 Hàm setState ngoài set trực tiếp còn có thể viết dưới dạng 1 hàm nhận vào state. VD: setState(state + 1) tương đương setState(state => state + 1) nhưng cách truyền vào hàm đúng hơn vì state luôn mang giá trị mới nhất ở future => ref tới "Tạo đồng hồ đếm ngược bằng hook"
 
+--> Khi dùng class component ta có setState có thể truyền vào partial state.
+Khi dùng functional component ta có thể gộp tất cả object vào 1 biến state và gọi setState nhưng điểm khác là lúc này phải truyền tất cả state chứ k được partial. Có thể destructing {...state, <>} để đảm bảo. Người ta khuyến khích là tách riêng ra
+
 -> Dùng useEffect: 
 useEffect run sau khi kết thúc lần render đầu tiên và mọi update trong component về sau, nó thực hiện từ trên xuống nhưng khi gặp useEffect sẽ lưu lại và chờ return DOM cập nhập xong sẽ thực hiện hàm bên trong useEffect. Tức tại thời điểm chạy DOM đã đc cập nhập dữ liệu phụ thuộc rồi và lần gán đầu tiên coi là 1 thay đổi và chạy useEffect lần đầu luôn. [<>] quyết định phụ thuộc vào cái gì, k có đối số 2 thì mọi thay đổi đều render lại.
 VD: nếu useEffect đổi 1 biến r lại phụ thuộc biến đó [] thì sẽ lag vô tận
 
 K thể lồng 1 hook call vào bên trong useEffect or useMemo
 
-Dùng return thì bắt buộc return 1 FUNCTION để unmount, thực hiện clean up nếu có, mặc định return undefined. Chỉ đc return 1 trong 2 thứ: undefined or function thực hiện clean up.
-Hàm return của useEffect chỉ đc chạy khi đến lúc cần clean up(tức kp return luôn) và có 1 quy tắc là khi 1 hàm useEffect đc gọi, nó sẽ clean(gọi vào return) cái useEffect trc nó r mơi thực hiện useEffect mới. 1 quy tắc nx là khi component unmount cũng sẽ tự thực hiện clean up gọi return, đó có thể là khi component k được render ra nữa vì chuyển sang 1 router khác
+Dùng return thì bắt buộc return 1 FUNCTION để unmount(cleanup function), thực hiện clean up nếu có, mặc định return undefined. Chỉ đc return 1 trong 2 thứ: undefined or function thực hiện clean up.
+Hàm return của useEffect chỉ đc chạy khi đến lúc cần clean up(tức kp return luôn) và có 1 quy tắc là khi 1 hàm useEffect đc gọi, nó sẽ clean(gọi vào return) cái useEffect trc nó r mơi thực hiện useEffect mới, và nó cũng clean up khi component bị remove khỏi cấu trúc DOM. 1 quy tắc nx là khi component unmount cũng sẽ tự thực hiện clean up gọi return, đó có thể là khi component k được render ra nữa vì chuyển sang 1 router khác
 
 Dependency của useEffect phải là biến của component này vì nó k bắt sự thay đổi nếu biến ngoài đổi giá trị
 
@@ -303,15 +314,18 @@ Trong useEffect k thể gọi luôn 1 hàm asynchronous được để tránh ra
 
 Trong saga ta có thể ngắt quãng 1 hàm fetch đang gọi dở và thực hiện 1 hàm fetch mới tương tự. Khi dùng 1 hàm fetch trong useEffect hay bất cứ chỗ nào khác, ta k thể cản khi nó đang thực hiện dở được. Ta chỉ có thể để nó tiếp tục fetch xong quyết định có dùng data lấy về hay là bỏ đi bằng cách dùng thêm 1 biến boolean để check
 
-Khi dùng useEffect k truyền gì như này vào đối số 2, nó sẽ luôn luôn được chạy sau khi hàm này được gọi bất kể state của functional component này có đổi hay không. Nó tương đương với việc viết trực tiếp vào hàm v nhưng điểm khác là nó thực hiện sau khi component chạy xong
+Dùng cái useEffect phải chú ý 1 thứ, useEffect luôn được chạy ít nhất 1 lần khi mà lần đầu tiên nó chưa có data gì cả. Tức lần đầu nó là rỗng cũng coi là gán và chạy vào. Do đó phải check nếu data chưa có gì thì bỏ or gán giá trị mặc định nha.
 
 --> Dùng useEffect với setInterval: dùng setInterval trong useEffect và return thì clearInterval thực chất nó tạo và xóa interval liên tục
 
 --> Lỗi của useEffect
 Chú ý là useEffect đc chạy sau khi render DOM đã đc cập nhập và cả lần render đầu tiên -> tức là ta tưởng mọi giá trị ta nhìn thấy đã render là mới nhất nhưng thực ra có vài giá trị đặc biệt đã update nhưng k hiện ra vì nó kp state props nên k gọi render lại
-Bc là như v dẫn đến 1 số Th hiếm hoi gây lỗi: ví dụ ta cho useEffect thì thay đổi 1 biến và hiển thị ra màn hình. Thông thường thì k sao hết nhưng nếu biến kia là state vì đổi state sẽ dẫn đến chạy lại hàm và in ra giá trị mới luôn. Nhưng nếu biến đó là global chẳng hạn thì hàm k render lại nên phải chờ đợt render lần sau mới hiện ra màn hình. Lỗi này ít xảy ra
+Bc là như v dẫn đến 1 số Th hiếm hoi gây lỗi: ví dụ ta cho useEffect thì thay đổi 1 biến và hiển thị ra màn hình. Thông thường thì k sao hết nhưng nếu biến kia là state vì đổi state sẽ dẫn đến chạy lại hàm và in ra giá trị mới luôn. Nhưng nếu biến đó là global chẳng hạn thì hàm k render lại nên phải chờ đợt render lần sau mới hiện ra màn hình. Lỗi này ít xảy ra vì nếu data update chuẩn với hook thì luôn hiện là mới nhất, kbh dùng khai báo data global
 
-Khi setState trong useEffect nó k đổi ngay mà giá trị vẫn như cũ và tiếp tục chạy đến hết hàm useEffect r kích hoạt render lại, khi render lại đến hàm useState của nó thì giá trị nó mới được update. Còn trước hàm useState thì nó coi giá trị undefined chưa tồn tại
+Khi dùng useEffect k truyền gì như này vào đối số 2, nó sẽ luôn luôn được chạy sau khi hàm này được gọi bất kể state của functional component này có đổi hay không. Nó tương đương với việc viết trực tiếp vào hàm v nhưng điểm khác là nó thực hiện sau khi component chạy xong. Khi dùng router lazy kết hợp thì có thể bị lỗi chạy hàm trong useEffect liên tục, cần check có mới chạy
+
+--> Bản chất: Khi setState trong useEffect, nó vẫn chạy tiếp hàm trong đó với giá trị cũ, đồng thời function component vẫn liên tục được chạy lại để render theo giá trị mới. Khi render lại đến hàm useState của nó thì giá trị nó mới được gán. Còn trước hàm useState thì nó coi giá trị undefined chưa tồn tại.
+VD: Ban đầu loading là false rồi ta setLoading(true) trong useEffect thì hàm trong useEffect vẫn thực hiện tiếp với loading là false nhưng đồng thời bên ngoài được render lại ngay với giá trị loading là true nhé. Tức là mỗi useEffect gắn liền với giá trị của lần render gọi nó và đều có ảnh hưởng đến data của render mới nhất.
 
 --> Tạo đồng hồ đếm ngược bằng hook => usecase giúp hiểu bản chất useState, dùng setInterval trong useEffect, tổng hợp mọi thứ
 => Cách tốt nhất vẫn là dùng useRef nhưng trong dự án thực tế, ta tính toán sự chênh lệch time liên tục chứ k để phụ thuộc vào máy có lag hay không
@@ -351,7 +365,8 @@ const A = () => {
 
 
 # Dùng useMemo useCallback
-Trap: 1 component render lại or nói là 1 function component thực hiện lại từ trên xuống r render ra màn hình bất cứ khi nào props, state của nó thay đổi. Khi đó bất cứ thuộc tính nào thay đổi cx đều bị render lại sẽ tạo mới biến và fuction để sử dụng -> giảm performance khi render. Nó tạo lại biến mới hoàn toàn, chạy lại các giá trị gán vào biến chứ k chủ động dùng lại biến cũ kể cả là biến const, nó xóa và tạo lại. Nhưng như v lại tối ưu hơn là dùng thêm useCallback, useMemo vào.
+Trap: 1 component render lại or nói là 1 function component thực hiện lại từ trên xuống r render ra màn hình bất cứ khi nào props, state của nó thay đổi. Khi đó bất cứ thuộc tính nào thay đổi cx đều bị render lại sẽ tạo mới biến và fuction để sử dụng -> giảm performance khi render. Nó tạo lại biến mới hoàn toàn, chạy lại các giá trị gán vào biến chứ k chủ động dùng lại biến cũ kể cả là biến const, nó xóa và tạo lại. Nhưng như v lại tối ưu hơn là dùng thêm useCallback, useMemo vào. 
+Để save giá trị và ss, thực tế nó dùng cache
 
 -> Phân biệt useEffect chạy hàm gì khi param2 thay đổi giá trị. Nó gọi return khi cần thiết.
 
@@ -384,8 +399,16 @@ Thì sẽ kbh rerender lại nữa, nếu biến const vĩnh viễn kbh đổi t
 -> Usecase dùng useMemo useCallback
 Khi có Referential equality với object, mảng or hàm
 Computationally expensive calculations
-=> chính vì v mới ít khi thấy người ta dùng 2 cái này
+=> Chính vì v mới ít khi thấy người ta dùng 2 cái này
 React.memo hay useMemo cũng dùng cho các <Con/> khi ta k muốn render lại Con khi Cha render lại
+
+=> Nhanh: useMemo khi cần lấy 1 biến nhưng xử lý phức tạp mới ra(trước khi chạy DOM), useEffect khi cần xử lý nhiều thứ lớn phụ thuộc vào 1 biến (sau khi chạy DOM), const khi 1 biến bth xử lý k nhiều.
+
+=> Lỗi. VD: onClick={() => setCounter(counter + 1)} thì mỗi lần component reder lại, nó sẽ tạo ra 1 hàm anonymous mới có nội dung như v. Nếu ta ấn nút mà xử lý phức tạp nhưng muốn component chỉ tạo 1 lần mà dùng useCallback là sai ngay vì tương tự như cách hiểu chia thành các frame của đồng hồ đếm ngược. Biến counter mà hàm callback này sử dụng chỉ ở frame đầu tiên và lúc gọi setCounter, giá trị counter bên ngoài đổi nhưng bên trong k đổi, thành ra vẫn phải thêm dependencies là counter và ở case này cũng chả lợi hơn là bao.
+
+=> refer tới "NextJS / NextJS Basic / routing"
+
+useCallback thg dùng cho 1 hàm kiểu xử lý event click chẳng hạn, còn useMemo thg dùng cho hàm trả ra 1 giá trị mà sẽ render ra màn hình.
 
 
 
@@ -407,11 +430,18 @@ Tham số thứ 2 nó nhận vào là ref mà ta có thể dùng để refer t�
 
 => Thông thường ta k dùng đến forwardRef hay useImperativeHandle vì nếu muốn dùng 1 component nào mà thay đổi thuộc tính bên trong ta sẽ viết logic ở con bằng cách truyền vào props chứ k viết logic ở cha bằng cách lấy ref như v. Cùng lắm là ta dùng useRef mà thôi
 
+=> Nhanh: useRef refer tới DOM or 1 giá trị trong component. Bình thường dùng biến let trong component nó sẽ tạo lại liên tục nên mỗi lần render sẽ lại như cũ, biến const cũng v nhưng sẽ fix cứng, useRef cung khả năng tạo ra biến có thể thay đổi giá trị như let nhưng k bị khởi tạo lại và k trigger rerender => giống vc tạo biến let global bên ngoài component
+
+VD: ấn vào button, xổ ra ô input và focus cho người dùng gõ -> thay vì dùng biến useState và dependencies thì có thể dùng useRef đến cái ô input và ấn thì gọi focus cũng như chỉnh style cho nó => vì nó play được với cấu hình DOM css cũng như js event nên nghĩ theo các này trước khi làm nghĩ tới state
+=> refer tới "NextJS / NextJS Basic / routing"
+
 
 
 # Custom hook
 Custom hook cũng chỉ là 1 function nhận đầu vào và trả ra 1 giá trị đầu ra tự động biến đối theo đầu vào. Để đầu ra đổi theo đầu vào thì bên trong có thể dùng useEffect [<đầu vào>]. Đặt để tái sử dụng ở nhiều nơi.
 Custom hook nên có use ở đầu để React tự check các violation với quy tắc các hook của React. Thật ra 1 hàm số dùng hook use nhưng lại k return ra 1 component mà return ra 1 giá trị thì React vẫn hiểu hàm số đó là 1 custom hook.
+Chú ý: Custom hook kp là 1 react component mà dùng như 1 hàm số bth và nó vẫn dùng được các hook khác của React như useRef
+=> refer tới "NextJS / NextJS Basic / routing"
 
 Thông thường custom hook dùng để cung ra 1 chức năng nào đó và nội dung của nó chỉ tập trung cung ra chức năng đó thôi. Cho nên code của nó rất ngắn gọn và bên trong k xử lý logic thừa. Cho nên 1 lời gọi trực tiếp custom hook trong 1 hàm sẽ chạy lại cả hàm custom hook đó và return lại giá trị nhưng nó vẫn tuân thủ nguyên tắc của 1 FC là k render lại các biến const useState hay useEffect dù các biến const khác vẫn xóa tạo lại nhưng performance k đáng kể
 Vc nó chạy lại customhook là đúng, k nên wrap nó vào useCallback lại càng tốn tài nguyên
@@ -470,6 +500,9 @@ extension trong react nó k dùng đc các kiểu onInstalled hay alert ở back
 
 
 # Request API
+Cách fetch data với query params và với req.body là 2 cách khác nhau và ta k rõ khác nhau như nào về bảo mật, 1 trong 2 cách k khác biệt là mấy. Bình thường, họ thường dùng params query của url để phục vụ các thao tác kiểu search, sort, filter data kiểu GET mà cần truyền params ý vì GET k nhận body JSON. 
+Còn các query kiểu khác sẽ dùng req.body như bth, VD đăng nhập gửi tk mk thì dùng query bth thôi.
+
 -> Dùng proxy: bên cạnh việc dùng axios + redux slice chuẩn, nếu connect với chỉ 1 server thì ta còn có cách khác là viết trong file package.json của client trường proxy lưu base url của server. Khi đó trong các request api viết url, ta chỉ cần viết phần đuôi còn base url nó sẽ tự lấy trong proxy
 
 -> Dùng axios
@@ -489,9 +522,15 @@ Data gửi server thông qua axios.post phải là 1 object, nên phải convert
 
 => refer tới "Tổng kết module JS / Query API trong JS thuần"
 
---> Dùng axios create và .get của nó sẽ tốt hơn vì params là undefined nó tự động k cho vào param => dùng cho config tốt
+--> Dùng axios create và .get của nó sẽ tốt hơn vì params là undefined nó tự động k cho vào param => dùng cho config tốt. 
+
 => refer tới "Projects / Leaderboard trava / Leaderboard Basic / armoury-slice"
 => refer tới "Tổng kết module JS / # Giá trị đặc biệt"
+
+-> Tổng kết các kiểu request đổi data
+--> Dùng Bearer token làm Authorization
+
+=> refer tới "Projects / Tinkerbellgarden"
 
 
 
@@ -536,7 +575,7 @@ Với các file như ảnh png hay svg thì ta import có đặt tên cho nó đ
 
 
 
-# CSS Reset cho 1 dự án React bth:
+# CSS Reset cho 1 dự án React bth
 -> Các thuộc tính chung:
 *{
   boxSizing: "border-box";
@@ -601,7 +640,10 @@ body::-webkit-scrollbar {
 }
 
 -> Thông thường ta k muốn chiều dài của page phụ thuộc vào kích thước bên trong mà ta luôn muốn minHeight phải là kích thước màn hình hiện tại để màn hình lớn dù trống vẫn hiển thị header và footer đúng. Khi đó phải bao tất cả bằng 1 thẻ Box với minHeight="calc(100vh - chiều cao header - chiều cao footer)"
+=> refer tới "# Dùng background"
+
 => refer tới "Projects / Setup / setup react mui web3 full"
+=> refer tới "Projecst / Tinkerbellgarden"
 
 
 

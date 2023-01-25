@@ -167,3 +167,187 @@ materialui v4: npm i notistack@latest-mui-v4
 => refer tới "Projects / Setup / setup react mui web3 full"
 
 
+
+# Font chữ
+-> Trong MUI có font riêng là Roboto sẵn rồi, để dùng font của ta ở material ui bản cũ v4 phải khai báo trong global, thêm link nó vào public/index.js và dùng clsx để thêm class font vào. 
+Trong bản v5, ta có thể tạo ra fontFamily và fontSize ngay trong mui createTheme mục typography để thay thế toàn bộ font trong ứng dụng hiện tại. Ta sẽ phải link đến google api file đó trong public/index.html => sau đó trong web chỗ nào dùng font khác thì tự thêm riêng. Ta cũng có thể tạo class chung global dùng font và thêm class đó vào chỗ nào dùng ok.
+
+-> Có thể custom cụ thể với từng loại thẻ sử dụng:
+const theme = createTheme();
+theme.typography.h3 = {
+  fontSize: '1.2rem',
+  '@media (min-width:600px)': {
+    fontSize: '1.5rem',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '2.4rem',
+  },
+}; => tức thẻ h3 dùng typography mới dùng 1.2 rem và nhỏ hơn 600px sẽ dùng 1.5rem và lớn hơn md dùng 2.4rem
+Vd khi dùng:
+<ThemeProvider theme={theme}>
+  <Typography variant="h3">Responsive h3</Typography>
+</ThemeProvider> 
+=> Responsive h3 sẽ hiện 1.2rem tùy kích thước màn hình
+
+Có thể custom nhiều type khác của Typography:
+typography: {
+  subtitle1: {
+    fontSize: 12,
+  },
+  body1: {
+    fontWeight: 500,
+  },
+  button: {
+    fontStyle: 'italic',
+  },
+},
+Vì typography có nhiều variant để dùng:
+h1
+h2
+h3
+h4
+h5
+h6
+subtitle1
+subtitle2
+body1
+body2
+button
+caption
+overline
+
+-> Để ghi đè custom dùng font 1 chô bất kỳ: 
+Dùng trực tiếp style={{fontFamily: "Roboto"}} chẳng hạn thì sẽ dùng font này chỉ khi nó có sẵn trong ứng dụng
+
+Nếu font chưa có trong ứng dụng thì phải link vào trong public/index.html và dùng bth
+=> Ta cứ link font cỡ regular xong muốn bold hay light thì tự set fontWeight sau nhưng đôi khi k được mà phải link kèm fontWeight
+
+=> refer tới "Project / Tinkerbellgarden / frontend full code"
+
+
+
+# Dùng Dialog
+-> Chỉ có ở v4
+disableTypography của DialogTitle sẽ k wrapper content của title trong thẻ typography nữa nên ta có thể thao tác nhiều thứ hơn ở header
+
+=> refer tới "Project / HeuristicFarming"
+
+
+
+# Dùng Button
+Kiểu list các button cùng kích thước cách nhau 1 đoạn cứ dùng Grid, kể cả chỉ có 1 tí khoảng cách nhưng dùng Grid sẽ responsive tốt hơn
+
+
+
+# Thao tác với className style(v5)
+-> Dùng styled
+Ta phải có block 1 class bao quanh component rồi trỏ dần dần đến class con
+
+--> Truyền props vào styled ở MUIv5. VD:
+const CustomClass = styled(Box, {
+    shouldForwardProp: (prop) => prop !== "fontWeight" && prop !== "myProp",
+})(({theme, myProp, fontWeight}) => ({
+    ".background": {
+        fontWeight,
+    }
+}));
+và dùng: <CustomClass fontWeight="lighter" myProp>...</CustomClass> 
+=> Khi này ta dùng trực tiếp theme.palette vì bản chất nhận vào 1 object có trường theme bên trong
+=> shouldForwardProp là thứ để tránh các props k hợp lệ được pass xuống dưới, ta định nghĩa các props nào muốn bỏ qua thông qua tên của nó dạng string, riêng theme là prop k cần check vì mặc định luôn có từ global theme. Khi check như trên tức chỉ cho các props tên là fontWeight và myProp được truyền vào root node.
+Bản chất là mỗi thẻ được định nghĩa các thuộc tính chuẩn cho riêng nó, 1 ngày nào đó ta dùng thẻ nhưng lại pass vào 1 attriute mà kp trong legal DOM mà nó định nghĩa thì nó giúp đảm bảo k có props sai nào được truyền vào ở đây
+
+-> Dùng theme trong sx
+Con mẹ nó trong mui 5 khi cần lấy màu cứ lấy kiểu color: "background.primary.main" mà éo cần useTheme => cái này chỉ dùng được khi dùng sx, khi đó các lệnh cũng có thể thay đổi VD trong style thì backgroundColor, trong sx thì bgColor. Nên dùng sx khi có thể. VD color: "divider" cũng là trong sx mói dùng đươc
+
+-> Customize thẻ có sẵn
+--> Customize bằng css selector bth
+VD cusomize lại thẻ TextField bằng cách bọc 1 class bao quanh TextField và trỏ dần dần đến class con:
+".test": {
+    "& div.MuiFormControl-root": {
+        "& div.MuiOutlinedInput-root": {
+            "& fieldset": {
+                borderColor: "red"
+            }
+        }
+    }
+},
+
+--> Dùng css selector trong styled
+".A": {
+  "&:hover":{}
+}
+=> hover vào A thì thẻ A hiện ra cái gì
+".A": {
+  "&:hover .B": {}
+}
+=> hover vào A thì class B mang css gì
+".A": {
+  "& .B": {
+    "&:hover": {}
+  }
+}
+=> B là con của A thì hover vào sẽ mang css gì
+".A": {
+  "& $B": {}
+}
+=> thẻ có id là B và là con mọi cấp của A mang css gì
+".A": {
+  "& th:last-child, & td:last-child": {
+  }
+}
+=> 1 list th td là con cuối cùng của thẻ có class A sẽ có css gì
+".A": {
+  "&:before": {}
+  "&:hover": {
+    "&:before": {}
+  },
+  "&:hover img": {},
+}
+=> before selector của A có css gì
+=> hover vào A thì before selector của A sẽ có css gì
+=> hover vào A thì img trong nó mang css gì
+
+=> còn theme.breakpoint để responsive css thì chỉ được dùng ở tầng ngoài k dùng được ở bên trong. Nhiều lúc nên dùng % or vh để chỉnh phụ thuộc theo width sẽ ok hơn
+
+-> Customize lại 1 thẻ với tên khác:
+const MainLayoutContainer = styled(Box)((theme) => ({
+    backgroundColor: theme.theme.palette.background.body.main,
+    height: "fit-content",
+    width: "100%",
+})); => Dùng thẻ Box có style trên với tên MainLayoutContainer
+
+
+
+# Các thư viện bổ trợ
+-> Dùng @mui/x-date-pickers và date-fns => tạo date picker làm input
+
+
+
+# Dùng ThemeProvider
+Nh TH buộc phải dùng ThemeProvider lồng ThemeProvider vì éo thể đổi color được, khi lồng vào sẽ override được theme trong phạm vi
+
+
+
+# Dùng TextField
+-> Dùng textfield select hơn là dùng component Select
+-> Dùng textfield multiline có thể bị lỗi rerender quá nhiều bởi devtool khi kích thước textarea bị thay đổi. Lỗi này kqtr và ta cx nên set 1 kích thước minRows sẵn ban đầu cho nó ở kích thước trung bình để tránh lag lỗi này
+
+-> Xử lý TextField invalid input: thay vì dùng type number ta dùng type text và tự check
+- Xử lý như html, css thuần là thêm pattern:"[a-z]{1,50}" và className:"input" và input:invalid:{<css>} thì trong mui có inputProps của TextField lo điều này. Nhưng để tránh conflict với style của mui thì k được để label và custom color khác từ trước
+- Ta có thể dùng pattern check kiểu const patternRange = /^[\d]*$/im; và dùng patternRange.test(e.target.value) là đúng thì mới update giá trị còn sai thì k làm gì và k thông báo gì cả
+- Check kiểu thuần nhưng gọn hơn kiểu: if(isNumeric(e.target.value)) và if e.target.value = Number(e.target.value) để tránh ký tự lạ
+- Dùng error và helperText là chuẩn nhất cho TextField của MUI hiện giờ nhưng nó k cản vc submit và ta vẫn phải thủ công check để cản form submit
+- Dùng formik check cũng có tự động như của MUI báo lỗi => khá hay nhưng phải nắm vững
+
+
+
+# Dùng transition components
+Trong mui có sẵn các transition component như: Collapse, Grow, Slide, Zoom, Fade dùng nó bao các component khác để xđ cách nó xuất hiện. VD: unmountOnExit để nó k hiện sẵn từ trước, in để xác định lúc hiện animation,.. có nhiều VD trên trang chủ mà khi thêm or xóa 1 element trong list thì nó co dãn list ấy
+Còn có TransitionGroup bao các component transition để nó tự động có sự tương tác với nhau. VD 1 list các item khi thêm bớt. Nên dùng transition bất cứ khi nào có cái gì kiểu component hiện ra
+
+
+
+# Các component khác
+Avatar, Paper, List, Divider, ListItem, Drawer, Paper
+=> refer tới "Projects / Tinkerbellgarden" đa phần các components v5 đều dùng ở project này để search
+
