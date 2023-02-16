@@ -578,10 +578,10 @@ Với các file như ảnh png hay svg thì ta import có đặt tên cho nó đ
 # CSS Reset cho 1 dự án React bth
 -> Các thuộc tính chung:
 *{
-  boxSizing: "border-box";
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-},
+}
 html{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -703,6 +703,9 @@ Sử dụng cache-control header để cản browser cache index.html và các f
 
 -> Dừng: 
 Dùng createApi, fetchBaseQuery của @reduxjs/toolkit/query/react
+
+-> Fix lỗi: 
+npx create-react-app a => đang chạy thì ngắt vì lỗi mạng xong gõ lại thì lỗi => xóa npm-cache trong AppData/Local là xong
 
 -> Tổng quan:
 ####

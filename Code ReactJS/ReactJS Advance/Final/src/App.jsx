@@ -5,6 +5,7 @@ import { Map } from "immutable";
 import UseThrottleLodash1 from "./UseThrottleLodash";
 import CustomDebounce from "./CustomDebounce";
 import CustomThrottle from "./CustomThrottle";
+import ProgressiveImage from "react-progressive-graceful-image";
 
 const map1 = Map({ a: 1, b: 2, c: 3 });
 const map2 = Map({ a: 1, b: 2, c: 3 });
@@ -23,6 +24,19 @@ function App() {
       <UseThrottleLodash1/>
       <CustomDebounce/>
       <CustomThrottle/>
+
+      {/* # Hiển thị ảnh */}
+      <ProgressiveImage src={"https://picsum.photos/200/300"} placeholder={"https://fastly.picsum.photos/id/237/536/354.jpg?hmac=i0yVXW1ORpyCZpQ-CknuyV-jbtU7_x9EBQVhvT5aRr0"}>
+        {(src, loading) => (
+          <img
+            className={`image${loading ? " loading" : " loaded"}`}
+            src={src}
+            alt="sea beach"
+            width="700"
+            height="465"
+          />
+        )}
+      </ProgressiveImage>
     </div>
   )
 }

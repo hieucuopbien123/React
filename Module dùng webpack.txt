@@ -16,7 +16,9 @@ Có thể custom:
 
 -> webpack ở v4 có đầy đủ NodeJS polyfills nhưng với các phiên bản mới nó k còn support. Điều này gây lỗi khi thao tác với web3 vì để dùng các module web3 buộc có mọi polyfills của nodejs 
 
---> Cách fix 1: downgrade react-scripts xuống v4.0.3
+--> Cách fix 1: downgrade react-scripts xuống v4.0.3 bh đã k fix được nx vì nó bị thêm lỗi openssl nên phải downgrade cả nodejs về version 16 rất vớ vẩn
+Downgrade cả react xuống version 17 cũng éo được
+=> K rõ copy version của trava được k nhưng khuyên là dùng react18 như cách 2
 
 --> Cách fix 2: Tự config webpack thêm các polyfills cần thiết vào kèm với react-app-rewired
 => refer tới "Projects / Setup / setup react mui web3 full"

@@ -586,6 +586,8 @@ Với dự án React, đôi khi phải làm thêm 1 việc là thêm thuộc tí
 
 
 # Hiển thị ảnh
+=> ref tới "# HTML_CSS_JS / # Xử lý image"
+
 Mấy cái bức ảnh có hình thù hay hiệu ứng phức tạp thay vì code thuần hãy tạo bằng design chuẩn kích thước r đưa vào sẽ ok hơn. Còn mấy cái màu mè dễ làm hay animation thì dùng css ok. Thỉnh thoảng mới phải dùng gif vì design nó cũng mệt 
 
 Thẻ image nằm trong 1 khối div mà muốn ra giữa thì phải dùng display: block; margin: 0 auto; cho nó vì image là thẻ inline k tính margin này nọ.

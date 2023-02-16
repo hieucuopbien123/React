@@ -396,7 +396,7 @@ module.exports = {
         "prettier/prettier": ["warn"],
     },
 };
--> sửa file .prettierrc.js thành:
+-> sửa file .prettierrc thành:
 {
     "printWidth": 120,
     "singleQuote": false,
