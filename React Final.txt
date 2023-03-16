@@ -72,3 +72,13 @@ $("body").on('scroll', _.debounce(function() {
 Trong react phải cho hàm vào useCallback or useRef vì nếu không thì mỗi lần render sẽ khai báo ra 1 hàm mới thì tất cả sẽ được gọi.
 
 
+
+-> Lỗi: 
+This site can’t provide a secure connection
+localhost sent an invalid response.
+=> Fix trên chrome thì vào chrome://net-internals/#hsts => trong Delete domain security policies gõ localhost là xong
+=> Fix trên edge tương tự vào: edge://net-internals/#hsts
+Lỗi này xuất hiện do policies hsts bị sai, k tin tưởng vào localhost. HSTS (HTTP Strict Transport Security) là một giao thức bảo mật mới yêu cầu tất cả kết nối tới một website phải được mã hóa bằng giao thức HTTPS. Trong TH này, ta bỏ s đi vẫn éo chạy được vì nó force mọi website phải có policies này
+
+
+

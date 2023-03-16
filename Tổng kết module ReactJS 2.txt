@@ -92,6 +92,8 @@ Phải import cả css và component js
 
 -> react-datepicker: chuyên tạo date picker
 
+-> react-awesome-slider: chuyên tạo chuyển full page đẹp dạng slider
+
 -> highcharts-react-official highcharts: tạo graph đẹp
 --> Tổng hợp đầy đủ options của highcharts thuần
 --> Tổng hợp options của highchart barchart

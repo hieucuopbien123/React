@@ -458,6 +458,14 @@ Khi 1 component vào lần đầu tiên thì biến useState của nó luôn man
 
 => refer tới "Projects / BattleHand"
 
+-> Thư viện @mantine/hooks cung sẵn hàng loạt custom hook: Trước khi tạo ra bất cứ custom hook nào, nên check xem @matine/hooks đã có chưa trước. Chat GPT sinh hook hay code React ok hết, nếu matine k có thì hỏi chat GPT. Các hook mạnh là:
+useIntersection check xem 1 component có visible toàn bộ trên màn hình không
+useScrollLock khóa và mở khóa thanh scrollbar
+useClipboard 
+useDebouncedValue tạo debounce sẵn cho ta rồi
+useMediaQuery và useClickOutside không thể thiếu với code frontend 
+useForm cung mọi thứ cho việc tạo form, bao gồm cả validate
+
 
 
 # Tạo darkmode bằng React
