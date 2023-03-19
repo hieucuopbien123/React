@@ -4,6 +4,11 @@ Load script defer và async khác nhau
 
 
 
+-> Thư viện mới hay:
+react-hot-toast: thư viện notifications ok cho react18
+
+
+
 -> Cách tối ưu hóa 1 ứng dụng React:
 --> Code splitting: có 2 PP hiện thực hóa
 Khi load trang web thì browser phải tải các file js html css của trang đó về. Với html bình thường sẽ import nap từng file module, thư viện. Với React nó tự bundle lại thành các file bundle.js rất gọn và gửi tới trình duyệt. Kỹ thuật code splitting được sử dụng ở đây là việc tách ứng dụng thành 2 phần: chỉ load phần bundle cần thiết để khởi động và các phần khác được load sau khi ứng dụng đã được chạy.
@@ -79,6 +84,20 @@ localhost sent an invalid response.
 => Fix trên chrome thì vào chrome://net-internals/#hsts => trong Delete domain security policies gõ localhost là xong
 => Fix trên edge tương tự vào: edge://net-internals/#hsts
 Lỗi này xuất hiện do policies hsts bị sai, k tin tưởng vào localhost. HSTS (HTTP Strict Transport Security) là một giao thức bảo mật mới yêu cầu tất cả kết nối tới một website phải được mã hóa bằng giao thức HTTPS. Trong TH này, ta bỏ s đi vẫn éo chạy được vì nó force mọi website phải có policies này
+
+
+
+-> Dùng web worker
+Trong JS cũng có thread, gọi là web worker. Bình thường ta chỉ dùng main thread nhưng thực hiện bất đồng bộ vẫn k bị block ui là vì dùng Event Loop nhưng với các task phức tạp.
+Vd: sort 500000 phần tử bằng bubble sort trong react sẽ làm ui block.
+Mở tab performance của browser sẽ thấy ui bị block vài giây, nếu chạy nó trên 1 worker riêng, thời gian vẫn thế nhưng main thread sẽ k bị block
+
+Nên dùng khi xử lý ảnh, process data set lớn, canvas drawing, export CSV or excel file lớn, các task gây nặng CPU
+Web worker k cho phép access vào window object; k được chạy nhiều task trên 1 worker mà nên tạo worker mới nhưng k nên lạm dụng; web worker trả ra kết quả ko phải là function vì output nó trả luôn được serialized; web worker chạy được tùy loại CPU core và bộ nhớ máy tính có, nhưng các loại máy phổ thông bây giờ đều dùng được ít nhất là thêm vài cái worker k sao.
+
+Dùng Web worker với vanilla js sẽ config phức tạp: https://dev.to/nilanth/multi-threaded-react-app-using-useworker-gf8?fbclid=IwAR0LTA_Qa-GABokylC3BJaVNMz1gsMR9kfL9tUWTNXe4zTlWOOwDViYBU7I
+Dùng web worker với lib react 18: @shopify/react-web-worker
+Bản react v16 nhưng vẫn chạy mượt: @koale/useworker
 
 
 
