@@ -1,0 +1,37 @@
+.awssld__next {
+  --slider-height-percentage: 49%;
+  --slider-transition-duration: 770ms;
+  --organic-arrow-thickness: 15px;
+  --organic-arrow-border-radius: 0px;
+  --organic-arrow-height: 40px;
+  --organic-arrow-color: #56a491;
+  --control-button-width: 10%;
+  --control-button-height: 25%;
+  --control-button-background: transparent;
+  --control-bullet-color: #65c1ab;
+  --control-bullet-active-color: #56a491;
+  --loader-bar-color: #851515;
+  --loader-bar-height: 6px;
+}
+
+.awssld {
+  --content-background-color: rgb(227, 123, 123);
+  --slider-height-percentage: 69%;
+  --slider-transition-duration: 1000ms;
+}
+
+.imageSlideWrapper{
+  height: 100%;
+  width: 100%;
+  background-color: var(--content-background-color);
+  overflow: hidden;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}

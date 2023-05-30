@@ -7,6 +7,8 @@ import CustomDebounce from "./CustomDebounce";
 import CustomThrottle from "./CustomThrottle";
 import ProgressiveImage from "react-progressive-graceful-image";
 import UseWebWorker from "./UseWebWorker";
+import UseLinaria from "./UseLinaria";
+import UseStyledComp from "src/UseStyledComp";
 
 const map1 = Map({ a: 1, b: 2, c: 3 });
 const map2 = Map({ a: 1, b: 2, c: 3 });
@@ -21,6 +23,8 @@ console.log(map3.get('b')); // 50
 function App() {
   return (
     <div>
+      <UseStyledComp/>
+      <UseLinaria/>
       <UseWebWorker/>
 
       <UseDebounceLodash1/>

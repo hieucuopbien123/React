@@ -123,6 +123,10 @@ Dù thông tin trên blockchain là công khai nhưng về vấn đề lưu dữ
 
 
 
+# Dùng web3modal v2 + wagmi cho chain Ethereum-like => ref tới "Projects / Thena-Frontend"
+
+
+
 # Other
 -> Lỗi cors phía front-end có thể được báo nếu server sập, thông thường vc fix lỗi này bằng extension phía client là k đúng đâu nhé. Trong web blockchain thì có thể thấy log lỗi này do các rpc ta lấy chọn lọc nhiều cái bị hỏng. Do đó ta mới cần 1 list các rpc, nếu đang dùng mà 1 rpc bị hỏng thì refresh lại page sẽ chọn rpc khác
 

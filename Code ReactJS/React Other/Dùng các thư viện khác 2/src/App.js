@@ -2,6 +2,8 @@
 // Dùng animate.css / Dùng react-intl / Dùng styled-components / Dùng immer / Dùng intl / Dùng compare-versions
 // Dùng lodash / Dùng public-ip / Dùng whatwg-fetch / Dùng invariant / Dùng lucene-query-parser
 
+// CSS in JS / styled-components
+
 // Dùng tools cho React / Dùng stylelint
 
 // ## NodeJS / # Các package backend NodeJS thường dùng / Dùng rimraf
@@ -26,6 +28,7 @@ import publicIp from "public-ip";
 import _, { conformsTo, isFunction, isObject } from "lodash";
 import "whatwg-fetch";
 
+// Tạo thẻ 
 const Title = styled.h1`
   font-size: 1.5em;
   text-align: center;

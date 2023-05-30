@@ -72,6 +72,8 @@ highcharts-react-official highcharts: tạo graph đẹp
 
 react-hot-toast: thư viện notifications ok cho react18
 
+react-awesome-slider: thư viện slider page cho react18
+
 
 
 Các thư viện chỉ dùng được cho phiên bản React17, k hỗ trợ React18:

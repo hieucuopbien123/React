@@ -34,6 +34,11 @@ Còn có input value => input defaultValue nhưng ta ít khi dùng vì dùng hoo
 
 
 
+# Dùng vite
+-> Dùng vite.config.js
+
+
+
 # Tính năng React18
 
 
@@ -339,7 +344,10 @@ Nếu dùng, ta nên tách ra thành file riêng export ra reducer
 
 useReducer thực chất giống useState, ta dùng khi component cần quản lý state 1 cách rõ ràng hơn. 
 Vd1: Ta dùng 1 vài biến useState phụ thuộc lẫn nhau trong 1 số TH như case đơn giản post, error, loading thì tất cả có thể nhét vào 1 reducer thôi => ít vào case này vì thường chỉ khi fetch trực tiếp trong hàm chứ k người ta sẽ dùng redux luôn
-Vd2: Khi 1 biến state mà có nhiều trường, đặc biệt là nested object hay array thì việc update nó phải viết nhiều hàm phức tạp hay kể cả ta đã gom nó với {...state, [name]: value} thì cũng nên dùng useReducer đỡ loạn => ít vào case nàys
+Vd2: Khi 1 biến state mà có nhiều trường, đặc biệt là nested object hay array thì việc update nó phải viết nhiều hàm phức tạp hay kể cả ta đã gom nó với {...state, [name]: value} thì cũng nên dùng useReducer đỡ loạn => ít vào case này
+
+=> UseReducer k giúp thay thế redux và k thể share state giữa các component ở xa nhau. Nó chỉ giúp quản lý local state của 1 component.
+Có thể dùng kết hợp với ReactContext tạo ra kiểu gần giống với redux. Component gọi useContext sẽ gọi cả useReducer và truyền cả [state, dispatch] và provider
 
 -> Bản chất stable value trong React:
 Các thứ tạo bằng hook hầu hết là stable value. Vd useFocusEffect của React Navigation của ReactNative thì k là stable value. Đã là stable value thì k tạo lại khi rerender. Ta nói stable value tức là các giá trị được gán bởi hàm hook trực tiếp. VD: const a = useCallback(b,[]); thì a là stable vì được gán trực tiếp, b là unstable và b sẽ tạo lại mỗi lần rerender.

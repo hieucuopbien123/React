@@ -118,3 +118,63 @@ File source map có thể được chủ động ẩn đi bởi developer vì l�
 Có thể tùy chỉnh source map bằng config webpack, cũng như vc ẩn nó đi
 
 
+
+-> Dùng animation với framer motion: Thư viện animation cho React bằng JS, k dùng CSS
+npm i framer-motion
+
+Ngoài các cái trong code còn có:
+LayoutGroup: nhóm các component lại và khi group layout thay đổi, nó sẽ tự thay đổi phù hợp cho cả group
+MotionConig: xác định config cho các child motion khác nhau chứ kp các child motion đều giống nhau
+LazyMotion: giảm bundle size để tăng loading performance. Nó sẽ tự load async các feature motion cần thiết
+
+Trang chủ còn có nhiều animation hay có sẵn: https://www.framer.com/motion/
+
+Animation với path more: https://blog.noelcserepy.com/how-to-animate-svg-paths-with-framer-motion
+
+
+
+-> CSS in JS:
+2 giải pháp mạnh là: styled-components và linaria. Cả JS và TS ok. Hỗ trợ atomic style. Dễ dùng source map. Đều style css được với stylelint
+
+linaria dùng với vite phải config babel => trong docs có đầy đủ cách dùng với mọi loại bundler ez
+Nên dùng styled-components, linaria truyền biến js vào cứ lỗi hoài
+
+linaria sẽ extract code ra css files trong quá trình build(zero run time css in js) va kích thước file sẽ lớn hơn vì phải request css file, còn styled-components sẽ dùng JS để inject css vào trong quá trình build làm giảm kích thước file css request và payload nhưng lại tăng JS bundle size. 
+
+
+
+-> https://loading.io/ => trang web tạo ra icon loading customize thoải mái, export ra gif hay svg đều được
+https://www.freecodecamp.org/news/react-hooks-every-project-should-use/?fbclid=IwAR0jfH3knL3uJImHBttOaSpBQWLdEVdCbW4CvHAluVPWc7AQuZFi1tmJ7cs -> web tổng hợp react hook có sẵn 
+
+
+
+-> Atomic Design: 
+1 trong các phương pháp thiết kế CSS code đảm bảo tính tái sử dụng, module hóa, scalable code. Có nhiều phương pháp tương đương như BEM, OOCSS, SMACSS. 
+Dựa trên việc build lên từng thành phần nguyên tử nhỏ nhất như input, button, heading là 1 tag. Tiếp theo là phân tử được cấu tạo bởi nhiều nguyên tử, như 1 form chẳng hạn. Kết hợp lên dần là có 1 organism. Cao hơn organism là template, thường là cấu trúc như page layout, bộ khung.
+Cấp thấp hơn k dùng component của cấp cao hơn.
+
+Kết hợp với việc gom add các thứ giống nhau vào 1 chỗ như bên công ty C# vẫn làm + tạo 1 file riêng chuyên xử lý switch case => đó là cách tạo ra cấu trúc tốt nhất cho 1 dự án scalable
+
+=> ref tới "NextJS"
+
+
+
+-> react-progressive-graceful-image có ProgressiveImage hiển thị ảnh cùng lazyloading chuẩn => nhưng lại chỉ hỗ trợ react v16 => tất cả hỗ trợ <= react16 bỏ hết
+
+
+
+-> Dùng react-awesome-slider: giúp chạy slider cực đẹp
+K được import scss mà phải import thư mục dist để tạo animation
+Phải import style cả dist/style.css và custom-animation với từng loại cụ thể
+Ta có thể trigger chuyển page tùy ý, xem source của: https://fullpage.caferati.me/
+
+Chỉnh gì thì tạo file css mới và ghi đè lên:
+Các thuộc tính css ta xem trong: https://caferati.me/demo/react-awesome-slider/fall và thêm vào class tên là awssld
+Muốn chỉnh chi tiết từng phần nào thì xem trong F12 mà lấy tên class
+
+
+
+-> 
+
+
+
