@@ -102,13 +102,15 @@ Bản react v16 nhưng vẫn chạy mượt: @koale/useworker
 
 
 -> Cách clone code frontend của các trang web:
+Khi code source js css bundle lại và run web trên browser thì rất khó debug vì các file bundle bị optimize và bị khác tên khi tải lên. File source map giúp browser có thể reconstruct original code, dễ hơn cho việc debug. Đa phần các trang web dùng các js framework bundle file nếu vẫn giữ source map có thể lấy được phần frontend static file. 
+
 Vào browser devtool -> Sources -> tìm mở các file chunk rồi click chuột phải vào file đang mở -> Add source map: <tên file>.map -> làm với mọi file js thì sẽ thấy được source code frontend đầy đủ -> Dùng extension resources saver -> click mọi option trừ cái XHR để tránh quá lớn -> Ấn tải về
 Tạo 1 dự án mới với công nghệ tương ứng và add các file vào src, config tùy chỉnh
 Thêm các loại thư viện đầy đủ đúng phiên bản, nếu phiên bản k chạy được thì phải tự downgrade xuống. Đây là phần khó nhất, đặc biệt là với web k dùng react. Có thể phải downgrade version react xuống nếu muốn hoạt động.
 Thêm các file css vào dự án vẫn có trong mục tải về
 1 số resources assets ảnh không hoạt động phải tự vào trang web gốc tải về.
 
-Ở bước add source map là ta đang thêm source map của file js đó để browser tái tạo lại code gốc.
+Ở bước add source map là ta đang thêm source map của file js đó để browser tái tạo lại code gốc. Có mọi file js css html ts jsx tsx, k có các file json
 Tool tìm file source map nếu có: https://sourcemaps.io/
 Lý tưởng là clone full source của: https://thena.fi/
 
