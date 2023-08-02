@@ -10,7 +10,7 @@ react-testing-library: viết test cho component react
 
 React Sight: extension giúp hiển thị compoent react sơ đồ cây, chơi cả redux, router các thứ => k khả dụng trên edge
 
-storybook: package giúp tách từng component, hiển thị dạng phân cấp giúp dễ theo dõi component => Từng component phải add vào storybook rất mất tg
+storybook: package giúp tách từng component, hiển thị dạng phân cấp giúp dễ theo dõi component => Từng component phải add vào storybook rất mất tg => k dùng
 
 react-cosmos: package vai trò tương tự như story book => đm vào cứ quay quay éo chạy được
 
@@ -64,7 +64,6 @@ Có thể dùng tool này để đổi state của component trực tiếp
 B2B là ứng dụng business to business, ứng dụng kiểu này thường có các tính năng chung như 1 trang admin để quản trị.
 React Admin giúp ta tạo ra template dùng cho B2B apps, nó cung sẵn các component hỗ trợ tạo trang admin cho ta bằng React và Material Design hiện đại
 Trong docs có mọi thứ rất rõ. Template trông thô sơ nhưng mấy trang example custom nhìn rất ảo
-
-
+Có hẳn package ra-data-json-server dùng riêng cho ReactAdmin cung vào data json
 
 

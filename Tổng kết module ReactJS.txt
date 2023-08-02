@@ -521,6 +521,9 @@ Còn các query kiểu khác sẽ dùng req.body như bth, VD đăng nhập gử
 
 -> Dùng proxy: bên cạnh việc dùng axios + redux slice chuẩn, nếu connect với chỉ 1 server thì ta còn có cách khác là viết trong file package.json của client trường proxy lưu base url của server. Khi đó trong các request api viết url, ta chỉ cần viết phần đuôi còn base url nó sẽ tự lấy trong proxy
 
+*** Ta có thể dùng attribute proxy ở file package.json của client có tác dụng biến nó làm đường dẫn mặc định của server khi fetch API. VD bth ta dùng:
+axios.get('http://localhost:4000/api/new') thì bh chỉ cần axios.get('/api/new') nếu dùng "proxy": "http://localhost:4000" trong package.json
+
 -> Dùng axios
 Mỗi request đều trả ra promise ta có thể dùng .then .catch để xử lý nhưng h toàn dùng try catch + async await
 

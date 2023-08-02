@@ -6,6 +6,10 @@ Do lỗi của React18 nên lập trình web3 dùng React17 mạnh hơn. Nếu t
 # Legacy web3 basic
 => refer tới "Web3 lib / Code / Web3 Advance / client"
 
+->*** Có thể refer tới contract ở dự án frontend trực tiếp trong cùng 1 thư mục bằng cách setup package json mà không cần viết script copy
+Thực hiện tx bằng web3 với instance contract
+=> refer tới "Solidity / Solidity Other / UseWeb3InReactBasic"
+
 
 
 # Các loại request của ethereum thường dùng

@@ -24,7 +24,7 @@ Còn Facebook trước đây dùng OpenID nhưng nay đã chuyển qua Facebook 
 
 Phiên bản mới nhất của OpenID là OpenID Connect, nó kết hợp OpenID authentication và OAuth2 authorization để vừa xác thực vừa ủy quyền
 
---> Oauth 2.0: là chuẩn để phân quyền. OAuth2 cũng là nền tảng OpenID Connect cung cấp OpenID xác thực ở phía trên. 
+--> Oauth 2.0: là chuẩn để phân quyền authorization. OAuth2 cũng là nền tảng OpenID Connect cung cấp OpenID xác thực ở phía trên. 
 Chú ý là OpenID Connect(OIDC) và OAuth2 là 2 giao thức hoàn toàn độc lập.
 
 OAuth2 cung cấp quyền truy cập đã được ủy quyền an toàn, ứng dụng sau khi được ủy quyền thậm chí có thể truy cập vào tài nguyên trên server của OpenID identity provider cơ nhưng với đk là identity provider phải hỗ trợ
@@ -32,10 +32,46 @@ Vd: Alice đk tài khoản tại NewsApp và có tính năng tùy chọn xem ai 
 
 => Bản chất là người dùng chỉ cần ủy quyền cho ứng dụng truy cập vào tài nguyên của OpenID provider. Do đó mới nói OAuth2 có 1 lớp OpenID ở bên trên bởi vì chính vc ủy quyền authorization cũng là 1 hình thức xác thực authentication rồi.
 
+=> Cái OAuth2 này phân quyền cho app được dùng cái gì của ứng dụng luôn, trong khi OpenId bản cũ chỉ cho đưang nhập vào. OpenId Connect mạnh hơn vì kết hợp 2 cái. SAML giống OpenId Connect nhưng chuẩn cũ quá r.
+
 --> SAML: là chuẩn lâu đời nhất từ năm 2001 rồi. Security Assertion Markup Language cung cả authentication và authorization.
 Cơ chế nó giống như token của OpenID hoặc OAuth2 nhưng thuật ngữ khác: principal là người dùng cuối; service provider là nhà cung cấp dịch vụ mà principal muốn truy cập; identity provider là nhà cung cấp nhận dạng như bth; identity provider gửi trả 1 assertion chứa thông tin ủy quyền, VD truy cập vào email, số điện thoại,...
 
 SAML 2.0 định nghĩa các assertion và protocol, binding,... các thứ cung cấp kết nối giữa service provider và identity provider sử dụng HTTP POST, nhiều tùy chọn hơn cho các TH khác nhau như SSO chẳng hạn.
+
+=> Khi làm dự án, xác định xem dùng chuẩn nào (thường là OpenId cũ hay OAuth1) và mô hình nào (thường là mỗi page 1 tk, công ty lớn mới SSO)
+
+
+
+# OAuth2
+-> VD user truy cập ứng dụng yêu cầu xác thực bằng tk google -> Redirect user tới web login của gg -> Đồng ý cho app sử dụng các quyền (Oauth2 có thể cho phép chi tiết dùng quyền gì chứ k chỉ là login) -> User quay về trang gốc, phiên làm việc kết thúc khi user logout or bị hết thời gian.
+
+Cơ chế:
+- Đầu tiên đăng ký cho App trên trang của Google Auth 1 ClientID và SecretCode và xác định luôn các chức năng Google API mà App muốn dùng. VD xem thông tin google calendar, thông tin cá nhân,... hay chỉ cần để xác thực đăng nhập.
+- User truy cập vào App và ấn GoogleSignIn button để chuyển đến trang của google, nhập username password để đăng nhập. OAuth2 chuẩn url có dạng:
+https://accounts.google.com/....&client_id=<ClientId>&redirect_uri=<RedirectURL>...
+Bước này website có thể làm giả mạo trang login của google popup ra để lấy tk mk của user, thậm chí hacker bên ngoài còn xâm nhập DNS server để làm điều này. Cách duy nhất là phải để ý đúng tên miền accounts.google.com 
+- User phải đồng ý nếu nếu dùng OAuth2 để truy cập đến tài nguyên cụ thể, chú ý dùng OpenID cũ sẽ k có bước này. User click button "Allow" thì GoogleAuth sẽ sinh 1 mã code và gửi mã code cho App thông qua cái RedirectURL. Tức App cần cài đặt sẵn sàng tại RedirectURL để nhận giá trị mã code kèm các thông tin xác thực khác và xử lý bước tiếp theo. OAuth2 chuẩn url sẽ gửi dạng (VD App dựng ở localhost):
+http://localhost/?code=..<mã code dài>...
+Để đảm bảo cái url kia đúng là App thì cần có bước xác thực App với Google thông qua SecretCode. Mã code này được gửi ở dạng public trên url và k bảo mật.
+- App nhận về mã code sẽ cung lại cho Google Auth server để nhận AccessToken, phải xác thực cả ClientID và SecretCode của App là hợp lệ. AccessToken sẽ có expire date (default 3600s) và cần gửi kèm API mỗi khi truy cập tới tài nguyên gg. 
+OAuth2 chuẩn request là:
+POST với body là code=<Code>&redirect_uri=<RedirectURL>&client_id=<ClientId>&client_secret=<SecretCode>
+OAuth2 chuẩn response là json object có:
+{accesstoken, expires_in, scope, token_type}
+
+Do mã code gửi từ Google Auth server tới RedirectURL sau khi login mà nó nằm ngay trong url nên mã code k được bảo mật. Tức người gửi mã code này lên chưa chắc đã là App. Do đó ta yêu cầu phải gửi thêm ClientID và SecretCode là thứ mà chỉ App thật mới có đi kèm.
+Lúc này ta k sợ bị lộ SecretCode vì nó được gửi từ server của App, tức là private. Chỉ có 1 lúc public duy nhất là khi client đăng nhập tk mk google vì ta redirect tới trang login của google buộc phải làm ở frontend. Do đó mã code k an toàn nên google mới bảo mật thêm là mã code chỉ được dùng 1 lần, sau khi sinh accesstoken thì code cũng hết giá trị. 
+Nếu lộ mã code -> k sao vì hacker kb SecretCode nên k sinh được accesstoken. 
+Nếu lộ SecretCode -> nó phải nghe lén được mã code hoặc biết tk mk để lấy được mã code để sinh accesstoken
+Nếu lộ accesstoken -> k sao vì có hạn sử dụng. 
+
+- Mọi API về sau truy cập vào Google Resource server cần có accesstoken đó. Google Resource server khác với Google Auth server vì nó có nhiều loại server chứa từng loại data khác nhau. 
+Vd: GR server của gmail, GR server của google calendar chẳng hạn. Nó giống kiểu SSO, tức đăng nhập vào gg xong là có access token truy cập vào từng app con tùy phân quyền như nào. 
+Nhưng không phải data nào cũng thuộc về Google Resource server, có các resource server của bên thứ 3 không thuộc về Google, lúc đó nó nhận accesstoken mà k hiểu dùng như thế nào. Khi đó ta phải có cơ chế ánh xạ tk gg với resource server đó or tìm cách xác thực login vào resource server nếu k dùng gg.
+
+Luồng:
+Client ấn Login -> sang trang sign in google -> google trả code qua 1 redirect url ở client -> client nhận code thì gửi code cho server -> server nhận code thì kết hợp với SecretCode lưu ở env gửi tới Google Auth server -> GA server trả lại access token cho server -> server trả accesstoken vào gg cho client -> Mọi API về sau cần truy cập gg, client phải gửi kèm accesstoken tới server -> server dùng accesstoken đó query tới Google Resource Server. 
 
 
 

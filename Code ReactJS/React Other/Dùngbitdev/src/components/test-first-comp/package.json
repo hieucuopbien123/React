@@ -1,0 +1,22 @@
+{
+  "name": "@bit/testfirstorg.testfirstscope.test-first-comp",
+  "version": "1.0.0",
+  "homepage": "https://bit.dev/testfirstorg/testfirstscope/test-first-comp",
+  "main": "dist/TestFirstComp.js",
+  "componentId": {
+    "scope": "testfirstorg.testfirstscope",
+    "name": "test-first-comp",
+    "version": "1.0.0"
+  },
+  "dependencies": {
+    "react": "^18.2.0"
+  },
+  "devDependencies": {},
+  "peerDependencies": {},
+  "license": "SEE LICENSE IN LICENSE",
+  "bit": {
+    "env": {
+      "compiler": "bit.envs/compilers/react@2.0.0"
+    }
+  }
+}

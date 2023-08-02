@@ -42,7 +42,7 @@ Vài video k load được
 -> react-beautiful-dnd: thư viện giúp tạo draggable item trong 1 list, move item giữa các column, move giữa các column, custom mọi thứ
 Url full course tutorial: https://github.com/eggheadio-projects/Beautiful-and-Accessible-Drag-and-Drop-with-react-beautiful-dnd-notes
 
--> react-slick slick-carousel: tạo carousel slider
+-> react-slick và slick-carousel: tạo carousel slider
 
 -> react-dnd: thư viện drag drop của React. Nó rất mạnh, thậm chí mạnh hơn cái trên. Có tutorial chi tiết
 
@@ -106,6 +106,8 @@ Ta có thể chỉnh rotation cho title
 Highchart cũng có cách dùng responsive cũng như loading riêng. Loading ta phải dùng theo nó chứ k được dùng loading của ta k sẽ lỗi
 
 Data truyền cho chart phải được sort theo trình tự trục ngang?
+
+-> sweetalert: thư viện hay nhất cho các loại hộp thoại kiểu alert confirm các thứ
 
 
 
@@ -299,7 +301,7 @@ Cái QRScan của react-qr-reader dùng phiên bản cũ nhưng nó auto bật c
 => refer tới "Projects / Tinkerbellgarden"
 
 -> x-react-flipclock: tạo FlipClock => bị lỗi nên giờ hạn chế dùng khi cần thời gian hiển thị cực chuẩn
-=> refer tới "Project / Ticket"
+=> refer tới "Project / Ticket" thực ra vẫn dùng được
 -> @pqina/flip: thư viện tạo Flip Clock chuẩn thay thế hoàn toàn cho x-react-flipclock
 => refer tới "Projects / Ticket"
 
