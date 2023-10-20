@@ -176,7 +176,20 @@ Muốn chỉnh chi tiết từng phần nào thì xem trong F12 mà lấy tên c
 
 
 
--> 
+-> Các theme ui mạnh mới:
+npm install bulma => lib cung css đẹp sẵn 
+npm install materialize-css@next => Thư viện cung components khá giống MUI
 
+radix-ui => lại 1 thư viện components cực mạnh nữa. 1 trong những thư viện hàng đầu nên dùng
+
+
+
+-> Tạo safe triangle cho context menu
+Giải thích rõ cơ chế ở: https://www.smashingmagazine.com/2023/08/better-context-menus-safe-triangles/
+Cụ thể là xử lý sự kiện mouse enter và mouse leave. Dùng toán check con chuột trong hình tam giác thì disable mouse pointer event đi là xong
+
+
+
+-> ***Clerk => tool mạnh nhất để tạo dialog authentication. Nó hỗ trợ sẵn đủ loại login, thậm chí là login bằng tiktok hay discord, metamask,...
 
 

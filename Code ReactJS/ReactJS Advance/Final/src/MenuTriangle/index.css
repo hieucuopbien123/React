@@ -1,0 +1,32 @@
+
+li {
+  cursor: pointer;
+  white-space: nowrap;
+  padding: 4px;
+  background-color: white;
+}
+
+li:first-child {
+  border-radius: 4px 4px 0 0;
+}
+
+li:last-child {
+  border-radius: 0 0 4px 4px;
+}
+
+ul {
+  width: fit-content;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+.container {
+  flex-direction: row;
+  height: 100vh;
+}
+
+@media (max-width: 600px) {
+  .container {
+    flex-direction: column;
+  }
+}

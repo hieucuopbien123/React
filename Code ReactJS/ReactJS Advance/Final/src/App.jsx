@@ -9,6 +9,7 @@ import ProgressiveImage from "react-progressive-graceful-image";
 import UseWebWorker from "./UseWebWorker";
 import UseLinaria from "./UseLinaria";
 import UseStyledComp from "src/UseStyledComp";
+import MenuTriangle from "./MenuTriangle/index.jsx";
 
 const map1 = Map({ a: 1, b: 2, c: 3 });
 const map2 = Map({ a: 1, b: 2, c: 3 });
@@ -44,6 +45,7 @@ function App() {
           />
         )}
       </ProgressiveImage>
+      <MenuTriangle/>
     </div>
   )
 }
