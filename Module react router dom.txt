@@ -193,6 +193,8 @@ function ArtistComponent() {
 }
 Ngày xưa có thư viện react-loadable để làm điều này nhưng h viết được luôn code lõi của React với nó
 
+Tức là lazy giúp gọi đến thì mới load, Suspense giúp trong qtr load thì hiển thị cái khác. Nếu k dùng lazy mà nó load tất cả lúc vào luôn thì cũng chả cần Suspense làm gì.
+
 => Combo đầy đủ còn có clsx + animate.css để tạo animation khi mount vào cơ
 => refer tới "Projects / Leaderboard trava / Leaderboard basic"
 

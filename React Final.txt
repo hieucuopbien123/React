@@ -193,3 +193,10 @@ Cụ thể là xử lý sự kiện mouse enter và mouse leave. Dùng toán che
 -> ***Clerk => tool mạnh nhất để tạo dialog authentication. Nó hỗ trợ sẵn đủ loại login, thậm chí là login bằng tiktok hay discord, metamask,...
 
 
+
+-> react-animated-cursor => thư viện tạo animate cursor mỗi khi rê chuột đi đâu
+react-parallax-mouse => thư viện hiệu ứng parallax bằng cách di chuyển chuột
+
+KendoReact: https://www.telerik.com/kendo-react-ui/components/tooltip/popover/callout/ => Thư viện react chuyên nghiệp
+
+

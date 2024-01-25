@@ -726,8 +726,15 @@ Dùng createApi, fetchBaseQuery của @reduxjs/toolkit/query/react
 -> Fix lỗi: 
 npx create-react-app a => đang chạy thì ngắt vì lỗi mạng xong gõ lại thì lỗi => xóa npm-cache trong AppData/Local là xong
 
+-> Cách debug trong React:
+1) Debug bằng browser: 
+Gõ debugger vào code React -> mở browser sẽ dừng lại chỗ đó
+2) Debug trên VSC: 
+Vào dự án react trên VSC -> Tab Debug -> Run and Debug -> Phải tạo file .vscode/launch.json, chú ý url và là url trang web VD http://localhost:3000, và webRoot là thư mục làm việc chứa index.js VD ${workspaceFolder}/src
+URL: https://code.visualstudio.com/docs/editor/debugging#_launch-configurations
+
 -> Tổng quan:
-####
+#### 
 # Tính năng React18
 # Basic
 # Code JSX
