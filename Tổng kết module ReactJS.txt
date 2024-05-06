@@ -623,7 +623,6 @@ body{
   width: 100%;
   height: 100%;
   -webkit-touch-callout: none;
-  overflow: auto;
 }
 => thuộc tính font-family trên là default của OS, nếu dùng các font riêng thì có thể thêm nó vào đầu or nếu chắc chắn tồn tại thì thay bằng nó luôn or cần dùng với 1 vài thẻ thì định nghĩa thêm vài class riêng dùng các font đó sau chỉ cần add vào.
 
@@ -732,6 +731,12 @@ Gõ debugger vào code React -> mở browser sẽ dừng lại chỗ đó
 2) Debug trên VSC: 
 Vào dự án react trên VSC -> Tab Debug -> Run and Debug -> Phải tạo file .vscode/launch.json, chú ý url và là url trang web VD http://localhost:3000, và webRoot là thư mục làm việc chứa index.js VD ${workspaceFolder}/src
 URL: https://code.visualstudio.com/docs/editor/debugging#_launch-configurations
+
+-> innerHTML là thuộc tính thẻ của html để 1 thẻ bao 1 thẻ khác. Nó có thể bị XSS nên React đã đổi tên thành dangerouslySetInnerHTML và khuyên k nên dùng. VD: <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+Tương tự thuộc tính href thẻ a cũng k an toàn. Khuyên dùng encodeURIComponent để chuyển ký tự đặc biệt thành html entity. VD: const encodedValue = encodeURIComponent(dynamicValue);
+return (
+  <a href={`https://example.com/page?param=${encodedValue}`}>Click me</a>
+);
 
 -> Tổng quan:
 #### 

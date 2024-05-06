@@ -1,3 +1,7 @@
+### Đóng file
+
+
+
 -> Phân biệt:
 Import là thêm 1 module bất đồng bộ, còn require là thêm theo thứ tự
 Load script defer và async khác nhau
@@ -180,8 +184,8 @@ Muốn chỉnh chi tiết từng phần nào thì xem trong F12 mà lấy tên c
 npm install bulma => lib cung css đẹp sẵn 
 npm install materialize-css@next => Thư viện cung components khá giống MUI
 
-radix-ui => lại 1 thư viện components cực mạnh nữa. 1 trong những thư viện hàng đầu nên dùng
-
+radix-ui => lại 1 thư viện components cực mạnh nữa. 1 trong những thư viện hàng đầu nên dùng => bỏ vì khó dùng
+https://rsuitejs.com/components/toaster/ => thư viện react component rất mạnh
 
 
 -> Tạo safe triangle cho context menu
@@ -198,5 +202,17 @@ Cụ thể là xử lý sự kiện mouse enter và mouse leave. Dùng toán che
 react-parallax-mouse => thư viện hiệu ứng parallax bằng cách di chuyển chuột
 
 KendoReact: https://www.telerik.com/kendo-react-ui/components/tooltip/popover/callout/ => Thư viện react chuyên nghiệp
+
+
+
+-> Trong đa số các trang web, sẽ luôn có một form gì đó. Ví dụ như đăng ký, đăng nhập, liên hệ,... Thì mẹo ở đây là hãy luôn đặt thuộc tính autofocus vào ô đầu tiên mà người dùng cần nhập.
+
+
+
+-> https://vasanthk.gitbooks.io/react-bits/content/
+- Xử lý nhiều đk jsx lồng nhau
+- Async nature of setState: trong class component mới gặp vì nó add vào queue delay và gom lại update 1 thể ở lần render sau nhưng functional luôn update chuẩn k sao
+
+
 
 

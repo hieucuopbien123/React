@@ -101,8 +101,8 @@ Còn có isPending nữa
 -> Cải tiến Suspense có thể dùng cho React ở phía server. Vốn ở React17, Suspense vẫn hỗ trợ kết hợp với React.lazy
 
 -> Các hook mới đều dùng được ở cả SSR và CSR:
-useId sinh số Id. Trong redux tool kit cũng có hàm nanoid sinh id ngẫu nhiên
-useTransition 
+useId sinh số Id. Trong redux tool kit cũng có hàm nanoid sinh id ngẫu nhiên. useId k trùng trong phạm vi 1 ứng dụng frontend. VD 1 component có trường id mà render nhiều nơi, dùng useId cho nó sẽ đảm bảo duy nhất
+useTransition trì hoãn việc nặng để tránh lag
 useDeferredValue tương tự useTransition, nó gán 1 value vào 1 biến số khác, biến số này chỉ được cập nhập sau 1 khoảng tg thì đảm bảo giải quyết vấn đề delay. Trong React17 cũng có hook này ở bản thử nghiêm
 useSyncExternalStore dùng độc và subscribe vào external data source tương thích với concurrent feature hiện tại. Nó dùng cho lib authors chứ ứng dụng bth k dùng
 useInsertionEffect giống useEffect nhưng được gọi đồng bộ với mục đích thêm style cho DOM trước khi nó đọc layout với useLayoutEffect. Nó k access vào ref và k update state được. Nó cũng chỉ dùng cho lib authors mà thôi
